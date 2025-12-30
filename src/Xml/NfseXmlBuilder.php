@@ -1,0 +1,126 @@
+<?php
+
+namespace Nfse\Xml;
+
+use DOMDocument;
+use DOMElement;
+use Nfse\Dto\NfseData;
+use Nfse\Dto\InfNfseData;
+use Nfse\Dto\EmitenteData;
+use Nfse\Dto\ValoresNfseData;
+use Nfse\Dto\EnderecoEmitenteData;
+
+class NfseXmlBuilder
+{
+    private DOMDocument $dom;
+    private DpsXmlBuilder $dpsBuilder;
+
+    public function __construct()
+    {
+        $this->dpsBuilder = new DpsXmlBuilder();
+    }
+
+    public function build(NfseData $nfse): string
+    {
+        $this->dom = new DOMDocument('1.0', 'UTF-8');
+        $this->dom->formatOutput = true;
+
+        $root = $this->dom->createElementNS('http://www.sped.fazenda.gov.br/nfse', 'NFSe');
+        $this->dom->appendChild($root);
+
+        $infNfse = $this->dom->createElement('infNFSe');
+        $infNfse->setAttribute('Id', $nfse->infNfse->id);
+        $infNfse->setAttribute('versao', $nfse->versao);
+        $root->appendChild($infNfse);
+
+        $this->buildInfNfse($infNfse, $nfse->infNfse);
+
+        return $this->dom->saveXML();
+    }
+
+    private function buildInfNfse(DOMElement $parent, InfNfseData $data): void
+    {
+        $this->appendElement($parent, 'nNFSe', $data->numeroNfse);
+        $this->appendElement($parent, 'nDFSe', $data->numeroDfse);
+        $this->appendElement($parent, 'cVerif', $data->codigoVerificacao);
+        $this->appendElement($parent, 'dhProc', $data->dataProcessamento);
+        $this->appendElement($parent, 'ambGer', (string)$data->ambienteGerador);
+        $this->appendElement($parent, 'verAplic', $data->versaoAplicativo);
+        $this->appendElement($parent, 'procEmi', (string)$data->processoEmissao);
+        $this->appendElement($parent, 'xLocEmi', $data->localEmissao);
+        $this->appendElement($parent, 'xLocPrestacao', $data->localPrestacao);
+        $this->appendElement($parent, 'cLocIncid', $data->codigoLocalIncidencia);
+        $this->appendElement($parent, 'xLocIncid', $data->nomeLocalIncidencia);
+        $this->appendElement($parent, 'xTribNac', $data->descricaoTributacaoNacional);
+        $this->appendElement($parent, 'xTribMun', $data->descricaoTributacaoMunicipal);
+        $this->appendElement($parent, 'cStat', (string)$data->codigoStatus);
+
+        if ($data->dps) {
+            // The DpsXmlBuilder creates a full XML, we need to extract the 'infDPS' element
+            $dpsXml = $this->dpsBuilder->build($data->dps);
+            $tempDom = new DOMDocument();
+            $tempDom->loadXML($dpsXml);
+            $infDpsNode = $tempDom->getElementsByTagName('infDPS')->item(0);
+            if ($infDpsNode) {
+                $importedNode = $this->dom->importNode($infDpsNode, true);
+                $parent->appendChild($importedNode);
+            }
+        }
+
+        if ($data->emitente) {
+            $this->buildEmitente($parent, $data->emitente);
+        }
+
+        if ($data->valores) {
+            $this->buildValores($parent, $data->valores);
+        }
+    }
+
+    private function buildEmitente(DOMElement $parent, EmitenteData $data): void
+    {
+        $emit = $this->dom->createElement('emit');
+        $this->appendElement($emit, 'CNPJ', $data->cnpj);
+        $this->appendElement($emit, 'CPF', $data->cpf);
+        $this->appendElement($emit, 'IM', $data->inscricaoMunicipal);
+        $this->appendElement($emit, 'xNome', $data->nome);
+        $this->appendElement($emit, 'xFant', $data->nomeFantasia);
+
+        if ($data->endereco) {
+            $this->buildEndereco($emit, $data->endereco);
+        }
+
+        $this->appendElement($emit, 'fone', $data->telefone);
+        $this->appendElement($emit, 'email', $data->email);
+        $parent->appendChild($emit);
+    }
+
+    private function buildEndereco(DOMElement $parent, EnderecoEmitenteData $data): void
+    {
+        $enderNac = $this->dom->createElement('enderNac');
+        $this->appendElement($enderNac, 'cMun', $data->codigoMunicipio);
+        $this->appendElement($enderNac, 'CEP', $data->cep);
+        $this->appendElement($enderNac, 'xLgr', $data->logradouro);
+        $this->appendElement($enderNac, 'nro', $data->numero);
+        $this->appendElement($enderNac, 'xCpl', $data->complemento);
+        $this->appendElement($enderNac, 'xBairro', $data->bairro);
+        $parent->appendChild($enderNac);
+    }
+
+    private function buildValores(DOMElement $parent, ValoresNfseData $data): void
+    {
+        $valores = $this->dom->createElement('valores');
+        $this->appendElement($valores, 'vBC', $data->baseCalculo !== null ? number_format($data->baseCalculo, 2, '.', '') : null);
+        $this->appendElement($valores, 'pAliqAplic', $data->aliquotaAplicada !== null ? number_format($data->aliquotaAplicada, 2, '.', '') : null);
+        $this->appendElement($valores, 'vISSQN', $data->valorIssqn !== null ? number_format($data->valorIssqn, 2, '.', '') : null);
+        $this->appendElement($valores, 'vLiq', $data->valorLiquido !== null ? number_format($data->valorLiquido, 2, '.', '') : null);
+        $parent->appendChild($valores);
+    }
+
+    private function appendElement(DOMElement $parent, string $name, ?string $value): void
+    {
+        if ($value !== null) {
+            $element = $this->dom->createElement($name, $value);
+            $parent->appendChild($element);
+        }
+    }
+}

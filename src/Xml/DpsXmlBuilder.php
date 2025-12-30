@@ -244,7 +244,23 @@ class DpsXmlBuilder
             $vDedRed = $this->dom->createElement('vDedRed');
             $this->appendElement($vDedRed, 'pDR', $data->deducaoReducao->percentualDeducaoReducao !== null ? number_format($data->deducaoReducao->percentualDeducaoReducao, 2, '.', '') : null);
             $this->appendElement($vDedRed, 'vDR', $data->deducaoReducao->valorDeducaoReducao !== null ? number_format($data->deducaoReducao->valorDeducaoReducao, 2, '.', '') : null);
-            // TODO: Map 'documentos' array if needed
+            
+            if ($data->deducaoReducao->documentos) {
+                $documentos = $this->dom->createElement('documentos');
+                foreach ($data->deducaoReducao->documentos as $docData) {
+                    $doc = $this->dom->createElement('doc');
+                    $this->appendElement($doc, 'chNFSe', $docData->chaveNfse);
+                    $this->appendElement($doc, 'chNFe', $docData->chaveNfe);
+                    $this->appendElement($doc, 'tpDedRed', (string)$docData->tipoDeducaoReducao);
+                    $this->appendElement($doc, 'xDescOutDed', $docData->descricaoOutrasDeducoes);
+                    $this->appendElement($doc, 'dEmiDoc', $docData->dataEmissaoDocumento);
+                    $this->appendElement($doc, 'vDedutivelRedutivel', $docData->valorDedutivelRedutivel !== null ? number_format($docData->valorDedutivelRedutivel, 2, '.', '') : null);
+                    $this->appendElement($doc, 'vDeducaoReducao', $docData->valorDeducaoReducao !== null ? number_format($docData->valorDeducaoReducao, 2, '.', '') : null);
+                    $documentos->appendChild($doc);
+                }
+                $vDedRed->appendChild($documentos);
+            }
+            
             $valores->appendChild($vDedRed);
         }
 
