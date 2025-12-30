@@ -101,43 +101,46 @@ class InfNfseData extends Data
         /**
          * Descrição da NBS.
          */
+        /**
+         * Descrição da NBS.
+         */
         #[MapInputName('xNBS')]
-        public ?string $descricaoNbs,
+        public ?string $descricaoNbs = null,
 
         /**
          * Tipo de Emissão.
          */
         #[MapInputName('tpEmis')]
-        public ?int $tipoEmissao,
+        public ?int $tipoEmissao = null,
 
         /**
          * Código de status.
          */
         #[MapInputName('cStat')]
-        public ?int $codigoStatus,
+        public ?int $codigoStatus = null,
 
         /**
          * Outras Informações.
          */
         #[MapInputName('xOutInf')]
-        public ?string $outrasInformacoes,
+        public ?string $outrasInformacoes = null,
 
         /**
          * Dados da DPS.
          */
         #[MapInputName('DPS')]
-        public ?DpsData $dps,
+        public ?DpsData $dps = null,
 
         /**
          * Dados do emitente.
          */
         #[MapInputName('emit')]
-        public ?EmitenteData $emitente,
+        public ?EmitenteData $emitente = null,
 
         /**
          * Valores da NFS-e.
          */
         #[MapInputName('valores')]
-        public ?ValoresNfseData $valores,
+        public ?ValoresNfseData $valores = null,
     ) {}
 }

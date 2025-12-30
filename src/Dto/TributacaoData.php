@@ -75,31 +75,31 @@ class TributacaoData extends Data
          * Base de cálculo PIS/COFINS.
          */
         #[MapInputName('tribFed.piscofins.vBCPisCofins')]
-        public ?float $baseCalculoPisCofins,
+        public ?float $baseCalculoPisCofins = null,
 
         /**
          * Alíquota PIS.
          */
         #[MapInputName('tribFed.piscofins.pAliqPis')]
-        public ?float $aliquotaPis,
+        public ?float $aliquotaPis = null,
 
         /**
          * Alíquota COFINS.
          */
         #[MapInputName('tribFed.piscofins.pAliqCofins')]
-        public ?float $aliquotaCofins,
+        public ?float $aliquotaCofins = null,
 
         /**
          * Valor PIS.
          */
         #[MapInputName('tribFed.piscofins.vPis')]
-        public ?float $valorPis,
+        public ?float $valorPis = null,
 
         /**
          * Valor COFINS.
          */
         #[MapInputName('tribFed.piscofins.vCofins')]
-        public ?float $valorCofins,
+        public ?float $valorCofins = null,
 
         /**
          * Tipo de Retenção PIS/COFINS.
@@ -107,49 +107,49 @@ class TributacaoData extends Data
          * 2 - Retido
          */
         #[MapInputName('tribFed.piscofins.tpRetPisCofins')]
-        public ?int $tipoRetencaoPisCofins,
+        public ?int $tipoRetencaoPisCofins = null,
 
         /**
          * Valor retido de IRRF.
          */
         #[MapInputName('tribFed.vRetIRRF')]
-        public ?float $valorRetidoIrrf,
+        public ?float $valorRetidoIrrf = null,
 
         /**
          * Valor retido de CSLL.
          */
         #[MapInputName('tribFed.vRetCSLL')]
-        public ?float $valorRetidoCsll,
+        public ?float $valorRetidoCsll = null,
 
         /**
          * Valor total dos tributos federais.
          */
         #[MapInputName('totTrib.vTotTrib.vTotTribFed')]
-        public ?float $valorTotalTributosFederais,
+        public ?float $valorTotalTributosFederais = null,
 
         /**
          * Valor total dos tributos estaduais.
          */
         #[MapInputName('totTrib.vTotTrib.vTotTribEst')]
-        public ?float $valorTotalTributosEstaduais,
+        public ?float $valorTotalTributosEstaduais = null,
 
         /**
          * Valor total dos tributos municipais.
          */
         #[MapInputName('totTrib.vTotTrib.vTotTribMun')]
-        public ?float $valorTotalTributosMunicipais,
+        public ?float $valorTotalTributosMunicipais = null,
 
         /**
          * Valor percentual total aproximado dos tributos federais, estaduais e municipais.
          */
         #[MapInputName('totTrib.pTotTribSN')]
-        public ?float $percentualTotalTributosSN,
+        public ?float $percentualTotalTributosSN = null,
 
         /**
          * Indicador de informação de valor total de tributos.
          * 0 - Nenhum
          */
         #[MapInputName('totTrib.indTotTrib')]
-        public ?int $indicadorTotalTributos,
+        public ?int $indicadorTotalTributos = null,
     ) {}
 }

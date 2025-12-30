@@ -18,48 +18,48 @@ class ValoresNfseData extends Data
          * Valor calculado de Dedução/Redução.
          */
         #[MapInputName('vCalcDR')]
-        public ?float $valorCalculadoDeducaoReducao,
+        public ?float $valorCalculadoDeducaoReducao = null,
 
         /**
          * Tipo de Benefício Municipal.
          */
         #[MapInputName('tpBM')]
-        public ?int $tipoBeneficioMunicipal,
+        public ?int $tipoBeneficioMunicipal = null,
 
         /**
          * Valor calculado de Benefício Municipal.
          */
         #[MapInputName('vCalcBM')]
-        public ?float $valorCalculadoBeneficioMunicipal,
+        public ?float $valorCalculadoBeneficioMunicipal = null,
 
         /**
          * Valor da Base de Cálculo.
          */
         #[MapInputName('vBC')]
-        public ?float $baseCalculo,
+        public ?float $baseCalculo = null,
 
         /**
          * Alíquota Aplicada.
          */
         #[MapInputName('pAliqAplic')]
-        public ?float $aliquotaAplicada,
+        public ?float $aliquotaAplicada = null,
 
         /**
          * Valor do ISSQN.
          */
         #[MapInputName('vISSQN')]
-        public ?float $valorIssqn,
+        public ?float $valorIssqn = null,
 
         /**
          * Valor Total Retido.
          */
         #[MapInputName('vTotalRet')]
-        public ?float $valorTotalRetido,
+        public ?float $valorTotalRetido = null,
 
         /**
          * Valor Líquido da NFS-e.
          */
         #[MapInputName('vLiq')]
-        public ?float $valorLiquido,
+        public ?float $valorLiquido = null,
     ) {}
 }
