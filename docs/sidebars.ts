@@ -4,6 +4,19 @@ const sidebars: SidebarsConfig = {
     docsSidebar: [
         "overview",
         "full-example",
+        {
+            type: "category",
+            label: "Tipos (DTOs)",
+            items: [
+                "types/main-documents",
+                "types/base-info",
+                "types/actors",
+                "types/service-location",
+                "types/values-taxation",
+                "types/deductions",
+                "types/others",
+            ],
+        },
         "dtos",
         "validations",
         "xml-serialization",

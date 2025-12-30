@@ -1,0 +1,52 @@
+# Informações do Documento
+
+Estes DTOs contêm o corpo principal e os metadados dos documentos fiscais.
+
+## InfDpsData
+
+Contém os dados detalhados da Declaração de Prestação de Serviço.
+
+### Propriedades Principais
+
+| Propriedade          | Tipo     | Mapeamento XML | Descrição                                      |
+| :------------------- | :------- | :------------- | :--------------------------------------------- |
+| `id`                 | `string` | `@Id`          | Identificador único da DPS.                    |
+| `tipoAmbiente`       | `int`    | `tpAmb`        | 1 - Produção, 2 - Homologação.                 |
+| `dataEmissao`        | `string` | `dhEmi`        | Data e hora de emissão.                        |
+| `serie`              | `string` | `serie`        | Série da DPS.                                  |
+| `numeroDps`          | `string` | `nDPS`         | Número da DPS.                                 |
+| `dataCompetencia`    | `string` | `dCompet`      | Data de competência do serviço.                |
+| `tipoEmitente`       | `int`    | `tpEmit`       | 1 - Prestador, 2 - Tomador, 3 - Intermediário. |
+| `codigoLocalEmissao` | `string` | `cLocEmi`      | Código IBGE do município emissor.              |
+
+### Relacionamentos
+
+-   `prestador`: Dados do prestador (`PrestadorData`).
+-   `tomador`: Dados do tomador (`TomadorData`).
+-   `intermediario`: Dados do intermediário (`IntermediarioData`).
+-   `servico`: Detalhes do serviço (`ServicoData`).
+-   `valores`: Valores e impostos (`ValoresData`).
+
+---
+
+## InfNfseData
+
+Contém os dados detalhados da Nota Fiscal de Serviço Eletrônica gerada.
+
+### Propriedades Principais
+
+| Propriedade         | Tipo     | Mapeamento XML | Descrição                                    |
+| :------------------ | :------- | :------------- | :------------------------------------------- |
+| `id`                | `string` | `id`           | Identificador único da NFS-e.                |
+| `numeroNfse`        | `string` | `nNFSe`        | Número sequencial da NFS-e.                  |
+| `numeroDfse`        | `string` | `nDFSe`        | Número do DFe nacional.                      |
+| `codigoVerificacao` | `string` | `cVerif`       | Código para verificação de autenticidade.    |
+| `dataProcessamento` | `string` | `dhProc`       | Data e hora de geração da nota.              |
+| `ambienteGerador`   | `int`    | `ambGer`       | Ambiente que gerou a nota.                   |
+| `codigoStatus`      | `int`    | `cStat`        | Status atual da nota (ex: 100 - Autorizado). |
+
+### Relacionamentos
+
+-   `dps`: Cópia da DPS que originou a nota (`DpsData`).
+-   `emitente`: Dados da entidade emissora (`EmitenteData`).
+-   `valores`: Valores consolidados da nota (`ValoresNfseData`).
