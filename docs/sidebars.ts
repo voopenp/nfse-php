@@ -3,7 +3,19 @@ import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 const sidebars: SidebarsConfig = {
     docsSidebar: [
         "overview",
-        "full-example",
+        {
+            type: "category",
+            label: "Exemplos Práticos",
+            items: [
+                "full-example",
+                "examples/tomador-pf",
+                "examples/tomador-pj",
+                "examples/tomador-exterior",
+                "examples/construcao-civil",
+                "examples/retencoes",
+                "examples/exportacao",
+            ],
+        },
         {
             type: "category",
             label: "Tipos (DTOs)",
@@ -20,18 +32,6 @@ const sidebars: SidebarsConfig = {
         "dtos",
         "validations",
         "xml-serialization",
-        {
-            type: "category",
-            label: "Exemplos Práticos",
-            items: [
-                "examples/tomador-pf",
-                "examples/tomador-pj",
-                "examples/tomador-exterior",
-                "examples/construcao-civil",
-                "examples/retencoes",
-                "examples/exportacao",
-            ],
-        },
         "advanced-scenarios",
         "typescript",
         "schema-rules",
