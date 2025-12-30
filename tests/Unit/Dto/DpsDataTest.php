@@ -1,0 +1,120 @@
+<?php
+
+namespace Nfse\Tests\Unit\Dto;
+
+use Nfse\Nfse\Dto\DpsData;
+use Nfse\Nfse\Dto\InfDpsData;
+use Nfse\Nfse\Dto\PrestadorData;
+use Nfse\Nfse\Dto\TomadorData;
+use Nfse\Nfse\Dto\ServicoData;
+use Nfse\Nfse\Dto\ValoresData;
+use Nfse\Nfse\Dto\EnderecoData;
+use Nfse\Nfse\Dto\RegimeTributarioData;
+use Nfse\Nfse\Dto\TributacaoData;
+use Nfse\Nfse\Dto\LocalPrestacaoData;
+use Nfse\Nfse\Dto\CodigoServicoData;
+use Nfse\Nfse\Dto\ValorServicoPrestadoData;
+use Nfse\Nfse\Dto\DescontoData;
+
+it('can instantiate dps data with full structure', function () {
+    $infDps = new InfDpsData(
+        id: 'DPS123',
+        tipoAmbiente: 2,
+        dataEmissao: '2023-10-27T10:00:00',
+        versaoAplicativo: '1.0',
+        serie: '1',
+        numeroDps: '1001',
+        dataCompetencia: '2023-10-27',
+        tipoEmitente: 1,
+        codigoLocalEmissao: '3550308',
+        substituicao: null,
+        prestador: new PrestadorData(
+            cnpj: '12345678000199',
+            cpf: null,
+            nif: null,
+            codigoNaoNif: null,
+            caepf: null,
+            inscricaoMunicipal: '12345',
+            nome: 'Prestador Exemplo Ltda',
+            endereco: new EnderecoData(
+                codigoMunicipio: '3550308',
+                cep: '01001000',
+                logradouro: 'Exemplo',
+                numero: '100',
+                bairro: 'Centro'
+            ),
+            telefone: '11999999999',
+            email: 'prestador@example.com',
+            regimeTributario: new RegimeTributarioData(
+                opcaoSimplesNacional: 1,
+                regimeApuracaoTributariaSN: 0,
+                regimeEspecialTributacao: 0
+            )
+        ),
+        tomador: new TomadorData(
+            cpf: '11122233344',
+            cnpj: null,
+            nif: null,
+            codigoNaoNif: null,
+            caepf: null,
+            inscricaoMunicipal: null,
+            nome: 'Tomador Exemplo',
+            endereco: new EnderecoData(
+                codigoMunicipio: '3550308',
+                cep: '01002000',
+                logradouro: 'Brasil',
+                numero: '200',
+                bairro: 'Jardins'
+            ),
+            telefone: '11888888888',
+            email: 'tomador@example.com'
+        ),
+        intermediario: null,
+        servico: new ServicoData(
+            localPrestacao: new LocalPrestacaoData(
+                codigoLocalPrestacao: '3550308',
+                codigoPaisPrestacao: 'BR'
+            ),
+            codigoServico: new CodigoServicoData(
+                codigoTributacaoNacional: '1.01',
+                codigoTributacaoMunicipal: '1010',
+                descricaoServico: 'Analise de sistemas',
+                codigoNbs: '1234',
+                codigoInternoContribuinte: 'SERV001'
+            ),
+            comercioExterior: null,
+            obra: null,
+            atividadeEvento: null,
+            informacoesComplementares: 'Serviço prestado com excelência',
+            idDocumentoTecnico: null,
+            documentoReferencia: null,
+            descricaoInformacoesComplementares: null
+        ),
+        valores: new ValoresData(
+            valorServicoPrestado: new ValorServicoPrestadoData(
+                valorRecebido: 1000.00,
+                valorServico: 1000.00
+            ),
+            desconto: new DescontoData(
+                valorDescontoIncondicionado: 0.0,
+                valorDescontoCondicionado: 0.0
+            ),
+            deducaoReducao: null,
+            tributacao: new TributacaoData(
+                tributacaoIssqn: 1,
+                tipoRetencaoIssqn: 1,
+                cstPisCofins: null,
+                percentualTotalTributosSN: null
+            )
+        )
+    );
+
+    $dpsData = new DpsData(
+        versao: '1.0',
+        infDps: $infDps
+    );
+
+    expect($dpsData)->toBeInstanceOf(DpsData::class)
+        ->and($dpsData->infDps->id)->toBe('DPS123')
+        ->and($dpsData->infDps->prestador->cnpj)->toBe('12345678000199');
+});
