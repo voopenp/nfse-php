@@ -45,6 +45,33 @@ const config: Config = {
         ],
     ],
 
+    plugins: [
+        [
+            require.resolve("@easyops-cn/docusaurus-search-local"),
+            {
+                // Configurações de indexação
+                hashed: true,
+                language: ["pt", "en"],
+                indexDocs: true,
+                indexBlog: false,
+                indexPages: true,
+
+                // Configurações de busca
+                searchResultLimits: 8,
+                searchResultContextMaxLength: 50,
+
+                // Estilo Spotlight/Command Palette
+                searchBarShortcut: true,
+                searchBarShortcutHint: true,
+                searchBarPosition: "left",
+
+                // Melhorias de UX
+                highlightSearchTermsOnTargetPage: true,
+                explicitSearchResultPath: true,
+            },
+        ],
+    ],
+
     themeConfig: {
         image: "img/docusaurus-social-card.jpg",
         navbar: {

@@ -10,27 +10,45 @@ interface Step {
 
 const steps: Step[] = [
     {
-        title: "Fase 1: Estrutura de Dados (DTOs)",
+        title: "Fase 1: Estrutura de Dados (DTOs) ✅",
         description:
-            "Implementação de DTOs tipados, mapeamento de campos e validações robustas.",
+            "DTOs tipados com spatie/laravel-data, mapeamento de campos, validações robustas e enums nativos PHP 8.1+.",
         status: "completed",
     },
     {
-        title: "Fase 2: Serialização",
+        title: "Fase 2: Serialização XML ✅",
         description:
-            "Geração de XML (padrão Nacional) e JSON a partir dos modelos de dados.",
+            "Geração de XML (padrão Nacional NFSe) com DpsXmlBuilder e NfseXmlBuilder totalmente funcionais.",
+        status: "completed",
+    },
+    {
+        title: "Fase 3: Assinatura Digital ✅",
+        description:
+            "Suporte completo a certificados A1, XmlSigner parametrizado (SHA-1/SHA-256), validação de elemento raiz.",
+        status: "completed",
+    },
+    {
+        title: "Fase 4: Utilitários ✅",
+        description:
+            "IdGenerator (DPS/NFSe), DocumentGenerator (CPF/CNPJ), validadores e helpers implementados.",
+        status: "completed",
+    },
+    {
+        title: "Fase 5: Documentação & Busca 🚀",
+        description:
+            "Docusaurus com busca local Spotlight-style, documentação completa de DTOs, assinatura e utilitários.",
         status: "in-progress",
     },
     {
-        title: "Fase 3: Assinatura Digital",
+        title: "Fase 6: Web Services (Próximo)",
         description:
-            "Suporte a certificados A1 e assinatura digital de documentos XML.",
+            "Integração com Web Services da SEFIN Nacional: envio de DPS, consulta de NFSe, eventos e cancelamentos.",
         status: "pending",
     },
     {
-        title: "Fase 4: Utilitários",
+        title: "Fase 7: Testes E2E & CI/CD",
         description:
-            "Helpers para cálculos de impostos e formatadores de documentos.",
+            "Testes end-to-end com ambiente de homologação, GitHub Actions para CI/CD e releases automáticas.",
         status: "pending",
     },
 ];
