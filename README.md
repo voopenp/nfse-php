@@ -8,6 +8,8 @@ A maneira mais moderna e eficiente de integrar PHP com a NFS-e Nacional.
 
 Este pacote é a fundação do ecossistema para integração com a NFS-e Nacional. O foco é garantir contratos sólidos, modelos de dados ricos (DTOs) e facilidade de uso para desenvolvedores PHP. Ele fornece um conjunto robusto de DTOs que simplificam a criação e validação dos XMLs, oferecendo uma interface fluida e uma documentação alinhada à realidade do desenvolvedor.
 
+📚 **Documentação Técnica:** [nfse.netlify.app](https://nfse.netlify.app/)
+
 ## Instalação
 
 Você pode instalar o pacote via composer:
@@ -21,7 +23,7 @@ composer require nfse-nacional/nfse-php
 Exemplo básico de utilização dos DTOs:
 
 ```php
-use Nfse\Nfse\Dto\DpsData;
+use Nfse\Dto\DpsData;
 
 // Exemplo de instanciação (ajuste conforme sua necessidade)
 $dps = DpsData::from([
@@ -30,6 +32,80 @@ $dps = DpsData::from([
         // ... dados da DPS
     ]
 ]);
+```
+
+## Exemplo Completo
+
+Abaixo, um exemplo de como gerar o ID, criar o objeto DPS, gerar o XML e assiná-lo digitalmente.
+
+```php
+use Nfse\Dto\DpsData;
+use Nfse\Xml\DpsXmlBuilder;
+use Nfse\Signer\Certificate;
+use Nfse\Signer\XmlSigner;
+use Nfse\Support\IdGenerator;
+
+// 1. Gerar o ID da DPS
+// Formato: DPS + Cód.Mun.(7) + Tipo Inscr.(1) + Inscr.Fed.(14) + Série(5) + Número(15)
+$id = IdGenerator::generateDpsId('12345678000199', '3550308', '1', '1001');
+
+// 2. Instanciar o DTO (você pode usar arrays ou objetos)
+$dps = DpsData::from([
+    '@versao' => '1.00',
+    'infDPS' => [
+        '@Id' => $id,
+        'tpAmb' => 2, // 2 - Homologação
+        'dhEmi' => date('Y-m-d\TH:i:s'),
+        'verAplic' => '1.0',
+        'serie' => '1',
+        'nDPS' => '1001',
+        'dCompet' => date('Y-m-d'),
+        'tpEmit' => 1, // 1 - Prestador
+        'cLocEmi' => '3550308', // São Paulo - SP
+        'prest' => [
+            'CNPJ' => '12345678000199',
+            'IM' => '12345',
+        ],
+        'toma' => [
+            'CPF' => '11122233344',
+            'xNome' => 'Tomador Exemplo',
+        ],
+        'serv' => [
+            'locPrest' => [
+                'cLocPrest' => '3550308',
+            ],
+            'cServ' => [
+                'cTribNac' => '1.01',
+                'xDescServ' => 'Analise de sistemas',
+            ],
+        ],
+        'valores' => [
+            'vServPrest' => [
+                'vReceb' => 1000.00,
+                'vServ' => 1000.00,
+            ],
+            'trib' => [
+                'tribISSQN' => 1, // 1 - Operação tributável
+                'tpRetISSQN' => 1, // 1 - Não Retido
+            ],
+        ],
+    ]
+]);
+
+// 3. Gerar o XML
+$builder = new DpsXmlBuilder();
+$xml = $builder->build($dps);
+
+// 4. Assinar o XML
+// Carregue seu certificado A1 (PKCS#12)
+$cert = new Certificate('/caminho/para/certificado.pfx', 'senha123');
+$signer = new XmlSigner($cert);
+
+// Assina a tag 'infDPS'
+$signedXml = $signer->sign($xml, 'infDPS');
+
+// Agora você pode enviar $signedXml para a API da Nacional
+echo $signedXml;
 ```
 
 ## 🗺️ Roadmap
