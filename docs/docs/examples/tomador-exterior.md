@@ -11,9 +11,9 @@ Este exemplo demonstra como preencher os dados para um tomador residente ou domi
 ## Exemplo de Código
 
 ```php
-use Nfse\Dto\TomadorData;
-use Nfse\Dto\EnderecoData;
-use Nfse\Dto\EnderecoExteriorData;
+use Nfse\Dto\Nfse\TomadorData;
+use Nfse\Dto\Nfse\EnderecoData;
+use Nfse\Dto\Nfse\EnderecoExteriorData;
 
 $tomador = new TomadorData(
     cpf: null,

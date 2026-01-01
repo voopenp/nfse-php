@@ -15,7 +15,7 @@ A estrutura do XML da NFS-e Nacional é complexa e rigorosa. Os builders (`DpsXm
 Para gerar o XML de uma Declaração de Prestação de Serviço (DPS), utilize o `DpsXmlBuilder`.
 
 ```php
-use Nfse\Dto\DpsData;
+use Nfse\Dto\Nfse\DpsData;
 use Nfse\Xml\DpsXmlBuilder;
 
 // 1. Instancie seu DTO (geralmente vindo de um formulário ou banco de dados)
@@ -33,7 +33,7 @@ echo $xml;
 Para documentos de NFS-e já processados ou para visualização, utilize o `NfseXmlBuilder`.
 
 ```php
-use Nfse\Dto\NfseData;
+use Nfse\Dto\Nfse\NfseData;
 use Nfse\Xml\NfseXmlBuilder;
 
 $nfseData = NfseData::from($dadosNfse);

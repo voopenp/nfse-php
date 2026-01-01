@@ -11,10 +11,10 @@ Cenário onde o serviço é prestado para um tomador no exterior.
 ## Exemplo de Código
 
 ```php
-use Nfse\Dto\ServicoData;
-use Nfse\Dto\ComercioExteriorData;
-use Nfse\Dto\CodigoServicoData;
-use Nfse\Dto\TributacaoData;
+use Nfse\Dto\Nfse\ServicoData;
+use Nfse\Dto\Nfse\ComercioExteriorData;
+use Nfse\Dto\Nfse\CodigoServicoData;
+use Nfse\Dto\Nfse\TributacaoData;
 
 // 1. Configurar Tributação como Exportação
 $tributacao = new TributacaoData(

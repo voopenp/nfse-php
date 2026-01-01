@@ -26,7 +26,7 @@ Use esta abordagem quando você já tem os dados no formato do padrão nacional 
 ### Exemplo Completo
 
 ```php
-use Nfse\Dto\DpsData;
+use Nfse\Dto\Nfse\DpsData;
 use Nfse\Xml\DpsXmlBuilder;
 use Illuminate\Validation\ValidationException;
 
@@ -141,7 +141,7 @@ Use esta abordagem quando você quer **código mais legível** mas ainda prefere
 ### Exemplo Completo
 
 ```php
-use Nfse\Dto\DpsData;
+use Nfse\Dto\Nfse\DpsData;
 use Nfse\Xml\DpsXmlBuilder;
 
 // Você também pode usar arrays com chaves legíveis
@@ -246,17 +246,17 @@ Use esta abordagem para **máxima type safety** e **autocomplete** da IDE.
 ### Exemplo Completo
 
 ```php
-use Nfse\Dto\DpsData;
-use Nfse\Dto\InfDpsData;
-use Nfse\Dto\PrestadorData;
-use Nfse\Dto\TomadorData;
-use Nfse\Dto\EnderecoNacionalData;
-use Nfse\Dto\ServicoData;
-use Nfse\Dto\CodigoServicoData;
-use Nfse\Dto\ValoresData;
-use Nfse\Dto\ValorServicoPrestadoData;
-use Nfse\Dto\TributacaoData;
-use Nfse\Dto\TributacaoMunicipalData;
+use Nfse\Dto\Nfse\DpsData;
+use Nfse\Dto\Nfse\InfDpsData;
+use Nfse\Dto\Nfse\PrestadorData;
+use Nfse\Dto\Nfse\TomadorData;
+use Nfse\Dto\Nfse\EnderecoNacionalData;
+use Nfse\Dto\Nfse\ServicoData;
+use Nfse\Dto\Nfse\CodigoServicoData;
+use Nfse\Dto\Nfse\ValoresData;
+use Nfse\Dto\Nfse\ValorServicoPrestadoData;
+use Nfse\Dto\Nfse\TributacaoData;
+use Nfse\Dto\Nfse\TributacaoMunicipalData;
 use Nfse\Xml\DpsXmlBuilder;
 
 // Construção Semântica com Argumentos Nomeados (PHP 8+)

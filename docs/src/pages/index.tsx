@@ -60,7 +60,7 @@ function HomepageHeader() {
                                 default
                             >
                                 <CodeBlock language="php">
-                                    {`use Nfse\\Dto\\DpsData;
+                                    {`use Nfse\\Dto\\Nfse\\DpsData;
 use Nfse\\Xml\\DpsXmlBuilder;
 use Illuminate\\Validation\\ValidationException;
 
@@ -128,7 +128,7 @@ try {
                                 label="Array (Semântico)"
                             >
                                 <CodeBlock language="php">
-                                    {`use Nfse\\Dto\\DpsData;
+                                    {`use Nfse\\Dto\\Nfse\\DpsData;
 use Nfse\\Xml\\DpsXmlBuilder;
 
 // Você também pode usar arrays com chaves legíveis
@@ -173,12 +173,12 @@ echo $xml;`}
                                 label="Objeto (Semântico)"
                             >
                                 <CodeBlock language="php">
-                                    {`use Nfse\\Dto\\DpsData;
-use Nfse\\Dto\\InfDpsData;
-use Nfse\\Dto\\PrestadorData;
-use Nfse\\Dto\\TomadorData;
-use Nfse\\Dto\\ServicoData;
-use Nfse\\Dto\\ValoresData;
+                                    {`use Nfse\\Dto\\Nfse\\DpsData;
+use Nfse\\Dto\\Nfse\\InfDpsData;
+use Nfse\\Dto\\Nfse\\PrestadorData;
+use Nfse\\Dto\\Nfse\\TomadorData;
+use Nfse\\Dto\\Nfse\\ServicoData;
+use Nfse\\Dto\\Nfse\\ValoresData;
 use Nfse\\Xml\\DpsXmlBuilder;
 
 // Construção Semântica com Argumentos Nomeados (PHP 8+)

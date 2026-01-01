@@ -6,7 +6,8 @@ O `nfse-php` é uma biblioteca agnóstica de framework que fornece os blocos de 
 
 1.  **Modelagem de Dados**: Define as classes que representam o domínio (Nota Fiscal, DPS, Pessoas) através de DTOs robustos. Veja a seção **[Tipos (DTOs)](./types/main-documents)**.
 2.  **Validação**: Garante que os dados estejam em conformidade com as regras de negócio básicas e o schema nacional antes do envio.
-3.  **Geração de Tipos**: Facilita a integração com o frontend através da geração automática de tipos TypeScript.
+3.  **Comunicação (SDK)**: Cliente HTTP nativo para integração com os Web Services da SEFIN Nacional e ADN.
+4.  **Geração de Tipos**: Facilita a integração com o frontend através da geração automática de tipos TypeScript.
 
 ## Tecnologia de DTOs
 
@@ -15,7 +16,7 @@ Utilizamos a biblioteca `spatie/laravel-data` para definição de DTOs. Isso nos
 ### Exemplo de DTO
 
 ```php
-namespace Nfse\Dto;
+namespace Nfse\Dto\Nfse\Nfse;
 
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
@@ -52,17 +53,18 @@ O fluxo típico de uso da biblioteca segue estes passos:
 1.  **Entrada de Dados**: Receba dados de um formulário, API ou banco de dados.
 2.  **Instanciação**: Crie um DTO usando `from()` ou `validateAndCreate()`.
 3.  **Validação**: A biblioteca valida automaticamente os tipos e restrições básicas.
-4.  **Processamento**: Utilize o DTO na sua lógica de negócio.
-5.  **Serialização**: Utilize os Builders para gerar o XML final.
+4.  **Assinatura**: Assine o XML gerado usando seu certificado digital.
+5.  **Transmissão**: Utilize o `NfseClient` para enviar o documento para o governo.
 
 ```mermaid
 graph LR
     A[Dados Brutos] --> B[DTO Data]
     B --> C{Validação}
-    C -- OK --> D[Lógica de Negócio]
-    D --> E[XML Builder]
-    E --> F[XML Final]
-    C -- Erro --> G[Exceção de Validação]
+    C -- OK --> D[XML Builder]
+    D --> E[Xml Signer]
+    E --> F[Nfse Client]
+    F --> G[Sefin Nacional]
+    C -- Erro --> H[Exceção de Validação]
 ```
 
 ## Instalação
@@ -76,7 +78,7 @@ composer require nfse-nacional/nfse-php
 A biblioteca permite criar e validar documentos de forma simples:
 
 ```php
-use Nfse\Dto\DpsData;
+use Nfse\Dto\Nfse\DpsData;
 
 // Criando a partir de um array de dados
 $dps = DpsData::from([

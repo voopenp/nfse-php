@@ -24,7 +24,7 @@ public function __construct(
 Para validar dados manualmente, você pode usar o método `validate`:
 
 ```php
-use Nfse\Dto\InfDpsData;
+use Nfse\Dto\Nfse\InfDpsData;
 
 try {
     InfDpsData::validate($dados);

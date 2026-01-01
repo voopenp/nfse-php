@@ -10,8 +10,8 @@ Este exemplo demonstra como instanciar o DTO `TomadorData` para um tomador pesso
 ## Exemplo de Código
 
 ```php
-use Nfse\Dto\TomadorData;
-use Nfse\Dto\EnderecoData;
+use Nfse\Dto\Nfse\TomadorData;
+use Nfse\Dto\Nfse\EnderecoData;
 
 $tomador = new TomadorData(
     cpf: '12345678901',

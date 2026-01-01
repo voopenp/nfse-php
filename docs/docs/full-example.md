@@ -7,9 +7,13 @@ Este guia apresenta um exemplo completo de ponta a ponta: desde a recepção dos
 Imagine que você está recebendo dados de um formulário de emissão de nota fiscal.
 
 ```php
-use Nfse\Dto\DpsData;
+use Nfse\Dto\Nfse\DpsData;
 use Nfse\Xml\DpsXmlBuilder;
 use Nfse\Support\IdGenerator;
+use Nfse\Signer\XmlSigner;
+use Nfse\Http\NfseContext;
+use Nfse\Http\Client\SefinClient;
+use Nfse\Enums\TipoAmbiente;
 use Illuminate\Validation\ValidationException;
 
 // 1. Gerar o ID da DPS
@@ -20,7 +24,7 @@ $idDps = IdGenerator::generateDpsId(
     '100'             // Número DPS
 );
 
-// 2. Dados vindos da sua aplicação (ex: $request->all())
+// 2. Dados vindos da sua aplicação
 $dadosDoFormulario = [
     'versao' => '1.00',
     'infDPS' => [
@@ -64,21 +68,43 @@ $dadosDoFormulario = [
 
 try {
     // 3. Validar e criar o DTO
-    // Isso garante que todos os campos obrigatórios estão presentes e nos formatos corretos
     $dps = DpsData::validateAndCreate($dadosDoFormulario);
 
     // 4. Gerar o XML
     $builder = new DpsXmlBuilder();
     $xml = $builder->build($dps);
 
-    // 5. Resultado
-    header('Content-Type: application/xml');
-    echo $xml;
+    // 5. Assinar o XML
+    $signer = new XmlSigner();
+    $xmlAssinado = $signer->sign(
+        $xml,
+        '/caminho/para/certificado.p12',
+        'sua-senha'
+    );
+
+    // 6. Transmitir para a SEFIN Nacional
+    $context = new NfseContext(
+        certificatePath: '/caminho/para/certificado.p12',
+        certificatePassword: 'sua-senha',
+        ambiente: TipoAmbiente::Homologacao
+    );
+
+    $sefin = new SefinClient($context);
+
+    // O XML deve ser enviado compactado em GZip e Base64
+    $xmlGZipB64 = base64_encode(gzencode($xmlAssinado));
+    $response = $sefin->emitirNfse($xmlGZipB64);
+
+    if ($response->erros) {
+        print_r($response->erros);
+    } else {
+        echo "NFS-e emitida: " . $response->chaveAcesso;
+    }
 
 } catch (ValidationException $e) {
-    // 6. Tratar erros de validação
-    // O $e->errors() conterá detalhes de quais campos falharam
     print_r($e->errors());
+} catch (\Exception $e) {
+    echo "Erro: " . $e->getMessage();
 }
 ```
 

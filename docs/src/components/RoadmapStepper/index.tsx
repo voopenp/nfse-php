@@ -40,10 +40,10 @@ const steps: Step[] = [
         status: "in-progress",
     },
     {
-        title: "Fase 6: Web Services (Próximo)",
+        title: "Fase 6: Web Services (SDK) ✅",
         description:
-            "Integração com Web Services da SEFIN Nacional: envio de DPS, consulta de NFSe, eventos e cancelamentos.",
-        status: "pending",
+            "Integração nativa com SEFIN Nacional e ADN: emissão, consulta, eventos e parâmetros municipais.",
+        status: "completed",
     },
     {
         title: "Fase 7: Testes E2E & CI/CD",

@@ -12,9 +12,9 @@ Exemplo de preenchimento de campos relativos a PIS e COFINS, incluindo base de c
 Neste exemplo, temos um cenário onde o PIS é zerado (alíquota 0.00%) e o COFINS incide sobre o faturamento (alíquota 7.60%), com retenção (tpRetPisCofins = 2).
 
 ```php
-use Nfse\Dto\ValoresData;
-use Nfse\Dto\TributacaoData;
-use Nfse\Dto\ValorServicoPrestadoData;
+use Nfse\Dto\Nfse\ValoresData;
+use Nfse\Dto\Nfse\TributacaoData;
+use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 
 $valores = new ValoresData(
     valorServicoPrestado: new ValorServicoPrestadoData(

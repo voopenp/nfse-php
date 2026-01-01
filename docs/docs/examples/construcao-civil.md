@@ -15,11 +15,11 @@ Para serviços de construção civil, é obrigatório informar os dados da obra.
 ## Exemplo de Código
 
 ```php
-use Nfse\Dto\ServicoData;
-use Nfse\Dto\ObraData;
-use Nfse\Dto\EnderecoData;
-use Nfse\Dto\LocalPrestacaoData;
-use Nfse\Dto\CodigoServicoData;
+use Nfse\Dto\Nfse\ServicoData;
+use Nfse\Dto\Nfse\ObraData;
+use Nfse\Dto\Nfse\EnderecoData;
+use Nfse\Dto\Nfse\LocalPrestacaoData;
+use Nfse\Dto\Nfse\CodigoServicoData;
 
 $servico = new ServicoData(
     localPrestacao: new LocalPrestacaoData(

@@ -18,6 +18,11 @@ const FAQList: FAQItem[] = [
                 </p>
                 <ul>
                     <li>
+                        <strong>Cliente SDK (API):</strong> Integração nativa
+                        com os Web Services da SEFIN Nacional e ADN (DANFSe,
+                        Parâmetros Municipais).
+                    </li>
+                    <li>
                         <strong>Geração de XML:</strong> Criação do XML final
                         compatível com o padrão nacional a partir de objetos
                         PHP.
@@ -46,12 +51,6 @@ const FAQList: FAQItem[] = [
                     <strong>NÃO</strong> é:
                 </p>
                 <ul>
-                    <li>
-                        <strong>Um Cliente HTTP/SOAP:</strong> Ele não realiza a
-                        transmissão (envio) da nota para a API da Receita. Seu
-                        papel é entregar o XML pronto e validado para que sua
-                        aplicação faça o envio.
-                    </li>
                     <li>
                         Um software de gestão (ERP) completo com interface
                         gráfica.

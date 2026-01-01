@@ -11,8 +11,8 @@ A correta identificação do tomador é crucial para a validação da nota. Abai
 Para tomadores pessoa física, o CPF é obrigatório.
 
 ```php
-use Nfse\Dto\TomadorData;
-use Nfse\Dto\EnderecoData;
+use Nfse\Dto\Nfse\TomadorData;
+use Nfse\Dto\Nfse\EnderecoData;
 
 $tomador = new TomadorData(
     cpf: '12345678901',
@@ -61,7 +61,7 @@ $tomador = new TomadorData(
 Para tomadores no exterior, não se usa CPF/CNPJ. Utiliza-se o NIF (Número de Identificação Fiscal) e o endereço exterior.
 
 ```php
-use Nfse\Dto\EnderecoExteriorData;
+use Nfse\Dto\Nfse\EnderecoExteriorData;
 
 $tomador = new TomadorData(
     cpf: null,
@@ -108,10 +108,10 @@ $infDps = new InfDpsData(
 Serviços de construção civil exigem o preenchimento do grupo `obra` dentro de `ServicoData`.
 
 ```php
-use Nfse\Dto\ObraData;
-use Nfse\Dto\ServicoData;
-use Nfse\Dto\CodigoServicoData;
-use Nfse\Dto\LocalPrestacaoData;
+use Nfse\Dto\Nfse\ObraData;
+use Nfse\Dto\Nfse\ServicoData;
+use Nfse\Dto\Nfse\CodigoServicoData;
+use Nfse\Dto\Nfse\LocalPrestacaoData;
 
 $servico = new ServicoData(
     localPrestacao: new LocalPrestacaoData(
@@ -151,8 +151,8 @@ Quando o ISS é retido pelo tomador ou intermediário, deve-se configurar o `Tri
 ### Retido pelo Tomador
 
 ```php
-use Nfse\Dto\TributacaoData;
-use Nfse\Dto\ValoresData;
+use Nfse\Dto\Nfse\TributacaoData;
+use Nfse\Dto\Nfse\ValoresData;
 
 $valores = new ValoresData(
     valorServicoPrestado: new ValorServicoPrestadoData(
@@ -194,7 +194,7 @@ $valores = new ValoresData(
 Para exportação, além de identificar o tomador como estrangeiro (item 3), deve-se configurar a tributação e o grupo de comércio exterior.
 
 ```php
-use Nfse\Dto\ComercioExteriorData;
+use Nfse\Dto\Nfse\ComercioExteriorData;
 
 // 1. Configurar Tributação
 $tributacao = new TributacaoData(

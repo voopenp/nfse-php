@@ -49,7 +49,7 @@ $xmlAssinado = $signer->sign($xmlSemAssinatura, 'infDPS');
 ```php
 use Nfse\Signer\{Certificate, XmlSigner};
 use Nfse\Xml\DpsXmlBuilder;
-use Nfse\Dto\DpsData;
+use Nfse\Dto\Nfse\DpsData;
 
 // 1. Criar o DTO da DPS
 $dps = new DpsData(
@@ -291,7 +291,7 @@ foreach ($dpsList as $dps) {
 
 ```php
 use Nfse\Support\IdGenerator;
-use Nfse\Dto\{DpsData, InfDpsData, PrestadorData, TomadorData};
+use Nfse\Dto\Nfse\{DpsData, InfDpsData, PrestadorData, TomadorData};
 use Nfse\Xml\DpsXmlBuilder;
 use Nfse\Signer\{Certificate, XmlSigner};
 

@@ -10,9 +10,9 @@ Cenários onde o ISSQN é retido pelo tomador ou intermediário.
 ## Exemplo: Retido pelo Tomador
 
 ```php
-use Nfse\Dto\ValoresData;
-use Nfse\Dto\TributacaoData;
-use Nfse\Dto\ValorServicoPrestadoData;
+use Nfse\Dto\Nfse\ValoresData;
+use Nfse\Dto\Nfse\TributacaoData;
+use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 
 $valores = new ValoresData(
     valorServicoPrestado: new ValorServicoPrestadoData(

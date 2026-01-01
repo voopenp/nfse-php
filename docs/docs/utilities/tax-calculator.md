@@ -148,7 +148,7 @@ echo "Total Federal: R$ " . number_format($totalTributosFederais, 2, ',', '.') .
 
 ```php
 use Nfse\Support\TaxCalculator;
-use Nfse\Dto\TributacaoData;
+use Nfse\Dto\Nfse\TributacaoData;
 
 $valorServico = 10000.00;
 $baseCalculoPisCofins = $valorServico;

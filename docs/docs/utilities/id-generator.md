@@ -160,7 +160,7 @@ echo $id;
 
 ```php
 use Nfse\Support\IdGenerator;
-use Nfse\Dto\{DpsData, InfDpsData};
+use Nfse\Dto\Nfse\{DpsData, InfDpsData};
 
 // 1. Gerar o ID ANTES de criar o DTO
 $idDps = IdGenerator::generateDpsId(

@@ -53,11 +53,22 @@ try {
 
 ## Detalhes Técnicos
 
--   **Algoritmo de Assinatura**: RSA-SHA1 (`http://www.w3.org/2000/09/xmldsig#rsa-sha1`).
--   **Algoritmo de Digest**: SHA1 (`http://www.w3.org/2000/09/xmldsig#sha1`).
+-   **Algoritmos Suportados**: RSA-SHA1 e RSA-SHA256.
 -   **Canonização**: C14N (`http://www.w3.org/TR/2001/REC-xml-c14n-20010315`).
 -   **Transformações**: Enveloped Signature e C14N.
 -   **Estrutura**: A assinatura é anexada como filha do elemento pai da tag assinada (ex: dentro de `<DPS>` para `<infDPS>`).
+
+O `XmlSigner` permite configurar o algoritmo desejado (o padrão é SHA1 para compatibilidade):
+
+```php
+use Nfse\Signer\XmlSigner;
+use Nfse\Signer\XmlSignerParameters;
+
+$params = new XmlSignerParameters(
+    algorithm: OPENSSL_ALGO_SHA256
+);
+$signer = new XmlSigner($certificado, $params);
+```
 
 ## Validação
 
