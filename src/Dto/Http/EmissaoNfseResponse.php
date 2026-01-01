@@ -7,8 +7,8 @@ use Spatie\LaravelData\Data;
 class EmissaoNfseResponse extends Data
 {
     /**
-     * @param MensagemProcessamentoDto[] $alertas
-     * @param MensagemProcessamentoDto[] $erros
+     * @param  MensagemProcessamentoDto[]  $alertas
+     * @param  MensagemProcessamentoDto[]  $erros
      */
     public function __construct(
         public ?int $tipoAmbiente = null,

@@ -4,20 +4,21 @@ namespace Nfse\Xml;
 
 use DOMDocument;
 use DOMElement;
-use Nfse\Dto\Nfse\NfseData;
-use Nfse\Dto\Nfse\InfNfseData;
 use Nfse\Dto\Nfse\EmitenteData;
-use Nfse\Dto\Nfse\ValoresNfseData;
 use Nfse\Dto\Nfse\EnderecoEmitenteData;
+use Nfse\Dto\Nfse\InfNfseData;
+use Nfse\Dto\Nfse\NfseData;
+use Nfse\Dto\Nfse\ValoresNfseData;
 
 class NfseXmlBuilder
 {
     private DOMDocument $dom;
+
     private DpsXmlBuilder $dpsBuilder;
 
     public function __construct()
     {
-        $this->dpsBuilder = new DpsXmlBuilder();
+        $this->dpsBuilder = new DpsXmlBuilder;
     }
 
     public function build(NfseData $nfse): string
@@ -45,9 +46,9 @@ class NfseXmlBuilder
         $this->appendElement($parent, 'cVerif', $data->codigoVerificacao);
         $this->appendElement($parent, 'dhProc', $data->dataProcessamento);
         $this->appendElement($parent, 'verAplic', $data->versaoAplicativo);
-        $this->appendElement($parent, 'ambGer', (string)$data->ambienteGerador);
-        $this->appendElement($parent, 'tpEmis', (string)$data->tipoEmissao);
-        $this->appendElement($parent, 'procEmi', (string)$data->processoEmissao);
+        $this->appendElement($parent, 'ambGer', (string) $data->ambienteGerador);
+        $this->appendElement($parent, 'tpEmis', (string) $data->tipoEmissao);
+        $this->appendElement($parent, 'procEmi', (string) $data->processoEmissao);
         $this->appendElement($parent, 'xLocEmi', $data->localEmissao);
         $this->appendElement($parent, 'xLocPrestacao', $data->localPrestacao);
         $this->appendElement($parent, 'cLocIncid', $data->codigoLocalIncidencia);
@@ -55,12 +56,12 @@ class NfseXmlBuilder
         $this->appendElement($parent, 'xTribNac', $data->descricaoTributacaoNacional);
         $this->appendElement($parent, 'xTribMun', $data->descricaoTributacaoMunicipal);
         $this->appendElement($parent, 'xNBS', $data->descricaoNbs);
-        $this->appendElement($parent, 'cStat', (string)$data->codigoStatus);
+        $this->appendElement($parent, 'cStat', (string) $data->codigoStatus);
 
         if ($data->dps) {
             // The DpsXmlBuilder creates a full XML, we need to extract the 'infDPS' element
             $dpsXml = $this->dpsBuilder->build($data->dps);
-            $tempDom = new DOMDocument();
+            $tempDom = new DOMDocument;
             $tempDom->loadXML($dpsXml);
             $infDpsNode = $tempDom->getElementsByTagName('infDPS')->item(0);
             if ($infDpsNode) {

@@ -6,7 +6,7 @@ it('can be instantiated from array-like input and maps names', function () {
     $data = CancelamentoData::from([
         'xDesc' => 'Desc',
         'cMotivo' => '1',
-        'xMotivo' => 'Teste motivo'
+        'xMotivo' => 'Teste motivo',
     ]);
 
     expect($data->descricao)->toBe('Desc');

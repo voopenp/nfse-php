@@ -2,19 +2,22 @@
 
 namespace Nfse\Tests\Unit\Service;
 
-use Nfse\Service\MunicipioService;
-use Nfse\Http\NfseContext;
 use Nfse\Enums\TipoAmbiente;
 use Nfse\Http\Client\AdnClient;
 use Nfse\Http\Client\CncClient;
+use Nfse\Http\NfseContext;
+use Nfse\Service\MunicipioService;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 class MunicipioServiceTest extends TestCase
 {
     private $context;
+
     private $service;
+
     private $adnClientMock;
+
     private $cncClientMock;
 
     protected function setUp(): void
@@ -43,7 +46,7 @@ class MunicipioServiceTest extends TestCase
         $cncProperty->setValue($this->service, $this->cncClientMock);
     }
 
-    public function testBaixarDfeMunicipio()
+    public function test_baixar_dfe_municipio()
     {
         $this->adnClientMock->expects($this->once())
             ->method('baixarDfeMunicipio')
@@ -55,7 +58,7 @@ class MunicipioServiceTest extends TestCase
         $this->assertInstanceOf(\Nfse\Dto\Http\DistribuicaoDfeResponse::class, $result);
     }
 
-    public function testEnviarLote()
+    public function test_enviar_lote()
     {
         $xmlZipB64 = 'base64data';
         $this->adnClientMock->expects($this->once())
@@ -68,7 +71,7 @@ class MunicipioServiceTest extends TestCase
         $this->assertEquals(['protocolo' => '123'], $result);
     }
 
-    public function testConsultarContribuinte()
+    public function test_consultar_contribuinte()
     {
         $this->cncClientMock->expects($this->once())
             ->method('consultarContribuinte')

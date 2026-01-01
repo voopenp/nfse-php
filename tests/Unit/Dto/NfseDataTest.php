@@ -6,7 +6,6 @@ use Nfse\Dto\Nfse\EnderecoEmitenteData;
 use Nfse\Dto\Nfse\InfDpsData;
 use Nfse\Dto\Nfse\InfNfseData;
 use Nfse\Dto\Nfse\NfseData;
-
 use Nfse\Dto\Nfse\ValoresNfseData;
 use Nfse\Support\IdGenerator;
 
@@ -30,7 +29,7 @@ it('can instantiate nfse data with full structure', function () {
             nomeLocalIncidencia: 'VARZEA ALEGRE',
             descricaoTributacaoNacional: 'Enfermagem...',
             descricaoTributacaoMunicipal: '04.06 - Enfermagem...',
-                                                                                descricaoNbs: '123456789',
+            descricaoNbs: '123456789',
             tipoEmissao: 1,
             codigoStatus: 100,
             outrasInformacoes: 'Informações adicionais',
@@ -92,7 +91,7 @@ it('can instantiate nfse data with full structure', function () {
     expect($nfse->infNfse->localEmissao)->toBe('VARZEA ALEGRE');
     expect($nfse->infNfse->valores)->toBeInstanceOf(ValoresNfseData::class);
     expect($nfse->infNfse->valores->valorLiquido)->toBe(1757.50);
-    
+
     expect($nfse->infNfse)->toBeInstanceOf(InfNfseData::class);
     expect($nfse->infNfse->emitente)->toBeInstanceOf(EmitenteData::class);
     expect($nfse->infNfse->emitente->endereco)->toBeInstanceOf(EnderecoEmitenteData::class);

@@ -2,9 +2,9 @@
 
 namespace Nfse\Http\Contracts;
 
-use Nfse\Dto\Http\EmissaoNfseResponse;
-use Nfse\Dto\Http\ConsultaNfseResponse;
 use Nfse\Dto\Http\ConsultaDpsResponse;
+use Nfse\Dto\Http\ConsultaNfseResponse;
+use Nfse\Dto\Http\EmissaoNfseResponse;
 use Nfse\Dto\Http\RegistroEventoResponse;
 
 interface SefinNacionalInterface

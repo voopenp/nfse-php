@@ -27,11 +27,11 @@ it('can generate a valid DPS ID for CNPJ', function () {
 
     // DPS + 3550308 + 2 + 12345678000199 + 0000A + 000000000000123
     // Note: Serie usually is numeric but standard says 5 chars. If it's 'A', it pads to '0000A'.
-    // Wait, standard for serie might be alphanumeric? 
+    // Wait, standard for serie might be alphanumeric?
     // The user code uses str_pad with 0. '0000A'.
-    
+
     $expected = 'DPS35503082123456780001990000A000000000000123';
-    
+
     expect($id)->toBe($expected);
     expect(strlen($id))->toBe(45);
 });

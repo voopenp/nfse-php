@@ -29,6 +29,7 @@ class DeducaoReducaoData extends Data
 
         /**
          * Documentos comprobatórios da dedução/redução.
+         *
          * @var DocumentoDeducaoData[]|null
          */
         #[MapInputName('documentos'), DataCollectionOf(DocumentoDeducaoData::class)]

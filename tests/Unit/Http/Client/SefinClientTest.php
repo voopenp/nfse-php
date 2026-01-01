@@ -2,18 +2,16 @@
 
 namespace Nfse\Tests\Unit\Http\Client;
 
-use Nfse\Http\Client\SefinClient;
-use Nfse\Http\NfseContext;
-use Nfse\Enums\TipoAmbiente;
-use Nfse\Dto\Http\EmissaoNfseResponse;
-use Nfse\Dto\Http\ConsultaNfseResponse;
-use Nfse\Dto\Http\ConsultaDpsResponse;
-use Nfse\Dto\Http\RegistroEventoResponse;
-use PHPUnit\Framework\TestCase;
+use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Client;
+use Nfse\Dto\Http\ConsultaNfseResponse;
+use Nfse\Dto\Http\EmissaoNfseResponse;
+use Nfse\Enums\TipoAmbiente;
+use Nfse\Http\Client\SefinClient;
+use Nfse\Http\NfseContext;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 class SefinClientTest extends TestCase
@@ -31,7 +29,7 @@ class SefinClientTest extends TestCase
         );
 
         $client = new SefinClient($context);
-        
+
         $reflection = new ReflectionClass($client);
         $property = $reflection->getProperty('httpClient');
         $property->setAccessible(true);
@@ -40,7 +38,7 @@ class SefinClientTest extends TestCase
         return $client;
     }
 
-    public function testEmitirNfse()
+    public function test_emitir_nfse()
     {
         $responseData = [
             'tipoAmbiente' => 2,
@@ -50,11 +48,11 @@ class SefinClientTest extends TestCase
             'chaveAcesso' => 'CHAVE123',
             'nfseXmlGZipB64' => base64_encode(gzencode('<nfse>xml</nfse>')),
             'alertas' => [],
-            'erros' => []
+            'erros' => [],
         ];
 
         $client = $this->createClientWithMock([
-            new Response(200, [], json_encode($responseData))
+            new Response(200, [], json_encode($responseData)),
         ]);
 
         $response = $client->emitirNfse('fake-payload');
@@ -63,18 +61,18 @@ class SefinClientTest extends TestCase
         $this->assertEquals('CHAVE123', $response->chaveAcesso);
     }
 
-    public function testConsultarNfse()
+    public function test_consultar_nfse()
     {
         $responseData = [
             'tipoAmbiente' => 2,
             'versaoAplicativo' => '1.0',
             'dataHoraProcessamento' => '2023-10-27T10:00:00',
             'chaveAcesso' => 'CHAVE123',
-            'nfseXmlGZipB64' => base64_encode(gzencode('<nfse>xml</nfse>'))
+            'nfseXmlGZipB64' => base64_encode(gzencode('<nfse>xml</nfse>')),
         ];
 
         $client = $this->createClientWithMock([
-            new Response(200, [], json_encode($responseData))
+            new Response(200, [], json_encode($responseData)),
         ]);
 
         $response = $client->consultarNfse('CHAVE123');
@@ -83,11 +81,11 @@ class SefinClientTest extends TestCase
         $this->assertEquals('CHAVE123', $response->chaveAcesso);
     }
 
-    public function testVerificarDps()
+    public function test_verificar_dps()
     {
         $client = $this->createClientWithMock([
             new Response(200),
-            new Response(404)
+            new Response(404),
         ]);
 
         $this->assertTrue($client->verificarDps('DPS123'));

@@ -4,7 +4,7 @@ namespace Nfse\Enums;
 
 /**
  * Tipo de Ambiente do Sistema Nacional NFS-e
- * 
+ *
  * Baseado no schema: TSTipoAmbiente
  */
 enum TipoAmbiente: string
@@ -21,8 +21,6 @@ enum TipoAmbiente: string
 
     /**
      * Get description for the enum case
-     * 
-     * @return string
      */
     public function getDescription(): string
     {
@@ -34,8 +32,6 @@ enum TipoAmbiente: string
 
     /**
      * Get label (alias for getDescription)
-     * 
-     * @return string
      */
     public function label(): string
     {

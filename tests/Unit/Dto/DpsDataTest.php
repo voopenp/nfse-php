@@ -2,19 +2,19 @@
 
 namespace Nfse\Tests\Unit\Dto;
 
-use Nfse\Dto\Nfse\DpsData;
-use Nfse\Dto\Nfse\InfDpsData;
-use Nfse\Dto\Nfse\PrestadorData;
-use Nfse\Dto\Nfse\TomadorData;
-use Nfse\Dto\Nfse\ServicoData;
-use Nfse\Dto\Nfse\ValoresData;
-use Nfse\Dto\Nfse\EnderecoData;
-use Nfse\Dto\Nfse\RegimeTributarioData;
-use Nfse\Dto\Nfse\TributacaoData;
-use Nfse\Dto\Nfse\LocalPrestacaoData;
 use Nfse\Dto\Nfse\CodigoServicoData;
-use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 use Nfse\Dto\Nfse\DescontoData;
+use Nfse\Dto\Nfse\DpsData;
+use Nfse\Dto\Nfse\EnderecoData;
+use Nfse\Dto\Nfse\InfDpsData;
+use Nfse\Dto\Nfse\LocalPrestacaoData;
+use Nfse\Dto\Nfse\PrestadorData;
+use Nfse\Dto\Nfse\RegimeTributarioData;
+use Nfse\Dto\Nfse\ServicoData;
+use Nfse\Dto\Nfse\TomadorData;
+use Nfse\Dto\Nfse\TributacaoData;
+use Nfse\Dto\Nfse\ValoresData;
+use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 use Nfse\Support\IdGenerator;
 
 it('can instantiate dps data with full structure', function () {

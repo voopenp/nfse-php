@@ -4,7 +4,7 @@ namespace Nfse\Enums;
 
 /**
  * Emitente da DPS
- * 
+ *
  * Baseado no schema: TSEmitenteDPS
  */
 enum EmitenteDPS: string
@@ -26,8 +26,6 @@ enum EmitenteDPS: string
 
     /**
      * Get description for the enum case
-     * 
-     * @return string
      */
     public function getDescription(): string
     {
@@ -40,8 +38,6 @@ enum EmitenteDPS: string
 
     /**
      * Get label (alias for getDescription)
-     * 
-     * @return string
      */
     public function label(): string
     {

@@ -2,14 +2,14 @@
 
 namespace Nfse\Tests\Unit\Http\Client;
 
-use Nfse\Http\Client\AdnClient;
-use Nfse\Http\NfseContext;
-use Nfse\Enums\TipoAmbiente;
-use PHPUnit\Framework\TestCase;
+use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Client;
+use Nfse\Enums\TipoAmbiente;
+use Nfse\Http\Client\AdnClient;
+use Nfse\Http\NfseContext;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 class AdnClientTest extends TestCase
@@ -27,7 +27,7 @@ class AdnClientTest extends TestCase
         );
 
         $client = new AdnClient($context);
-        
+
         $reflection = new ReflectionClass($client);
         $property = $reflection->getProperty('httpClient');
         $property->setAccessible(true);
@@ -36,12 +36,12 @@ class AdnClientTest extends TestCase
         return $client;
     }
 
-    public function testConsultarParametrosConvenio()
+    public function test_consultar_parametros_convenio()
     {
         $responseData = ['param' => 'value'];
 
         $client = $this->createClientWithMock([
-            new Response(200, [], json_encode($responseData))
+            new Response(200, [], json_encode($responseData)),
         ]);
 
         $response = $client->consultarParametrosConvenio('3550308');
@@ -49,18 +49,18 @@ class AdnClientTest extends TestCase
         $this->assertEquals($responseData, $response);
     }
 
-    public function testBaixarDfeContribuinte()
+    public function test_baixar_dfe_contribuinte()
     {
         $responseData = [
             'tipoAmbiente' => 2,
             'ultimoNSU' => 100,
             'listaNSU' => [
-                ['nsu' => 100, 'xmlGZipB64' => 'base64']
-            ]
+                ['nsu' => 100, 'xmlGZipB64' => 'base64'],
+            ],
         ];
 
         $client = $this->createClientWithMock([
-            new Response(200, [], json_encode($responseData))
+            new Response(200, [], json_encode($responseData)),
         ]);
 
         $response = $client->baixarDfeContribuinte(100);
@@ -69,12 +69,12 @@ class AdnClientTest extends TestCase
         $this->assertEquals(100, $response->ultimoNsu);
     }
 
-    public function testObterDanfse()
+    public function test_obter_danfse()
     {
         $pdfContent = '%PDF-1.4';
 
         $client = $this->createClientWithMock([
-            new Response(200, [], $pdfContent)
+            new Response(200, [], $pdfContent),
         ]);
 
         $response = $client->obterDanfse('CHAVE123');

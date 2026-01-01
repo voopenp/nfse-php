@@ -1,25 +1,21 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
-use Nfse\Dto\Nfse\InfDpsData;
-use Nfse\Dto\Nfse\PrestadorData;
-use Nfse\Dto\Nfse\TomadorData;
-use Nfse\Dto\Nfse\ServicoData;
-use Nfse\Dto\Nfse\ValoresData;
-use Nfse\Dto\Nfse\EnderecoData;
-use Nfse\Dto\Nfse\RegimeTributarioData;
-use Nfse\Dto\Nfse\TributacaoData;
-use Nfse\Dto\Nfse\LocalPrestacaoData;
 use Nfse\Dto\Nfse\CodigoServicoData;
-use Nfse\Dto\Nfse\ComercioExteriorData;
-use Nfse\Dto\Nfse\ObraData;
-use Nfse\Dto\Nfse\AtividadeEventoData;
-use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 use Nfse\Dto\Nfse\DescontoData;
-use Nfse\Dto\Nfse\DeducaoReducaoData;
-use Nfse\Dto\Nfse\SubstituicaoData;
+use Nfse\Dto\Nfse\EnderecoData;
+use Nfse\Dto\Nfse\InfDpsData;
 use Nfse\Dto\Nfse\IntermediarioData;
+use Nfse\Dto\Nfse\LocalPrestacaoData;
+use Nfse\Dto\Nfse\PrestadorData;
+use Nfse\Dto\Nfse\RegimeTributarioData;
+use Nfse\Dto\Nfse\ServicoData;
+use Nfse\Dto\Nfse\SubstituicaoData;
+use Nfse\Dto\Nfse\TomadorData;
+use Nfse\Dto\Nfse\TributacaoData;
+use Nfse\Dto\Nfse\ValoresData;
+use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 
 try {
     $infDps = new InfDpsData(
@@ -139,6 +135,6 @@ try {
     var_dump($infDps);
 
 } catch (\Throwable $e) {
-    echo "Error: " . $e->getMessage() . "\n";
+    echo 'Error: '.$e->getMessage()."\n";
     echo $e->getTraceAsString();
 }

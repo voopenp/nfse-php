@@ -1,8 +1,8 @@
 <?php
 
+use Nfse\Dto\Nfse\CancelamentoData;
 use Nfse\Dto\Nfse\InfPedRegData;
 use Nfse\Dto\Nfse\PedRegEventoData;
-use Nfse\Dto\Nfse\CancelamentoData;
 use Nfse\Xml\EventosXmlBuilder;
 
 it('builds a pedRegEvento xml for cancelamento', function () {
@@ -19,7 +19,7 @@ it('builds a pedRegEvento xml for cancelamento', function () {
 
     $pedido = new PedRegEventoData(infPedReg: $inf);
 
-    $xml = (new EventosXmlBuilder())->buildPedRegEvento($pedido);
+    $xml = (new EventosXmlBuilder)->buildPedRegEvento($pedido);
 
     expect($xml)->toContain('<pedRegEvento');
     expect($xml)->toContain('<infPedReg Id="PRE12345678901234567890123456789012345678901234567890101101');

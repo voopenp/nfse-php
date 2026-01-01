@@ -10,7 +10,6 @@ use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 #[MapName(SnakeCaseMapper::class)]
 class NfseData extends Data
 {
-
     public function __construct(
         /**
          * Versão do leiaute.

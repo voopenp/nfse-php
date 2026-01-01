@@ -5,13 +5,14 @@ namespace Nfse\Http\Client;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Nfse\Http\NfseContext;
 use Nfse\Enums\TipoAmbiente;
 use Nfse\Http\Exceptions\NfseApiException;
+use Nfse\Http\NfseContext;
 
 class CncClient
 {
     private const URL_PRODUCTION = 'https://adn.nfse.gov.br/cnc';
+
     private const URL_HOMOLOGATION = 'https://adn.producaorestrita.nfse.gov.br/cnc';
 
     private Client $httpClient;
@@ -55,7 +56,7 @@ class CncClient
             $decoded = json_decode($content, true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw NfseApiException::responseError('Resposta inválida (não é JSON): ' . $content);
+                throw NfseApiException::responseError('Resposta inválida (não é JSON): '.$content);
             }
 
             return $decoded;
@@ -68,13 +69,13 @@ class CncClient
     {
         try {
             $response = $this->httpClient->post($endpoint, [
-                RequestOptions::JSON => $data
+                RequestOptions::JSON => $data,
             ]);
             $content = $response->getBody()->getContents();
             $decoded = json_decode($content, true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw NfseApiException::responseError('Resposta inválida (não é JSON): ' . $content);
+                throw NfseApiException::responseError('Resposta inválida (não é JSON): '.$content);
             }
 
             return $decoded;

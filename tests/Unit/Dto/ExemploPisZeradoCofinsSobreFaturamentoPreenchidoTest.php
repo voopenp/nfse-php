@@ -2,12 +2,14 @@
 
 namespace Nfse\Tests\Unit\Dto;
 
+use Nfse\Dto\Nfse\CodigoServicoData;
 use Nfse\Dto\Nfse\DpsData;
 use Nfse\Dto\Nfse\EmitenteData;
 use Nfse\Dto\Nfse\EnderecoData;
 use Nfse\Dto\Nfse\EnderecoEmitenteData;
 use Nfse\Dto\Nfse\InfDpsData;
 use Nfse\Dto\Nfse\InfNfseData;
+use Nfse\Dto\Nfse\LocalPrestacaoData;
 use Nfse\Dto\Nfse\NfseData;
 use Nfse\Dto\Nfse\PrestadorData;
 use Nfse\Dto\Nfse\RegimeTributarioData;
@@ -17,10 +19,8 @@ use Nfse\Dto\Nfse\TributacaoData;
 use Nfse\Dto\Nfse\ValoresData;
 use Nfse\Dto\Nfse\ValoresNfseData;
 use Nfse\Dto\Nfse\ValorServicoPrestadoData;
-use Nfse\Dto\Nfse\LocalPrestacaoData;
-use Nfse\Dto\Nfse\CodigoServicoData;
-use Nfse\Xml\NfseXmlBuilder;
 use Nfse\Support\IdGenerator;
+use Nfse\Xml\NfseXmlBuilder;
 
 it('can generate XML with all fields from ExemploPisZeradoCofinsSobreFaturamentoPreenchido', function () {
     $dpsId = IdGenerator::generateDpsId('11905971000105', '3304557', '333', '6');
@@ -183,7 +183,7 @@ it('can generate XML with all fields from ExemploPisZeradoCofinsSobreFaturamento
         )
     );
 
-    $builder = new NfseXmlBuilder();
+    $builder = new NfseXmlBuilder;
     $xml = $builder->build($nfse);
 
     // Assertions for NFSe fields
@@ -224,7 +224,7 @@ it('can generate XML with all fields from ExemploPisZeradoCofinsSobreFaturamento
         ->and($xml)->toContain('<vLiq>9385.00</vLiq>');
 
     // Assertions for DPS fields
-    expect($xml)->toContain('Id="' . $dpsId . '"')
+    expect($xml)->toContain('Id="'.$dpsId.'"')
         ->and($xml)->toContain('<tpAmb>2</tpAmb>')
         ->and($xml)->toContain('<dhEmi>2025-12-30T19:00:06-03:00</dhEmi>')
         ->and($xml)->toContain('<verAplic>MXM.RTC-1.00</verAplic>')

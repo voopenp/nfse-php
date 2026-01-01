@@ -5,12 +5,12 @@ namespace Nfse\Signer;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
-use DOMXPath;
 use Exception;
 
 class XmlSigner implements SignerInterface
 {
     private Certificate $certificate;
+
     private const CANONICAL = [true, false, null, null];
 
     public function __construct(Certificate $certificate)
@@ -20,14 +20,14 @@ class XmlSigner implements SignerInterface
 
     /**
      * Sign XML content
-     * 
-     * @param string $content XML content to sign
-     * @param string $tagname Tag name to sign (e.g., 'infDPS')
-     * @param string $mark Attribute name for ID (default: 'Id')
-     * @param int $algorithm OpenSSL algorithm (default: OPENSSL_ALGO_SHA1)
-     * @param array $canonical Canonicalization options [exclusive, withComments, xpath, nsPrefixes]
-     * @param string $rootname Root element name for validation (optional)
-     * @param array $options Additional options (reserved for future use)
+     *
+     * @param  string  $content  XML content to sign
+     * @param  string  $tagname  Tag name to sign (e.g., 'infDPS')
+     * @param  string  $mark  Attribute name for ID (default: 'Id')
+     * @param  int  $algorithm  OpenSSL algorithm (default: OPENSSL_ALGO_SHA1)
+     * @param  array  $canonical  Canonicalization options [exclusive, withComments, xpath, nsPrefixes]
+     * @param  string  $rootname  Root element name for validation (optional)
+     * @param  array  $options  Additional options (reserved for future use)
      * @return string Signed XML content
      */
     public function sign(
@@ -40,7 +40,7 @@ class XmlSigner implements SignerInterface
         array $options = []
     ): string {
         if (empty($content)) {
-            throw new Exception("Conteúdo XML vazio.");
+            throw new Exception('Conteúdo XML vazio.');
         }
 
         $dom = new DOMDocument('1.0', 'UTF-8');
@@ -49,9 +49,9 @@ class XmlSigner implements SignerInterface
         $dom->loadXML($content);
 
         $root = $dom->documentElement;
-        
+
         // Validate root element if specified
-        if (!empty($rootname) && $root->nodeName !== $rootname) {
+        if (! empty($rootname) && $root->nodeName !== $rootname) {
             throw new Exception("Elemento raiz esperado: {$rootname}, encontrado: {$root->nodeName}");
         }
 
@@ -99,7 +99,7 @@ class XmlSigner implements SignerInterface
         // Get ID attribute using the specified mark
         $idSigned = $node->getAttribute($mark);
         if (empty($idSigned)) {
-             throw new Exception("Tag a ser assinada deve possuir um atributo '{$mark}'.");
+            throw new Exception("Tag a ser assinada deve possuir um atributo '{$mark}'.");
         }
 
         // Calculate Digest
@@ -177,6 +177,7 @@ class XmlSigner implements SignerInterface
     {
         $c14n = $this->canonize($node, $canonical);
         $hashValue = hash($algorithm, $c14n, true);
+
         return base64_encode($hashValue);
     }
 

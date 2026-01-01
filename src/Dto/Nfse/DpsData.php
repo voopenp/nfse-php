@@ -10,7 +10,6 @@ use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 #[MapName(SnakeCaseMapper::class)]
 class DpsData extends Data
 {
-
     public function __construct(
         #[MapInputName('@versao')]
         public ?string $versao,

@@ -7,8 +7,7 @@ class DocumentGenerator
     /**
      * Gera um CPF válido.
      *
-     * @param bool $formatted Se true, retorna formatado (XXX.XXX.XXX-XX).
-     * @return string
+     * @param  bool  $formatted  Se true, retorna formatado (XXX.XXX.XXX-XX).
      */
     public static function generateCpf(bool $formatted = false): string
     {
@@ -42,8 +41,7 @@ class DocumentGenerator
     /**
      * Gera um CNPJ válido.
      *
-     * @param bool $formatted Se true, retorna formatado (XX.XXX.XXX/XXXX-XX).
-     * @return string
+     * @param  bool  $formatted  Se true, retorna formatado (XX.XXX.XXX/XXXX-XX).
      */
     public static function generateCnpj(bool $formatted = false): string
     {
@@ -84,11 +82,11 @@ class DocumentGenerator
 
     private static function formatCpf(string $cpf): string
     {
-        return substr($cpf, 0, 3) . '.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-' . substr($cpf, 9, 2);
+        return substr($cpf, 0, 3).'.'.substr($cpf, 3, 3).'.'.substr($cpf, 6, 3).'-'.substr($cpf, 9, 2);
     }
 
     private static function formatCnpj(string $cnpj): string
     {
-        return substr($cnpj, 0, 2) . '.' . substr($cnpj, 2, 3) . '.' . substr($cnpj, 5, 3) . '/' . substr($cnpj, 8, 4) . '-' . substr($cnpj, 12, 2);
+        return substr($cnpj, 0, 2).'.'.substr($cnpj, 2, 3).'.'.substr($cnpj, 5, 3).'/'.substr($cnpj, 8, 4).'-'.substr($cnpj, 12, 2);
     }
 }

@@ -7,12 +7,14 @@ use Exception;
 class Certificate
 {
     private string $pfxContent;
+
     private string $password;
+
     private ?array $certData = null;
 
     public function __construct(string $pfxPath, string $password)
     {
-        if (!file_exists($pfxPath)) {
+        if (! file_exists($pfxPath)) {
             throw new Exception("Certificado não encontrado: {$pfxPath}");
         }
 
@@ -23,7 +25,7 @@ class Certificate
 
     private function load(): void
     {
-        if (!openssl_pkcs12_read($this->pfxContent, $certs, $this->password)) {
+        if (! openssl_pkcs12_read($this->pfxContent, $certs, $this->password)) {
             // Capture OpenSSL error
             $sslError = '';
             while ($msg = openssl_error_string()) {
@@ -66,15 +68,17 @@ class Certificate
         $cert = $this->getCertificate();
         $cert = str_replace('-----BEGIN CERTIFICATE-----', '', $cert);
         $cert = str_replace('-----END CERTIFICATE-----', '', $cert);
+
         return str_replace(["\r", "\n"], '', $cert);
     }
 
     public function sign(string $content, int $algorithm = OPENSSL_ALGO_SHA1): string
     {
         $signature = '';
-        if (!openssl_sign($content, $signature, $this->getPrivateKey(), $algorithm)) {
-            throw new Exception("Falha ao assinar o conteúdo: " . openssl_error_string());
+        if (! openssl_sign($content, $signature, $this->getPrivateKey(), $algorithm)) {
+            throw new Exception('Falha ao assinar o conteúdo: '.openssl_error_string());
         }
+
         return $signature;
     }
 }

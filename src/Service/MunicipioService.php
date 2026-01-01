@@ -5,11 +5,11 @@ namespace Nfse\Service;
 use Nfse\Http\Client\AdnClient;
 use Nfse\Http\Client\CncClient;
 use Nfse\Http\NfseContext;
-use Nfse\Http\Exceptions\NfseApiException;
 
 class MunicipioService
 {
     private AdnClient $adnClient;
+
     private CncClient $cncClient;
 
     public function __construct(private NfseContext $context)

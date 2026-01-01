@@ -7,9 +7,9 @@ use Spatie\LaravelData\Data;
 class DistribuicaoDfeResponse extends Data
 {
     /**
-     * @param MensagemProcessamentoDto[] $alertas
-     * @param MensagemProcessamentoDto[] $erros
-     * @param DistribuicaoNsuDto[] $listaNsu
+     * @param  MensagemProcessamentoDto[]  $alertas
+     * @param  MensagemProcessamentoDto[]  $erros
+     * @param  DistribuicaoNsuDto[]  $listaNsu
      */
     public function __construct(
         public ?int $tipoAmbiente = null,

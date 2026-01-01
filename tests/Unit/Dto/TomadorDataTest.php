@@ -3,7 +3,6 @@
 use Nfse\Dto\Nfse\EnderecoData;
 use Nfse\Dto\Nfse\EnderecoExteriorData;
 use Nfse\Dto\Nfse\TomadorData;
-
 use Nfse\Support\DocumentGenerator;
 
 it('can instantiate tomador as PF (Person)', function () {

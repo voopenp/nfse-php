@@ -2,30 +2,33 @@
 
 namespace Nfse\Tests\Unit\Service;
 
-use Nfse\Service\ContribuinteService;
-use Nfse\Http\NfseContext;
-use Nfse\Enums\TipoAmbiente;
+use Nfse\Dto\Http\ConsultaNfseResponse;
+use Nfse\Dto\Http\EmissaoNfseResponse;
 use Nfse\Dto\Nfse\DpsData;
 use Nfse\Dto\Nfse\InfDpsData;
-use Nfse\Http\Contracts\SefinNacionalInterface;
-use Nfse\Dto\Http\EmissaoNfseResponse;
-use Nfse\Dto\Http\ConsultaNfseResponse;
-use Nfse\Support\IdGenerator;
+use Nfse\Enums\TipoAmbiente;
 use Nfse\Http\Client\AdnClient;
+use Nfse\Http\Contracts\SefinNacionalInterface;
+use Nfse\Http\NfseContext;
+use Nfse\Service\ContribuinteService;
+use Nfse\Support\IdGenerator;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 class ContribuinteServiceTest extends TestCase
 {
     private $context;
+
     private $service;
+
     private $sefinClientMock;
+
     private $adnClientMock;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->context = new NfseContext(
             TipoAmbiente::Homologacao,
             '/tmp/cert.pfx',
@@ -34,11 +37,11 @@ class ContribuinteServiceTest extends TestCase
 
         $this->sefinClientMock = $this->createMock(SefinNacionalInterface::class);
         $this->adnClientMock = $this->createMock(AdnClient::class);
-        
+
         $this->service = new ContribuinteService($this->context);
 
         $reflection = new ReflectionClass($this->service);
-        
+
         $sefinProperty = $reflection->getProperty('sefinClient');
         $sefinProperty->setAccessible(true);
         $sefinProperty->setValue($this->service, $this->sefinClientMock);
@@ -48,7 +51,7 @@ class ContribuinteServiceTest extends TestCase
         $adnProperty->setValue($this->service, $this->adnClientMock);
     }
 
-    public function testEmitirNfseSuccess()
+    public function test_emitir_nfse_success()
     {
         $idDps = IdGenerator::generateDpsId('12345678000199', '3550308', '1', '1');
         $dpsData = new DpsData(
@@ -81,11 +84,11 @@ class ContribuinteServiceTest extends TestCase
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Parser de XML ainda não implementado');
-        
+
         $this->service->emitir($dpsData);
     }
 
-    public function testConsultarNfseSuccess()
+    public function test_consultar_nfse_success()
     {
         $chave = '12345678901234567890123456789012345678901234567890';
         $xmlContent = '<nfse>Dados da Nota</nfse>';
@@ -103,7 +106,7 @@ class ContribuinteServiceTest extends TestCase
             ->method('consultarNfse')
             ->with($chave)
             ->willReturn($responseDto);
-        
+
         try {
             $this->service->consultar($chave);
         } catch (\Exception $e) {
@@ -112,7 +115,7 @@ class ContribuinteServiceTest extends TestCase
         }
     }
 
-    public function testDownloadDanfseSuccess()
+    public function test_download_danfse_success()
     {
         $chave = '12345678901234567890123456789012345678901234567890';
         $pdfContent = '%PDF-1.4 content...';

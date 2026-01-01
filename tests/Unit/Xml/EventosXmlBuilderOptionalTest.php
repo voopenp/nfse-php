@@ -16,7 +16,7 @@ it('includes CPFAutor when cpfAutor is provided and omits CNPJAutor', function (
 
     $pedido = new PedRegEventoData(infPedReg: $inf);
 
-    $xml = (new EventosXmlBuilder())->buildPedRegEvento($pedido);
+    $xml = (new EventosXmlBuilder)->buildPedRegEvento($pedido);
 
     expect($xml)->toContain('<CPFAutor>11122233344</CPFAutor>');
     expect($xml)->not()->toContain('<CNPJAutor>');
@@ -24,7 +24,7 @@ it('includes CPFAutor when cpfAutor is provided and omits CNPJAutor', function (
     expect($xml)->toContain('nPedRegEvento>7</nPedRegEvento>');
     $ch = '12345678901234567890123456789012345678901234567890';
     $tipo = '101101';
-    expect($xml)->toContain('Id="PRE' . $ch . $tipo . '007');
+    expect($xml)->toContain('Id="PRE'.$ch.$tipo.'007');
 });
 
 it('does not include e101101 when no cancellation provided', function () {
@@ -37,7 +37,7 @@ it('does not include e101101 when no cancellation provided', function () {
     );
 
     $pedido = new PedRegEventoData(infPedReg: $inf);
-    $xml = (new EventosXmlBuilder())->buildPedRegEvento($pedido);
+    $xml = (new EventosXmlBuilder)->buildPedRegEvento($pedido);
 
     expect($xml)->not()->toContain('<e101101>');
 });

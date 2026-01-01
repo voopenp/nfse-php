@@ -8,9 +8,7 @@ use Nfse\Service\MunicipioService;
 
 class Nfse
 {
-    public function __construct(private NfseContext $context)
-    {
-    }
+    public function __construct(private NfseContext $context) {}
 
     /**
      * Retorna o serviço para operações de Contribuinte (Prestador/Tomador).

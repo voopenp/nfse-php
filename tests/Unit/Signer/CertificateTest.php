@@ -2,13 +2,13 @@
 
 namespace Nfse\Tests\Unit\Signer;
 
-use Nfse\Signer\Certificate;
 use Exception;
+use Nfse\Signer\Certificate;
 
 it('throws exception for invalid password', function () {
-    $pfxPath = __DIR__ . '/../../fixtures/certs/test.pfx';
+    $pfxPath = __DIR__.'/../../fixtures/certs/test.pfx';
     $password = 'wrong_password';
-    
+
     expect(fn () => new Certificate($pfxPath, $password))
         ->toThrow(Exception::class, 'Senha do certificado incorreta ou arquivo inválido/corrompido');
 });

@@ -2,7 +2,6 @@
 
 use Nfse\Dto\Nfse\DpsData;
 use Nfse\Dto\Nfse\EnderecoData;
-use Nfse\Dto\Nfse\EnderecoExteriorData;
 use Nfse\Dto\Nfse\InfDpsData;
 use Nfse\Dto\Nfse\PrestadorData;
 use Nfse\Dto\Nfse\TomadorData;
@@ -52,7 +51,7 @@ it('validates a valid DPS', function () {
         )
     );
 
-    $validator = new DpsValidator();
+    $validator = new DpsValidator;
     $result = $validator->validate($dps);
 
     expect($result->isValid)->toBeTrue();
@@ -83,7 +82,7 @@ it('fails when Prestador is missing', function () {
         )
     );
 
-    $validator = new DpsValidator();
+    $validator = new DpsValidator;
     $result = $validator->validate($dps);
 
     expect($result->isValid)->toBeFalse();
@@ -126,7 +125,7 @@ it('fails when Prestador address is missing and not emitter', function () {
         )
     );
 
-    $validator = new DpsValidator();
+    $validator = new DpsValidator;
     $result = $validator->validate($dps);
 
     expect($result->isValid)->toBeFalse();
@@ -188,7 +187,7 @@ it('fails when Tomador is identified but address is missing', function () {
         )
     );
 
-    $validator = new DpsValidator();
+    $validator = new DpsValidator;
     $result = $validator->validate($dps);
 
     expect($result->isValid)->toBeFalse();
@@ -258,7 +257,7 @@ it('fails when Tomador has NIF but missing foreign address', function () {
         )
     );
 
-    $validator = new DpsValidator();
+    $validator = new DpsValidator;
     $result = $validator->validate($dps);
 
     expect($result->isValid)->toBeFalse();
@@ -328,7 +327,7 @@ it('fails when Tomador has CPF but missing national address', function () {
         )
     );
 
-    $validator = new DpsValidator();
+    $validator = new DpsValidator;
     $result = $validator->validate($dps);
 
     expect($result->isValid)->toBeFalse();

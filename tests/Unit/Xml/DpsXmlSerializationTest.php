@@ -2,19 +2,19 @@
 
 namespace Nfse\Tests\Unit\Xml;
 
-use Nfse\Dto\Nfse\DpsData;
-use Nfse\Dto\Nfse\InfDpsData;
-use Nfse\Dto\Nfse\PrestadorData;
-use Nfse\Dto\Nfse\TomadorData;
-use Nfse\Dto\Nfse\ServicoData;
-use Nfse\Dto\Nfse\ValoresData;
-use Nfse\Dto\Nfse\EnderecoData;
-use Nfse\Dto\Nfse\RegimeTributarioData;
-use Nfse\Dto\Nfse\TributacaoData;
-use Nfse\Dto\Nfse\LocalPrestacaoData;
 use Nfse\Dto\Nfse\CodigoServicoData;
-use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 use Nfse\Dto\Nfse\DescontoData;
+use Nfse\Dto\Nfse\DpsData;
+use Nfse\Dto\Nfse\EnderecoData;
+use Nfse\Dto\Nfse\InfDpsData;
+use Nfse\Dto\Nfse\LocalPrestacaoData;
+use Nfse\Dto\Nfse\PrestadorData;
+use Nfse\Dto\Nfse\RegimeTributarioData;
+use Nfse\Dto\Nfse\ServicoData;
+use Nfse\Dto\Nfse\TomadorData;
+use Nfse\Dto\Nfse\TributacaoData;
+use Nfse\Dto\Nfse\ValoresData;
+use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 use Nfse\Xml\DpsXmlBuilder;
 
 it('serializes dps data to xml correctly', function () {
@@ -126,7 +126,7 @@ it('serializes dps data to xml correctly', function () {
         infDps: $infDps
     );
 
-    $builder = new DpsXmlBuilder();
+    $builder = new DpsXmlBuilder;
     $xml = $builder->build($dpsData);
 
     expect($xml)->toContain('<DPS xmlns="http://www.sped.fazenda.gov.br/nfse">')

@@ -83,7 +83,7 @@ it('serializes nfse data to xml correctly', function () {
         )
     );
 
-    $builder = new NfseXmlBuilder();
+    $builder = new NfseXmlBuilder;
     $xml = $builder->build($nfse);
 
     expect($xml)->toContain('<NFSe xmlns="http://www.sped.fazenda.gov.br/nfse">')

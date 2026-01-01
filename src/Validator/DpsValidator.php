@@ -33,6 +33,7 @@ class DpsValidator
 
         if ($prestador === null) {
             $errors[] = 'Prestador data is required.';
+
             return;
         }
 
@@ -52,7 +53,7 @@ class DpsValidator
     private function validateTomador(InfDpsData $infDps, array &$errors): void
     {
         $tomador = $infDps->tomador;
-        
+
         if ($tomador === null) {
             return;
         }
@@ -63,6 +64,7 @@ class DpsValidator
         if ($isIdentified) {
             if ($tomador->endereco === null) {
                 $errors[] = 'Endereço do tomador é obrigatório quando o tomador é identificado.';
+
                 return;
             }
 
@@ -70,14 +72,14 @@ class DpsValidator
             // We assume "estrangeiro" means NIF is present or specific flag.
             // Schema Rule E0242: "O grupo de informações de endereço no exterior deve ser informado obrigatoriamente quando o tomador for identificado pelo NIF e o emitente por CNPJ."
             // Also if address is foreign, we expect `enderecoExterior` to be filled.
-            
+
             // Let's use NIF as the indicator for foreign entity as per schema hint.
             if ($tomador->nif !== null) {
-                 if ($tomador->endereco->enderecoExterior === null) {
-                     $errors[] = 'Endereço no exterior do tomador é obrigatório quando identificado por NIF.';
-                 }
-                 // And national address fields should probably be empty or ignored?
-                 // Schema doesn't explicitly forbid national fields if foreign is present, but usually it's one or the other.
+                if ($tomador->endereco->enderecoExterior === null) {
+                    $errors[] = 'Endereço no exterior do tomador é obrigatório quando identificado por NIF.';
+                }
+                // And national address fields should probably be empty or ignored?
+                // Schema doesn't explicitly forbid national fields if foreign is present, but usually it's one or the other.
             } else {
                 // If not NIF (so CPF or CNPJ), we expect national address fields.
                 // We can check if `codigoMunicipio` is present in `endereco`.

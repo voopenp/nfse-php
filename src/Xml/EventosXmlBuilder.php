@@ -5,7 +5,6 @@ namespace Nfse\Xml;
 use DOMDocument;
 use DOMElement;
 use Nfse\Dto\Nfse\PedRegEventoData;
-use Nfse\Dto\Nfse\InfPedRegData;
 
 class EventosXmlBuilder
 {
@@ -25,11 +24,11 @@ class EventosXmlBuilder
         // Build Id for infPedReg: PRE + chNFSe + tipoEvento + nPedRegEvento(3 digits)
         $ch = $data->infPedReg->chaveNfse;
         $tipo = $data->infPedReg->tipoEvento;
-        $nPed = str_pad((string)$data->infPedReg->nPedRegEvento, 3, '0', STR_PAD_LEFT);
+        $nPed = str_pad((string) $data->infPedReg->nPedRegEvento, 3, '0', STR_PAD_LEFT);
         $id = "PRE{$ch}{$tipo}{$nPed}";
         $inf->setAttribute('Id', $id);
 
-        $this->appendElement($inf, 'tpAmb', (string)$data->infPedReg->tipoAmbiente);
+        $this->appendElement($inf, 'tpAmb', (string) $data->infPedReg->tipoAmbiente);
         $this->appendElement($inf, 'verAplic', $data->infPedReg->versaoAplicativo);
         $this->appendElement($inf, 'dhEvento', $data->infPedReg->dataHoraEvento);
 
@@ -41,7 +40,7 @@ class EventosXmlBuilder
         }
 
         $this->appendElement($inf, 'chNFSe', $data->infPedReg->chaveNfse);
-        $this->appendElement($inf, 'nPedRegEvento', (string)$data->infPedReg->nPedRegEvento);
+        $this->appendElement($inf, 'nPedRegEvento', (string) $data->infPedReg->nPedRegEvento);
 
         // Only implement cancellation (e101101) for now
         if ($data->infPedReg->e101101) {

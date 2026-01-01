@@ -2,20 +2,21 @@
 
 namespace Nfse\Service;
 
-use Nfse\Http\Client\SefinClient;
-use Nfse\Http\Client\AdnClient;
-use Nfse\Http\NfseContext;
-use Nfse\Http\Exceptions\NfseApiException;
 use Nfse\Dto\Nfse\DpsData;
 use Nfse\Dto\Nfse\NfseData;
-use Nfse\Xml\DpsXmlBuilder;
+use Nfse\Http\Client\AdnClient;
+use Nfse\Http\Client\SefinClient;
+use Nfse\Http\Contracts\SefinNacionalInterface;
+use Nfse\Http\Exceptions\NfseApiException;
+use Nfse\Http\NfseContext;
 use Nfse\Signer\Certificate;
 use Nfse\Signer\XmlSigner;
-use Nfse\Http\Contracts\SefinNacionalInterface;
+use Nfse\Xml\DpsXmlBuilder;
 
 class ContribuinteService
 {
     private SefinNacionalInterface $sefinClient;
+
     private AdnClient $adnClient;
 
     public function __construct(private NfseContext $context)
@@ -29,7 +30,7 @@ class ContribuinteService
      */
     public function emitir(DpsData $dps): NfseData
     {
-        $builder = new DpsXmlBuilder();
+        $builder = new DpsXmlBuilder;
         $xml = $builder->build($dps);
 
         $cert = new Certificate($this->context->certificatePath, $this->context->certificatePassword);
@@ -44,19 +45,19 @@ class ContribuinteService
         // Transport
         $response = $this->sefinClient->emitirNfse($payload);
 
-        if (!empty($response->erros)) {
-            $msg = 'Erro na emissão: ' . json_encode($response->erros);
+        if (! empty($response->erros)) {
+            $msg = 'Erro na emissão: '.json_encode($response->erros);
             throw NfseApiException::responseError($msg);
         }
 
-        if (!$response->nfseXmlGZipB64) {
-             throw NfseApiException::responseError('Resposta sem XML da NFS-e.');
+        if (! $response->nfseXmlGZipB64) {
+            throw NfseApiException::responseError('Resposta sem XML da NFS-e.');
         }
 
         $nfseXml = gzdecode(base64_decode($response->nfseXmlGZipB64));
 
         // TODO: Implementar NfseXmlParser
-        throw new \Exception("Parser de XML ainda não implementado. XML Recebido: " . substr($nfseXml, 0, 100) . "...");
+        throw new \Exception('Parser de XML ainda não implementado. XML Recebido: '.substr($nfseXml, 0, 100).'...');
     }
 
     public function consultar(string $chave): ?NfseData
@@ -67,14 +68,14 @@ class ContribuinteService
             return null;
         }
 
-        if (!$response->nfseXmlGZipB64) {
+        if (! $response->nfseXmlGZipB64) {
             return null;
         }
 
         $nfseXml = gzdecode(base64_decode($response->nfseXmlGZipB64));
 
         // TODO: Implementar NfseXmlParser
-        throw new \Exception("Parser de XML ainda não implementado. XML Recebido: " . substr($nfseXml, 0, 100) . "...");
+        throw new \Exception('Parser de XML ainda não implementado. XML Recebido: '.substr($nfseXml, 0, 100).'...');
     }
 
     public function consultarDps(string $idDps): \Nfse\Dto\Http\ConsultaDpsResponse
@@ -107,6 +108,7 @@ class ContribuinteService
         if ($tipoEvento) {
             return $this->sefinClient->listarEventosPorTipo($chaveAcesso, $tipoEvento);
         }
+
         return $this->sefinClient->listarEventos($chaveAcesso);
     }
 

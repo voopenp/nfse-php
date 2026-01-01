@@ -6,7 +6,7 @@ return [
      * to transform, this will be the `src` directory.
      */
     'searching_paths' => [
-        __DIR__ . '/src/Dto',
+        __DIR__.'/src/Dto',
     ],
 
     /*
@@ -28,7 +28,7 @@ return [
     /*
      * The path where the generated TypeScript types will be written.
      */
-    'output_file' => __DIR__ . '/types/generated.d.ts',
+    'output_file' => __DIR__.'/types/generated.d.ts',
 
     /*
      * This formatter will be used to format the generated TypeScript types.

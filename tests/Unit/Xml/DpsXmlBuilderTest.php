@@ -2,18 +2,18 @@
 
 namespace Nfse\Tests\Unit\Xml;
 
+use Nfse\Dto\Nfse\CodigoServicoData;
 use Nfse\Dto\Nfse\DpsData;
 use Nfse\Dto\Nfse\InfDpsData;
-use Nfse\Dto\Nfse\PrestadorData;
-use Nfse\Dto\Nfse\TomadorData;
-use Nfse\Dto\Nfse\ServicoData;
-use Nfse\Dto\Nfse\ValoresData;
 use Nfse\Dto\Nfse\LocalPrestacaoData;
-use Nfse\Dto\Nfse\CodigoServicoData;
-use Nfse\Dto\Nfse\ValorServicoPrestadoData;
+use Nfse\Dto\Nfse\PrestadorData;
+use Nfse\Dto\Nfse\ServicoData;
+use Nfse\Dto\Nfse\TomadorData;
 use Nfse\Dto\Nfse\TributacaoData;
-use Nfse\Xml\DpsXmlBuilder;
+use Nfse\Dto\Nfse\ValoresData;
+use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 use Nfse\Support\IdGenerator;
+use Nfse\Xml\DpsXmlBuilder;
 
 it('can build xml from dps data', function () {
     $id = IdGenerator::generateDpsId('12345678000199', '3550308', '1', '1001');
@@ -106,11 +106,11 @@ it('can build xml from dps data', function () {
         infDps: $infDps
     );
 
-    $builder = new DpsXmlBuilder();
+    $builder = new DpsXmlBuilder;
     $xml = $builder->build($dpsData);
 
     expect($xml)->toContain('<DPS xmlns="http://www.sped.fazenda.gov.br/nfse">')
-        ->and($xml)->toContain('<infDPS Id="' . $id . '" versao="1.0">')
+        ->and($xml)->toContain('<infDPS Id="'.$id.'" versao="1.0">')
         ->and($xml)->toContain('<nDPS>1001</nDPS>')
         ->and($xml)->toContain('<vServ>1000.00</vServ>')
         ->and($xml)->toContain('<cMotivoEmisTI>4</cMotivoEmisTI>')

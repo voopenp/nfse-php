@@ -5,19 +5,20 @@ namespace Nfse\Http\Client;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Nfse\Http\NfseContext;
-use Nfse\Enums\TipoAmbiente;
-use Nfse\Http\Exceptions\NfseApiException;
-use Nfse\Http\Contracts\SefinNacionalInterface;
-use Nfse\Dto\Http\EmissaoNfseResponse;
-use Nfse\Dto\Http\ConsultaNfseResponse;
 use Nfse\Dto\Http\ConsultaDpsResponse;
-use Nfse\Dto\Http\RegistroEventoResponse;
+use Nfse\Dto\Http\ConsultaNfseResponse;
+use Nfse\Dto\Http\EmissaoNfseResponse;
 use Nfse\Dto\Http\MensagemProcessamentoDto;
+use Nfse\Dto\Http\RegistroEventoResponse;
+use Nfse\Enums\TipoAmbiente;
+use Nfse\Http\Contracts\SefinNacionalInterface;
+use Nfse\Http\Exceptions\NfseApiException;
+use Nfse\Http\NfseContext;
 
 class SefinClient implements SefinNacionalInterface
 {
     private const URL_PRODUCTION = 'https://sefin.nfse.gov.br/SefinNacional';
+
     private const URL_HOMOLOGATION = 'https://sefin.producaorestrita.nfse.gov.br/API/SefinNacional';
 
     private Client $httpClient;
@@ -70,6 +71,7 @@ class SefinClient implements SefinNacionalInterface
     {
         try {
             $response = $this->httpClient->get($endpoint);
+
             return json_decode($response->getBody()->getContents(), true);
         } catch (GuzzleException $e) {
             throw NfseApiException::requestError($e->getMessage(), $e->getCode());
@@ -121,7 +123,7 @@ class SefinClient implements SefinNacionalInterface
     public function registrarEvento(string $chaveAcesso, string $eventoXmlGZipB64): RegistroEventoResponse
     {
         $response = $this->post("/nfse/{$chaveAcesso}/eventos", [
-            'pedidoRegistroEventoXmlGZipB64' => $eventoXmlGZipB64
+            'pedidoRegistroEventoXmlGZipB64' => $eventoXmlGZipB64,
         ]);
 
         return new RegistroEventoResponse(
@@ -148,9 +150,12 @@ class SefinClient implements SefinNacionalInterface
     {
         try {
             $this->httpClient->head("/dps/{$idDps}");
+
             return true;
         } catch (GuzzleException $e) {
-            if ($e->getCode() === 404) return false;
+            if ($e->getCode() === 404) {
+                return false;
+            }
             throw NfseApiException::requestError($e->getMessage(), $e->getCode());
         }
     }
@@ -167,7 +172,7 @@ class SefinClient implements SefinNacionalInterface
 
     private function mapMensagens(array $mensagens): array
     {
-        return array_map(fn($m) => new MensagemProcessamentoDto(
+        return array_map(fn ($m) => new MensagemProcessamentoDto(
             mensagem: $m['mensagem'] ?? null,
             parametros: $m['parametros'] ?? null,
             codigo: $m['codigo'] ?? null,

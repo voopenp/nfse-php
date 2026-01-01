@@ -1,13 +1,13 @@
 <?php
 
-if (!function_exists('app')) {
-    function app($abstract = null) {
+if (! function_exists('app')) {
+    function app($abstract = null)
+    {
         static $container = [];
-        
+
         if ($abstract === null) {
             return $container;
         }
-
 
         if (isset($container[$abstract])) {
             return $container[$abstract];
@@ -18,9 +18,10 @@ if (!function_exists('app')) {
             if (isset($container[\Illuminate\Contracts\Validation\Factory::class])) {
                 return $container[$abstract] = $container[\Illuminate\Contracts\Validation\Factory::class];
             }
+
             return $container[$abstract] = $container[\Illuminate\Contracts\Validation\Factory::class] = new \Illuminate\Validation\Factory(
                 new \Illuminate\Translation\Translator(
-                    new \Illuminate\Translation\ArrayLoader(),
+                    new \Illuminate\Translation\ArrayLoader,
                     'en'
                 )
             );
@@ -28,7 +29,7 @@ if (!function_exists('app')) {
 
         if ($abstract === \Spatie\LaravelData\Support\DataConfig::class) {
             return $container[$abstract] = new \Spatie\LaravelData\Support\DataConfig(
-                ruleInferrers: array_map(fn($class) => app($class), config('data.rule_inferrers'))
+                ruleInferrers: array_map(fn ($class) => app($class), config('data.rule_inferrers'))
             );
         }
 
@@ -37,7 +38,7 @@ if (!function_exists('app')) {
             $constructor = $reflection->getConstructor();
 
             if ($constructor === null) {
-                return $container[$abstract] = new $abstract();
+                return $container[$abstract] = new $abstract;
             }
 
             $parameters = $constructor->getParameters();
@@ -45,7 +46,7 @@ if (!function_exists('app')) {
 
             foreach ($parameters as $parameter) {
                 $type = $parameter->getType();
-                if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
+                if ($type instanceof ReflectionNamedType && ! $type->isBuiltin()) {
                     $dependencies[] = app($type->getName());
                 } elseif ($parameter->isDefaultValueAvailable()) {
                     $dependencies[] = $parameter->getDefaultValue();
@@ -67,17 +68,42 @@ if (!function_exists('app')) {
 }
 
 // Set facade application
-\Illuminate\Support\Facades\Facade::setFacadeApplication(new class implements ArrayAccess {
-    public function make($abstract) { return app($abstract); }
-    public function bound($abstract) { return isset(app()[$abstract]); }
-    public function offsetExists($offset): bool { return isset(app()[$offset]); }
-    public function offsetGet($offset): mixed { return app($offset); }
-    public function offsetSet($offset, $value): void { app()[$offset] = $value; }
-    public function offsetUnset($offset): void { unset(app()[$offset]); }
+\Illuminate\Support\Facades\Facade::setFacadeApplication(new class implements ArrayAccess
+{
+    public function make($abstract)
+    {
+        return app($abstract);
+    }
+
+    public function bound($abstract)
+    {
+        return isset(app()[$abstract]);
+    }
+
+    public function offsetExists($offset): bool
+    {
+        return isset(app()[$offset]);
+    }
+
+    public function offsetGet($offset): mixed
+    {
+        return app($offset);
+    }
+
+    public function offsetSet($offset, $value): void
+    {
+        app()[$offset] = $value;
+    }
+
+    public function offsetUnset($offset): void
+    {
+        unset(app()[$offset]);
+    }
 });
 
-if (!function_exists('config')) {
-    function config($key = null, $default = null) {
+if (! function_exists('config')) {
+    function config($key = null, $default = null)
+    {
         $config = [
             'data' => [
                 'date_format' => 'Y-m-d\TH:i:sP',
@@ -100,13 +126,15 @@ if (!function_exists('config')) {
             ],
         ];
 
-        if ($key === null) return $config;
+        if ($key === null) {
+            return $config;
+        }
 
         $parts = explode('.', $key);
         $current = $config;
 
         foreach ($parts as $part) {
-            if (!isset($current[$part])) {
+            if (! isset($current[$part])) {
                 return $default;
             }
             $current = $current[$part];
@@ -116,8 +144,9 @@ if (!function_exists('config')) {
     }
 }
 
-if (!function_exists('resolve')) {
-    function resolve($abstract = null) {
+if (! function_exists('resolve')) {
+    function resolve($abstract = null)
+    {
         return app($abstract);
     }
 }

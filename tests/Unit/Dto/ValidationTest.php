@@ -2,8 +2,8 @@
 
 namespace Nfse\Tests\Unit\Dto;
 
-use Nfse\Dto\Nfse\InfDpsData;
 use Illuminate\Validation\ValidationException;
+use Nfse\Dto\Nfse\InfDpsData;
 
 it('fails validation when required fields are missing', function () {
     InfDpsData::validate([
