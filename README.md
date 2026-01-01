@@ -194,6 +194,18 @@ Por favor, veja [CONTRIBUTING](CONTRIBUTING.md) para detalhes.
 
 Se você descobrir alguma vulnerabilidade de segurança, por favor, envie um e-mail para o mantenedor em vez de usar o rastreador de problemas.
 
+## 💖 Sponsors
+
+Este projeto é mantido de forma independente e só é possível graças à parceria técnica com empresas e municípios parceiros. Por questões de _compliance_ e confidencialidade, esses parceiros não podem ser citados nominalmente, mas seu apoio foi fundamental para chegarmos até aqui.
+
+Para garantir a continuidade, manutenção e evolução constante do SDK, precisamos de novos patrocinadores. Os custos do projeto incluem:
+
+-   **Infraestrutura de CI/CD**: Execução de testes automatizados e builds via GitHub Actions.
+-   **Agentes de IA**: Utilização de ferramentas avançadas de codificação para acelerar o desenvolvimento.
+-   **Café e Tempo**: Manter um projeto desse porte exige dedicação exclusiva e, claro, muito café!
+
+Se este projeto é útil para você ou sua empresa, considere nos apoiar através do [GitHub Sponsors](https://github.com/sponsors/a21ns1g4ts).
+
 ## Credits
 
 -   [A21ns1g4ts](https://github.com/a21ns1g4ts)
