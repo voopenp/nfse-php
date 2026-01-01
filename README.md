@@ -173,12 +173,6 @@ Este projeto está em desenvolvimento ativo. Abaixo estão as fases planejadas:
 -   [ ] GitHub Actions para CI/CD.
 -   [ ] Releases automáticas.
 
-### Fase 7: Testes E2E & CI/CD 📅
-
--   [ ] Testes end-to-end com ambiente de homologação.
--   [ ] GitHub Actions para CI/CD.
--   [ ] Releases automáticas.
-
 Para mais detalhes, consulte o arquivo [ROADMAP.md](ROADMAP.md).
 
 ## Testing

@@ -37,6 +37,16 @@ const FeatureList: FeatureItem[] = [
             </>
         ),
     },
+    {
+        title: "APIs de Serviços e Utilitários",
+        description: (
+            <>
+                Integração com endpoints de utilidades e serviços —
+                Contribuinte, Municípios e ADN — para emissão, consulta, eventos
+                e parâmetros municipais.
+            </>
+        ),
+    },
 ];
 
 function Feature({ title, description }: FeatureItem) {
