@@ -77,6 +77,28 @@
     scrollbar-color: #555 #1e1e1e;
 }
 
+/* Dense tabs for hero: allow labels to wrap and reduce padding */
+.tabsDense :global(.tabs__list) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    justify-content: center;
+}
+.tabsDense :global(.tabs__item) {
+    white-space: normal; /* allow wrapping on long labels */
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.1;
+    min-width: 3rem; /* allow short items to keep a minimum size */
+    text-align: center;
+    flex: 0 0 auto; /* size based on content, not a fixed width */
+    word-break: break-word;
+}
+.tabsDense :global(.tabs__item--active) {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+
 .codeScroll::-webkit-scrollbar {
     width: 8px;
 }

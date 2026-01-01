@@ -26,12 +26,15 @@ function HomepageHeader() {
                         {siteConfig.title}
                     </Heading>
                     <p className="hero__subtitle">{siteConfig.tagline}</p>
-                    <p className="hero__subtitle">Cliente de integração (Service + SDK) para o padrão NFSe Nacional.</p>
+                    <p className="hero__subtitle">
+                        Cliente de integração (Service + SDK) para o padrão NFSe
+                        Nacional.
+                    </p>
                     <p className={styles.heroDescription}>
                         Simplifique a integração com a NFS-e Nacional. Este
-                        pacote oferece um cliente completo (Service + SDK)
-                        para emissão, consulta e cancelamento de notas fiscais
-                        de serviço, com validação de DTOs e assinatura digital
+                        pacote oferece um cliente completo (Service + SDK) para
+                        emissão, consulta e cancelamento de notas fiscais de
+                        serviço, com validação de DTOs e assinatura digital
                         automática.
                     </p>
                     <div className={styles.buttons}>
@@ -56,14 +59,15 @@ function HomepageHeader() {
                         ></span>
                     </div>
                     <div className={styles.codeScroll}>
-                        <Tabs>
-                            <TabItem
-                                value="array"
-                                label="Array (Padrão Nacional)"
-                                default
-                            >
-                                <CodeBlock language="php">
-                                    {`use Nfse\\Dto\\Nfse\\DpsData;
+                        <div className={styles.tabsDense}>
+                            <Tabs>
+                                <TabItem
+                                    value="array"
+                                    label="Array (Padrão Nacional)"
+                                    default
+                                >
+                                    <CodeBlock language="php">
+                                        {`use Nfse\\Dto\\Nfse\\DpsData;
 use Nfse\\Xml\\DpsXmlBuilder;
 use Illuminate\\Validation\\ValidationException;
 
@@ -124,11 +128,11 @@ try {
 } catch (ValidationException $e) {
     print_r($e->errors());
 }`}
-                                </CodeBlock>
-                            </TabItem>
-                            <TabItem value="emitir" label="Emitir NFS-e">
-                                <CodeBlock language="php">
-                                    {`use Nfse\Contribuinte\Service\NfseService;
+                                    </CodeBlock>
+                                </TabItem>
+                                <TabItem value="emitir" label="Emitir NFS-e">
+                                    <CodeBlock language="php">
+                                        {`use Nfse\Contribuinte\Service\NfseService;
     use Nfse\Contribuinte\Configuration\NfseContext;
     use Nfse\Dto\DpsData;
 
@@ -153,11 +157,11 @@ try {
 
     $nfse = $service->emitir($dps);
     echo "Nota emitida! Número: {$nfse->infNfse->numeroNfse}";`}
-                                </CodeBlock>
-                            </TabItem>
-                            <TabItem value="consultar" label="Consultar">
-                                <CodeBlock language="php">
-                                    {`// 1. Instancie o serviço (igual ao exemplo anterior)
+                                    </CodeBlock>
+                                </TabItem>
+                                <TabItem value="consultar" label="Consultar">
+                                    <CodeBlock language="php">
+                                        {`// 1. Instancie o serviço (igual ao exemplo anterior)
     $service = new NfseService($context);
 
     // 2. Consulte pela chave de acesso
@@ -172,11 +176,14 @@ try {
     } catch (\Exception $e) {
         echo "Erro na consulta: " . $e->getMessage();
     }`}
-                                </CodeBlock>
-                            </TabItem>
-                            <TabItem value="eventos" label="Eventos (Cancelar)">
-                                <CodeBlock language="php">
-                                    {`use Nfse\Dto\EventoData;
+                                    </CodeBlock>
+                                </TabItem>
+                                <TabItem
+                                    value="eventos"
+                                    label="Eventos (Cancelar)"
+                                >
+                                    <CodeBlock language="php">
+                                        {`use Nfse\Dto\EventoData;
 
     $evento = new EventoData(
         chaveAcesso: '12345678901234567890123456789012345678901234567890',
@@ -193,14 +200,14 @@ try {
     } catch (\Exception $e) {
         echo "Falha ao registrar evento: " . $e->getMessage();
     }`}
-                                </CodeBlock>
-                            </TabItem>
-                            <TabItem
-                                value="array-semantic"
-                                label="Array (Semântico)"
-                            >
-                                <CodeBlock language="php">
-                                    {`use Nfse\\Dto\\Nfse\\DpsData;
+                                    </CodeBlock>
+                                </TabItem>
+                                <TabItem
+                                    value="array-semantic"
+                                    label="Array (Semântico)"
+                                >
+                                    <CodeBlock language="php">
+                                        {`use Nfse\\Dto\\Nfse\\DpsData;
 use Nfse\\Xml\\DpsXmlBuilder;
 
 // Você também pode usar arrays com chaves legíveis
@@ -238,14 +245,14 @@ $dados = [
 $dps = DpsData::from($dados);
 $xml = (new DpsXmlBuilder())->build($dps);
 echo $xml;`}
-                                </CodeBlock>
-                            </TabItem>
-                            <TabItem
-                                value="semantic"
-                                label="Objeto (Semântico)"
-                            >
-                                <CodeBlock language="php">
-                                    {`use Nfse\\Dto\\Nfse\\DpsData;
+                                    </CodeBlock>
+                                </TabItem>
+                                <TabItem
+                                    value="semantic"
+                                    label="Objeto (Semântico)"
+                                >
+                                    <CodeBlock language="php">
+                                        {`use Nfse\\Dto\\Nfse\\DpsData;
 use Nfse\\Dto\\Nfse\\InfDpsData;
 use Nfse\\Dto\\Nfse\\PrestadorData;
 use Nfse\\Dto\\Nfse\\TomadorData;
@@ -300,9 +307,10 @@ $builder = new DpsXmlBuilder();
 $xml = $builder->build($dps);
 
 echo $xml;`}
-                                </CodeBlock>
-                            </TabItem>
-                        </Tabs>
+                                    </CodeBlock>
+                                </TabItem>
+                            </Tabs>
+                        </div>
                     </div>
                 </div>
             </div>
