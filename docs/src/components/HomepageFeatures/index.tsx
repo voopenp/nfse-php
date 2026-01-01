@@ -38,6 +38,26 @@ const FeatureList: FeatureItem[] = [
         ),
     },
     {
+        title: "Assinatura Digital Nativa",
+        description: (
+            <>
+                Suporte completo a certificados A1 (PKCS#12) e assinatura
+                XML-DSig, garantindo a validade jurídica de todos os documentos
+                gerados.
+            </>
+        ),
+    },
+    {
+        title: "Arquitetura Moderna",
+        description: (
+            <>
+                Desenvolvido com PHP 8.2+, aproveitando as últimas
+                funcionalidades da linguagem para um código limpo, seguro e
+                performático.
+            </>
+        ),
+    },
+    {
         title: "APIs de Serviços e Utilitários",
         description: (
             <>
