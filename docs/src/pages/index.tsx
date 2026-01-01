@@ -135,7 +135,12 @@ try {
                                         {`use Nfse\Http\NfseContext;
 use Nfse\Nfse;
 use Nfse\Enums\TipoAmbiente;
-use Nfse\Dto\DpsData;
+use Nfse\Dto\Nfse\DpsData;
+use Nfse\Dto\Nfse\InfDpsData;
+use Nfse\Dto\Nfse\PrestadorData;
+use Nfse\Dto\Nfse\TomadorData;
+use Nfse\Dto\Nfse\ServicoData;
+use Nfse\Dto\Nfse\ValoresData;
 
 $context = new NfseContext(
     TipoAmbiente::Homologacao,
@@ -143,26 +148,29 @@ $context = new NfseContext(
     'password'
 );
 
-// Obtenha o serviço de Contribuinte via helper
+// Obtenha o serviço de Contribuinte
 $nfse = new Nfse($context);
 $service = $nfse->contribuinte();
 
 $dps = new DpsData(
     versao: '1.00',
-    infDps: [
-        'id' => 'DPS123',
-        'tipoAmbiente' => 2,
-        'prestador' => ['cnpj' => '12345678000199'],
-        'tomador' => ['cpf' => '11122233344'],
-        'servico' => ['codigoTributacaoNacional' => '01.01'],
-        'valores' => ['valorServicoPrestado' => ['valorServico' => 100.00]]
-    ]
+    infDps: new InfDpsData(
+        id: 'DPS123',
+        tipoAmbiente: 2,
+        prestador: new PrestadorData(cnpj: '12345678000199'),
+        tomador: new TomadorData(cpf: '11122233344'),
+        servico: new ServicoData(codigoTributacaoNacional: '01.01'),
+        valores: new ValoresData(valorServicos: 100.00)
+    )
 );
 
-$nfse = $service->emitir($dps);
-// Observação: o parser do XML de resposta ainda está em desenvolvimento
-// — o retorno atual inclui o XML compactado; quando disponível, o
-// serviço retornará um objeto NfseData com os campos tipados.`}
+$resultado = $service->emitir($dps);
+
+if ($resultado instanceof \Nfse\Dto\Nfse\NfseData) {
+    echo "Nota emitida: " . $resultado->infNfse->chaveAcesso;
+} else {
+    echo "Resposta não tipada — verifique o XML retornado.";
+}`}
                                     </CodeBlock>
                                 </TabItem>
                                 <TabItem value="consultar" label="Consultar">
@@ -175,10 +183,10 @@ $service = $nfse->contribuinte();
 $chave = '12345678901234567890123456789012345678901234567890';
 try {
     $nfse = $service->consultar($chave);
-    if ($nfse) {
+    if ($nfse instanceof \Nfse\Dto\Nfse\NfseData) {
         echo "Nota encontrada! Emitida em: " . $nfse->infNfse->dataEmissao;
     } else {
-        echo "Nota não encontrada.";
+        echo "Nota não encontrada ou resposta não tipada.";
     }
 } catch (\Exception $e) {
     echo "Erro na consulta: " . $e->getMessage();
@@ -192,16 +200,26 @@ try {
                                     <CodeBlock language="php">
                                         {`use Nfse\Signer\Certificate;
 use Nfse\Signer\XmlSigner;
+use Nfse\Dto\Nfse\CancelamentoData;
+use Nfse\Dto\Nfse\InfPedRegData;
+use Nfse\Dto\Nfse\PedRegEventoData;
+use Nfse\Xml\EventosXmlBuilder;
 
-// Exemplo simplificado: montar o pedido de registro de evento e assiná-lo
-$pedidoXml = "<PedidoRegistroEvento>...seu-xml-de-evento-aqui...</PedidoRegistroEvento>";
+// Assumindo que $service foi instanciado conforme o exemplo de emissão
+$infPedReg = new InfPedRegData(id: 'e1', identidadeEmitente: '12345678000199', cpfAutor: '11122233344');
+$cancel = new CancelamentoData(motivo: 'Erro na emissão');
+$ped = new PedRegEventoData(versao: '1.01', infPedReg: $infPedReg, eventos: [$cancel]);
+
+$xml = (new EventosXmlBuilder())->build($ped);
+
 $cert = new Certificate('/path/to/cert.pfx', 'password');
 $signer = new XmlSigner($cert);
-$signedXml = $signer->sign($pedidoXml, 'PedidoRegistroEvento');
-$payload = base64_encode(gzencode($signedXml));
+$signed = $signer->sign($xml, 'pedRegEvento');
+$payload = base64_encode(gzencode($signed));
 
-$resultado = $service->registrarEvento('12345678901234567890123456789012345678901234567890', $payload);
-if ($resultado->sucesso) {
+$chave = '12345678901234567890123456789012345678901234567890';
+$resultado = $service->registrarEvento($chave, $payload);
+if ($resultado->sucesso ?? false) {
     echo "Evento registrado com sucesso!";
 }`}
                                     </CodeBlock>
