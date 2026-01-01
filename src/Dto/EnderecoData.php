@@ -24,14 +24,14 @@ class EnderecoData extends Data
          */
         #[MapInputName('endNac.cMun')]
         #[Nullable, StringType, Size(7)]
-        public ?string $codigoMunicipio,
+        public ?string $codigoMunicipio = null,
 
         /**
          * CEP.
          */
         #[MapInputName('endNac.CEP')]
         #[Nullable, StringType, Size(8)]
-        public ?string $cep,
+        public ?string $cep = null,
 
         /**
          * Logradouro.
@@ -59,12 +59,12 @@ class EnderecoData extends Data
          */
         #[MapInputName('xCpl')]
         #[Nullable, StringType, Max(60)]
-        public ?string $complemento,
+        public ?string $complemento = null,
 
         /**
          * Endereço no exterior.
          */
         #[MapInputName('endExt')]
-        public ?EnderecoExteriorData $enderecoExterior,
+        public ?EnderecoExteriorData $enderecoExterior = null,
     ) {}
 }

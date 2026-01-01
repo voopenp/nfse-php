@@ -32,6 +32,6 @@ class DeducaoReducaoData extends Data
          * @var DocumentoDeducaoData[]|null
          */
         #[MapInputName('documentos'), DataCollectionOf(DocumentoDeducaoData::class)]
-        public ?array $documentos,
+        public ?array $documentos = null,
     ) {}
 }

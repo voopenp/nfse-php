@@ -99,7 +99,7 @@ class InfDpsData extends Data
          */
         #[MapInputName('cMotivoEmisTI')]
         #[Nullable, StringType, In(['1', '2', '3', '4'])]
-        public ?string $motivoEmissaoTomadorIntermediario,
+        public ?string $motivoEmissaoTomadorIntermediario = null,
 
         /**
          * Chave de acesso da NFS-e rejeitada.
@@ -107,13 +107,13 @@ class InfDpsData extends Data
          */
         #[MapInputName('chNFSeRej')]
         #[Nullable, StringType, Size(44)]
-        public ?string $chaveNfseRejeitada,
+        public ?string $chaveNfseRejeitada = null,
 
         /**
          * Informações de substituição de NFS-e.
          */
         #[MapInputName('subst')]
-        public ?SubstituicaoData $substituicao,
+        public ?SubstituicaoData $substituicao = null,
 
         /**
          * Dados do prestador do serviço.
@@ -131,7 +131,7 @@ class InfDpsData extends Data
          * Dados do intermediário do serviço.
          */
         #[MapInputName('interm')]
-        public ?IntermediarioData $intermediario,
+        public ?IntermediarioData $intermediario = null,
 
         /**
          * Dados do serviço prestado.

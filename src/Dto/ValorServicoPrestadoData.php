@@ -19,7 +19,7 @@ class ValorServicoPrestadoData extends Data
          * Obrigatório se tpEmit = 3.
          */
         #[MapInputName('vReceb')]
-        public ?float $valorRecebido,
+        public ?float $valorRecebido = null,
 
         /**
          * Valor do serviço prestado.

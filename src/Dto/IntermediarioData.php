@@ -19,62 +19,62 @@ class IntermediarioData extends Data
          * Obrigatório se pessoa jurídica.
          */
         #[MapInputName('CNPJ')]
-        public ?string $cnpj,
+        public ?string $cnpj = null,
 
         /**
          * CPF do intermediário.
          * Obrigatório se pessoa física.
          */
         #[MapInputName('CPF')]
-        public ?string $cpf,
+        public ?string $cpf = null,
 
         /**
          * Número de Identificação Fiscal (NIF) do intermediário.
          * Não permitido se tpEmit=3.
          */
         #[MapInputName('NIF')]
-        public ?string $nif,
+        public ?string $nif = null,
 
         /**
          * Código do motivo de não informar o NIF.
          */
         #[MapInputName('cNaoNIF')]
-        public ?string $codigoNaoNif,
+        public ?string $codigoNaoNif = null,
 
         /**
          * Cadastro de Atividade Econômica da Pessoa Física.
          */
         #[MapInputName('CAEPF')]
-        public ?string $caepf,
+        public ?string $caepf = null,
 
         /**
          * Inscrição Municipal do intermediário.
          */
         #[MapInputName('IM')]
-        public ?string $inscricaoMunicipal,
+        public ?string $inscricaoMunicipal = null,
 
         /**
          * Razão Social ou Nome do intermediário.
          */
         #[MapInputName('xNome')]
-        public ?string $nome,
+        public ?string $nome = null,
 
         /**
          * Endereço do intermediário.
          */
         #[MapInputName('end')]
-        public ?EnderecoData $endereco,
+        public ?EnderecoData $endereco = null,
 
         /**
          * Telefone do intermediário.
          */
         #[MapInputName('fone')]
-        public ?string $telefone,
+        public ?string $telefone = null,
 
         /**
          * Email do intermediário.
          */
         #[MapInputName('email')]
-        public ?string $email,
+        public ?string $email = null,
     ) {}
 }

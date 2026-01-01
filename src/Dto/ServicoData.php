@@ -22,56 +22,56 @@ class ServicoData extends Data
          * Local da prestação do serviço.
          */
         #[MapInputName('locPrest')]
-        public ?LocalPrestacaoData $localPrestacao,
+        public ?LocalPrestacaoData $localPrestacao = null,
 
         /**
          * Código do serviço prestado.
          */
         #[MapInputName('cServ')]
-        public ?CodigoServicoData $codigoServico,
+        public ?CodigoServicoData $codigoServico = null,
 
         /**
          * Informações de comércio exterior.
          */
         #[MapInputName('comExt')]
-        public ?ComercioExteriorData $comercioExterior,
+        public ?ComercioExteriorData $comercioExterior = null,
 
         /**
          * Informações da obra.
          */
         #[MapInputName('obra')]
-        public ?ObraData $obra,
+        public ?ObraData $obra = null,
 
         /**
          * Informações de atividade/evento.
          */
         #[MapInputName('atvEvento')]
-        public ?AtividadeEventoData $atividadeEvento,
+        public ?AtividadeEventoData $atividadeEvento = null,
 
         /**
          * Informações complementares do serviço.
          */
         #[MapInputName('infoComplem')]
         #[Nullable, StringType, Max(2000)]
-        public ?string $informacoesComplementares,
+        public ?string $informacoesComplementares = null,
 
         /**
          * Identificador do documento técnico.
          */
         #[MapInputName('idDocTec')]
-        public ?string $idDocumentoTecnico,
+        public ?string $idDocumentoTecnico = null,
 
         /**
          * Documento de referência.
          * Obrigatório se tpEmit = 2 ou 3.
          */
         #[MapInputName('docRef')]
-        public ?string $documentoReferencia,
+        public ?string $documentoReferencia = null,
 
         /**
          * Outras informações complementares.
          */
         #[MapInputName('xInfComp')]
-        public ?string $descricaoInformacoesComplementares,
+        public ?string $descricaoInformacoesComplementares = null,
     ) {}
 }

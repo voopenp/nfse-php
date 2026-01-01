@@ -26,18 +26,18 @@ class ValoresData extends Data
          * Descontos condicionados e incondicionados.
          */
         #[MapInputName('vDescCondIncond')]
-        public ?DescontoData $desconto,
+        public ?DescontoData $desconto = null,
 
         /**
          * Deduções e reduções da base de cálculo.
          */
         #[MapInputName('vDedRed')]
-        public ?DeducaoReducaoData $deducaoReducao,
+        public ?DeducaoReducaoData $deducaoReducao = null,
 
         /**
          * Informações sobre a tributação do serviço.
          */
         #[MapInputName('trib')]
-        public ?TributacaoData $tributacao,
+        public ?TributacaoData $tributacao = null,
     ) {}
 }

@@ -26,7 +26,7 @@ class PrestadorData extends Data
          */
         #[MapInputName('CNPJ')]
         #[Nullable, StringType, Size(14)]
-        public ?string $cnpj,
+        public ?string $cnpj = null,
 
         /**
          * CPF do prestador.
@@ -34,7 +34,7 @@ class PrestadorData extends Data
          */
         #[MapInputName('CPF')]
         #[Nullable, StringType, Size(11)]
-        public ?string $cpf,
+        public ?string $cpf = null,
 
         /**
          * Número de Identificação Fiscal (NIF) do prestador.
@@ -42,57 +42,57 @@ class PrestadorData extends Data
          */
         #[MapInputName('NIF')]
         #[Nullable, StringType, Max(15)]
-        public ?string $nif,
+        public ?string $nif = null,
 
         /**
          * Código do motivo de não informar o NIF.
          */
         #[MapInputName('cNaoNIF')]
-        public ?string $codigoNaoNif,
+        public ?string $codigoNaoNif = null,
 
         /**
          * Cadastro de Atividade Econômica da Pessoa Física.
          */
         #[MapInputName('CAEPF')]
-        public ?string $caepf,
+        public ?string $caepf = null,
 
         /**
          * Inscrição Municipal do prestador.
          */
         #[MapInputName('IM')]
         #[Nullable, StringType, Max(15)]
-        public ?string $inscricaoMunicipal,
+        public ?string $inscricaoMunicipal = null,
 
         /**
          * Razão Social ou Nome do prestador.
          */
         #[MapInputName('xNome')]
         #[Nullable, StringType, Max(255)]
-        public ?string $nome,
+        public ?string $nome = null,
 
         /**
          * Endereço do prestador.
          */
         #[MapInputName('end')]
-        public ?EnderecoData $endereco,
+        public ?EnderecoData $endereco = null,
 
         /**
          * Telefone do prestador.
          */
         #[MapInputName('fone')]
-        public ?string $telefone,
+        public ?string $telefone = null,
 
         /**
          * Email do prestador.
          */
         #[MapInputName('email')]
         #[Nullable, Email, Max(80)]
-        public ?string $email,
+        public ?string $email = null,
 
         /**
          * Regime tributário do prestador.
          */
         #[MapInputName('regTrib')]
-        public ?RegimeTributarioData $regimeTributario,
+        public ?RegimeTributarioData $regimeTributario = null,
     ) {}
 }

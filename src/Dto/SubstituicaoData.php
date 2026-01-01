@@ -18,7 +18,7 @@ class SubstituicaoData extends Data
          * Chave de acesso da NFS-e a ser substituída.
          */
         #[MapInputName('chSubstda')]
-        public ?string $chaveSubstituida,
+        public ?string $chaveNfseSubstituida,
 
         /**
          * Código do motivo da substituição.

@@ -30,7 +30,7 @@ class CodigoServicoData extends Data
          * Descrição do serviço.
          */
         #[MapInputName('xDescServ')]
-        public ?string $descricaoServico,
+        public ?string $descricaoServico = null,
 
         /**
          * Código NBS (Nomenclatura Brasileira de Serviços).
@@ -39,9 +39,15 @@ class CodigoServicoData extends Data
         public ?string $codigoNbs,
 
         /**
+         * Código CNAE (Classificação Nacional de Atividades Econômicas).
+         */
+        #[MapInputName('cCNAE')]
+        public ?string $codigoCnae,
+
+        /**
          * Código interno do serviço no sistema do contribuinte.
          */
         #[MapInputName('cIntContrib')]
-        public ?string $codigoInternoContribuinte,
+        public ?string $codigoInternoContribuinte = null,
     ) {}
 }

@@ -33,6 +33,58 @@ class ComercioExteriorData extends Data
         public ?int $vinculoPrestacao,
 
         /**
+         * Tipo de pessoa do exportador.
+         * 1 - Pessoa Jurídica
+         * 2 - Pessoa Física
+         */
+        #[MapInputName('tpPessoaExport')]
+        public ?int $tipoPessoaExportador,
+
+        /**
+         * NIF do exportador.
+         */
+        #[MapInputName('NIFExport')]
+        public ?string $nifExportador,
+
+        /**
+         * Código do país do exportador.
+         */
+        #[MapInputName('cPaisExport')]
+        public ?string $codigoPaisExportador,
+
+        /**
+         * Código do mecanismo de apoio/fomento.
+         */
+        #[MapInputName('cMecAFComex')]
+        public ?string $codigoMecanismoApoioFomento,
+
+        /**
+         * Número do enquadramento.
+         */
+        #[MapInputName('nEnquad')]
+        public ?string $numeroEnquadramento,
+
+        /**
+         * Número do processo.
+         */
+        #[MapInputName('nProc')]
+        public ?string $numeroProcesso,
+
+        /**
+         * Indicador de incentivo fiscal.
+         * 1 - Sim
+         * 2 - Não
+         */
+        #[MapInputName('indIncentivo')]
+        public ?int $indicadorIncentivo,
+
+        /**
+         * Descrição do incentivo fiscal.
+         */
+        #[MapInputName('xDescIncentivo')]
+        public ?string $descricaoIncentivo,
+
+        /**
          * Código da moeda da transação (ISO 4217).
          */
         #[MapInputName('tpMoeda')]

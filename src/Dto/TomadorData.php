@@ -26,7 +26,7 @@ class TomadorData extends Data
          */
         #[MapInputName('CPF')]
         #[Nullable, StringType, Size(11)]
-        public ?string $cpf,
+        public ?string $cpf = null,
 
         /**
          * CNPJ do tomador.
@@ -34,7 +34,7 @@ class TomadorData extends Data
          */
         #[MapInputName('CNPJ')]
         #[Nullable, StringType, Size(14)]
-        public ?string $cnpj,
+        public ?string $cnpj = null,
 
         /**
          * Número de Identificação Fiscal (NIF) do tomador.
@@ -42,51 +42,51 @@ class TomadorData extends Data
          */
         #[MapInputName('NIF')]
         #[Nullable, StringType, Max(15)]
-        public ?string $nif,
+        public ?string $nif = null,
 
         /**
          * Código do motivo de não informar o NIF.
          */
         #[MapInputName('cNaoNIF')]
-        public ?string $codigoNaoNif,
+        public ?string $codigoNaoNif = null,
 
         /**
          * Cadastro de Atividade Econômica da Pessoa Física.
          */
         #[MapInputName('CAEPF')]
-        public ?string $caepf,
+        public ?string $caepf = null,
 
         /**
          * Inscrição Municipal do tomador.
          */
         #[MapInputName('IM')]
         #[Nullable, StringType, Max(15)]
-        public ?string $inscricaoMunicipal,
+        public ?string $inscricaoMunicipal = null,
 
         /**
          * Razão Social ou Nome do tomador.
          */
         #[MapInputName('xNome')]
         #[Nullable, StringType, Max(255)]
-        public ?string $nome,
+        public ?string $nome = null,
 
         /**
          * Endereço do tomador.
          */
         #[MapInputName('end')]
-        public ?EnderecoData $endereco,
+        public ?EnderecoData $endereco = null,
 
         /**
          * Telefone do tomador.
          */
         #[MapInputName('fone')]
-        public ?string $telefone,
+        public ?string $telefone = null,
 
         /**
          * Email do tomador.
          */
         #[MapInputName('email')]
         #[Nullable, Email, Max(80)]
-        public ?string $email,
+        public ?string $email = null,
     ) {}
 }

@@ -18,48 +18,48 @@ class EmitenteData extends Data
          * CNPJ do emitente.
          */
         #[MapInputName('CNPJ')]
-        public ?string $cnpj,
+        public ?string $cnpj = null,
 
         /**
          * CPF do emitente.
          */
         #[MapInputName('CPF')]
-        public ?string $cpf,
+        public ?string $cpf = null,
 
         /**
          * Inscrição Municipal do emitente.
          */
         #[MapInputName('IM')]
-        public ?string $inscricaoMunicipal,
+        public ?string $inscricaoMunicipal = null,
 
         /**
          * Razão Social ou Nome do emitente.
          */
         #[MapInputName('xNome')]
-        public ?string $nome,
+        public ?string $nome = null,
 
         /**
          * Nome Fantasia do emitente.
          */
         #[MapInputName('xFant')]
-        public ?string $nomeFantasia,
+        public ?string $nomeFantasia = null,
 
         /**
          * Endereço do emitente.
          */
         #[MapInputName('enderNac')]
-        public ?EnderecoEmitenteData $endereco,
+        public ?EnderecoEmitenteData $endereco = null,
 
         /**
          * Telefone do emitente.
          */
         #[MapInputName('fone')]
-        public ?string $telefone,
+        public ?string $telefone = null,
 
         /**
          * Email do emitente.
          */
         #[MapInputName('email')]
-        public ?string $email,
+        public ?string $email = null,
     ) {}
 }

@@ -101,9 +101,6 @@ class InfNfseData extends Data
         /**
          * Descrição da NBS.
          */
-        /**
-         * Descrição da NBS.
-         */
         #[MapInputName('xNBS')]
         public ?string $descricaoNbs = null,
 
@@ -129,18 +126,18 @@ class InfNfseData extends Data
          * Dados da DPS.
          */
         #[MapInputName('DPS')]
-        public ?DpsData $dps = null,
+        public ?DpsData $dps,
 
         /**
          * Dados do emitente.
          */
         #[MapInputName('emit')]
-        public ?EmitenteData $emitente = null,
+        public ?EmitenteData $emitente,
 
         /**
          * Valores da NFS-e.
          */
         #[MapInputName('valores')]
-        public ?ValoresNfseData $valores = null,
+        public ?ValoresNfseData $valores,
     ) {}
 }
