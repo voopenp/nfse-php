@@ -20,7 +20,7 @@ class MunicipioServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->context = new NfseContext(
             TipoAmbiente::Homologacao,
             '/tmp/cert.pfx',
@@ -29,11 +29,11 @@ class MunicipioServiceTest extends TestCase
 
         $this->adnClientMock = $this->createMock(AdnClient::class);
         $this->cncClientMock = $this->createMock(CncClient::class);
-        
+
         $this->service = new MunicipioService($this->context);
 
         $reflection = new ReflectionClass($this->service);
-        
+
         $adnProperty = $reflection->getProperty('adnClient');
         $adnProperty->setAccessible(true);
         $adnProperty->setValue($this->service, $this->adnClientMock);
@@ -48,11 +48,11 @@ class MunicipioServiceTest extends TestCase
         $this->adnClientMock->expects($this->once())
             ->method('baixarDfeMunicipio')
             ->with(100)
-            ->willReturn(['dfe' => 'data']);
+            ->willReturn(new \Nfse\Dto\Http\DistribuicaoDfeResponse(ultimoNsu: 100, listaNsu: []));
 
         $result = $this->service->baixarDfe(100);
 
-        $this->assertEquals(['dfe' => 'data'], $result);
+        $this->assertInstanceOf(\Nfse\Dto\Http\DistribuicaoDfeResponse::class, $result);
     }
 
     public function testEnviarLote()
