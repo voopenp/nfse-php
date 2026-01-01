@@ -66,6 +66,44 @@ class AdnClient implements AdnDanfseInterface
     }
 
     /**
+     * ADN Contribuinte
+     */
+    public function baixarDfeContribuinte(int $nsu): array
+    {
+        return $this->get("/contribuintes/dfe/{$nsu}");
+    }
+
+    public function consultarEventosContribuinte(string $chaveAcesso): array
+    {
+        return $this->get("/contribuintes/nfse/{$chaveAcesso}/eventos");
+    }
+
+    /**
+     * ADN Município
+     */
+    public function baixarDfeMunicipio(int $nsu): array
+    {
+        return $this->get("/municipios/dfe/{$nsu}");
+    }
+
+    /**
+     * ADN Recepção
+     */
+    public function enviarLote(string $xmlZipB64): array
+    {
+        try {
+            $response = $this->httpClient->post('/dfe', [
+                RequestOptions::JSON => [
+                    'arquivo' => $xmlZipB64
+                ]
+            ]);
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (GuzzleException $e) {
+            throw NfseApiException::requestError($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
      * ADN Parâmetros Municipais
      */
     public function consultarParametrosConvenio(string $codigoMunicipio): array

@@ -57,6 +57,30 @@ O campo `ID` da DPS deve seguir um formato específico:
 -   **Alíquota Mínima**: O valor de dedução não pode resultar em uma alíquota efetiva menor que 2%, exceto para serviços específicos (7.02, 7.05, 16.01). (Regra E0447)
 -   **Documentos**: Se houver dedução por documentos, estes devem ser informados e validados (Chave NFS-e, NF-e, etc.). (Regra E0449)
 
+## Regras de Assinatura Digital
+
+### Assinatura no DPS vs NFSe
+
+-   **DPS**: A assinatura é **opcional** no schema XSD (`minOccurs="0"`). No entanto, para a maioria das integrações via API, a assinatura da tag `infDPS` é necessária para garantir a integridade.
+-   **NFSe**: A assinatura é **obrigatória** no retorno da SEFIN.
+
+### Padrão XML-DSig
+
+A biblioteca segue o padrão oficial XML-DSig, garantindo que os elementos `SignedInfo`, `SignatureValue` e `KeyInfo` estejam presentes e corretos.
+
+## Identificadores (IDs)
+
+### ID do DPS (45 posições)
+
+Regra de formação: `DPS` + `Cód.Mun (7)` + `Tipo Inscrição (1)` + `Inscrição (14)` + `Série (5)` + `Número (15)`.
+
+-   O CPF deve ser completado com zeros à esquerda (14 posições).
+-   A série NÃO pode ser composta apenas de zeros.
+
+### ID da NFSe (53 posições)
+
+Regra de formação: `NFS` + `Cód.Mun.(7)` + `Amb.Ger.(1)` + `Tipo Inscrição(1)` + `Inscrição(14)` + `No.NFS-e(13)` + `AnoMes Emis.(4)` + `Cód.Num.(9)` + `DV(1)`.
+
 ## Mapeamento de Campos
 
 Os DTOs utilizam o atributo `#[MapInputName]` e `#[MapName]` para garantir que os campos do XML/JSON sejam corretamente mapeados para as propriedades PHP, respeitando as nomenclaturas do schema nacional.

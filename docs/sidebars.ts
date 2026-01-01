@@ -38,7 +38,16 @@ const sidebars: SidebarsConfig = {
         "digital-signature",
         "signing-dps",
         "xml-signer",
-        "web-services",
+        {
+            type: "category",
+            label: "Serviços (Web Services)",
+            items: [
+                "services/overview",
+                "services/contribuinte",
+                "services/municipio",
+                "web-services",
+            ],
+        },
         {
             type: "category",
             label: "Utilitários",

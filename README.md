@@ -109,6 +109,32 @@ $signedXml = $signer->sign($xml, 'infDPS');
 echo $signedXml;
 ```
 
+## Web Services (SDK) 🌐
+
+O pacote agora inclui uma camada de serviços de alto nível para integração direta com a SEFIN Nacional e o ADN.
+
+```php
+use Nfse\Nfse;
+use Nfse\Http\NfseContext;
+use Nfse\Enums\TipoAmbiente;
+
+$context = new NfseContext(
+    ambiente: TipoAmbiente::Homologacao,
+    certificatePath: '/caminho/para/certificado.p12',
+    certificatePassword: 'senha'
+);
+
+$nfse = new Nfse($context);
+
+// Emitir uma nota (Contribuinte)
+$contribuinte = $nfse->contribuinte();
+$resultado = $contribuinte->emitir($dps);
+
+// Baixar arrecadação (Município)
+$municipio = $nfse->municipio();
+$notas = $municipio->baixarDfe(100);
+```
+
 ## 🗺️ Roadmap
 
 Este projeto está em desenvolvimento ativo. Abaixo estão as fases planejadas:
@@ -116,40 +142,36 @@ Este projeto está em desenvolvimento ativo. Abaixo estão as fases planejadas:
 ### Fase 1: Estrutura de Dados (DTOs) ✅
 
 -   [x] Implementar DTOs usando `spatie/laravel-data`.
--   [x] Mapear campos do Excel (`ANEXO_I...`) usando atributos `#[MapInputName]`.
--   [x] Implementar `Dps`, `Prestador`, `Tomador`, `Servico`, `Valores`.
--   [x] Adicionar validações (Constraints) nos DTOs.
+-   [x] Mapear campos do Excel usando atributos.
 -   [x] Testes unitários de validação.
 
 ### Fase 2: Serialização ✅
 
--   [x] Implementar Serializer para XML (padrão ABRASF/Nacional).
--   [x] Garantir que a serialização respeite os XSDs oficiais.
+-   [x] Implementar Serializer para XML.
+-   [x] Garantir conformidade com XSDs oficiais.
 
 ### Fase 3: Assinatura Digital ✅
 
--   [x] Criar `SignerInterface`.
--   [x] Implementar adaptador para assinatura XML (DSig).
 -   [x] Suporte a certificado A1 (PKCS#12).
+-   [x] Implementação de XML-DSig.
 
-### Fase 4: Utilitários ✅
+### Fase 4: Web Services (SDK) ✅
 
--   [x] Helpers para cálculo de impostos (simples).
--   [x] Formatadores de documentos (CPF/CNPJ).
--   [x] Gerador de IDs (DPS/NFSe).
+-   [x] Integração com SEFIN Nacional (Emissão/Consulta).
+-   [x] Integração com ADN (Distribuição/Parâmetros).
+-   [x] Integração com CNC (Cadastro Nacional).
+-   [x] Camada de serviços simplificada (`ContribuinteService` e `MunicipioService`).
 
-### Fase 5: Documentação & Busca 🚀
+### Fase 5: Documentação & Busca ✅
 
 -   [x] Docusaurus com busca local.
--   [x] Documentação de DTOs e Assinatura.
--   [ ] Tutoriais avançados.
+-   [x] Documentação completa de serviços e DTOs.
 
-### Fase 6: Web Services (Próximo) 📅
+### Fase 6: Testes E2E & CI/CD 🚀
 
--   [ ] Integração com Web Services da SEFIN Nacional.
--   [ ] Envio de DPS.
--   [ ] Consulta de NFSe.
--   [ ] Eventos e Cancelamentos.
+-   [ ] Testes end-to-end com ambiente de homologação.
+-   [ ] GitHub Actions para CI/CD.
+-   [ ] Releases automáticas.
 
 ### Fase 7: Testes E2E & CI/CD 📅
 

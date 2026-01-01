@@ -1,0 +1,123 @@
+<?php
+
+namespace Nfse\Service;
+
+use Nfse\Http\Client\SefinClient;
+use Nfse\Http\Client\AdnClient;
+use Nfse\Http\NfseContext;
+use Nfse\Http\Exceptions\NfseApiException;
+use Nfse\Dto\Nfse\DpsData;
+use Nfse\Dto\Nfse\NfseData;
+use Nfse\Xml\DpsXmlBuilder;
+use Nfse\Signer\Certificate;
+use Nfse\Signer\XmlSigner;
+use Nfse\Http\Contracts\SefinNacionalInterface;
+
+class ContribuinteService
+{
+    private SefinNacionalInterface $sefinClient;
+    private AdnClient $adnClient;
+
+    public function __construct(private NfseContext $context)
+    {
+        $this->sefinClient = new SefinClient($context);
+        $this->adnClient = new AdnClient($context);
+    }
+
+    /**
+     * Emite uma NFS-e a partir de um DPS.
+     */
+    public function emitir(DpsData $dps): NfseData
+    {
+        $builder = new DpsXmlBuilder();
+        $xml = $builder->build($dps);
+
+        $cert = new Certificate($this->context->certificatePath, $this->context->certificatePassword);
+        $signer = new XmlSigner($cert);
+
+        // Assina a tag 'infDPS'
+        $signedXml = $signer->sign($xml, 'infDPS');
+
+        // Envelope (GZIP + Base64)
+        $payload = base64_encode(gzencode($signedXml));
+
+        // Transport
+        $response = $this->sefinClient->emitirNfse($payload);
+
+        if (!empty($response->erros)) {
+            $msg = 'Erro na emissão: ' . json_encode($response->erros);
+            throw NfseApiException::responseError($msg);
+        }
+
+        if (!$response->nfseXmlGZipB64) {
+             throw NfseApiException::responseError('Resposta sem XML da NFS-e.');
+        }
+
+        $nfseXml = gzdecode(base64_decode($response->nfseXmlGZipB64));
+
+        // TODO: Implementar NfseXmlParser
+        throw new \Exception("Parser de XML ainda não implementado. XML Recebido: " . substr($nfseXml, 0, 100) . "...");
+    }
+
+    public function consultar(string $chave): ?NfseData
+    {
+        try {
+            $response = $this->sefinClient->consultarNfse($chave);
+        } catch (NfseApiException $e) {
+            return null;
+        }
+
+        if (!$response->nfseXmlGZipB64) {
+            return null;
+        }
+
+        $nfseXml = gzdecode(base64_decode($response->nfseXmlGZipB64));
+
+        // TODO: Implementar NfseXmlParser
+        throw new \Exception("Parser de XML ainda não implementado. XML Recebido: " . substr($nfseXml, 0, 100) . "...");
+    }
+
+    public function downloadDanfse(string $chaveAcesso): string
+    {
+        return $this->adnClient->obterDanfse($chaveAcesso);
+    }
+
+    public function verificarDps(string $idDps): bool
+    {
+        return $this->sefinClient->verificarDps($idDps);
+    }
+
+    public function listarEventos(string $chaveAcesso, ?int $tipoEvento = null): array
+    {
+        if ($tipoEvento) {
+            return $this->sefinClient->listarEventosPorTipo($chaveAcesso, $tipoEvento);
+        }
+        return $this->sefinClient->listarEventos($chaveAcesso);
+    }
+
+    /**
+     * ADN Contribuinte - Baixa documentos via NSU
+     */
+    public function baixarDfe(int $nsu): array
+    {
+        return $this->adnClient->baixarDfeContribuinte($nsu);
+    }
+
+    /**
+     * ADN Contribuinte - Consulta eventos de uma nota
+     */
+    public function consultarEventos(string $chaveAcesso): array
+    {
+        return $this->adnClient->consultarEventosContribuinte($chaveAcesso);
+    }
+
+    public function consultarParametrosConvenio(string $codigoMunicipio): array
+    {
+        return $this->adnClient->consultarParametrosConvenio($codigoMunicipio);
+    }
+
+    public function consultarAliquota(string $codigoMunicipio, string $codigoServico, string $competencia): array
+    {
+        return $this->adnClient->consultarAliquota($codigoMunicipio, $codigoServico, $competencia);
+    }
+}
