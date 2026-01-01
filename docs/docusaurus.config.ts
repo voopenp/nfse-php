@@ -60,10 +60,9 @@ const config: Config = {
                 searchResultLimits: 8,
                 searchResultContextMaxLength: 50,
 
-                // Estilo Spotlight/Command Palette
                 searchBarShortcut: true,
                 searchBarShortcutHint: true,
-                searchBarPosition: "left",
+                searchBarPosition: "right",
 
                 // Melhorias de UX
                 highlightSearchTermsOnTargetPage: true,
