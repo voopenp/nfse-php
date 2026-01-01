@@ -1,0 +1,36 @@
+.section {
+    padding: 3rem 0;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+.card {
+    background: var(--ifm-card-background-color);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: var(--ifm-box-shadow-sm);
+}
+.cardTitle {
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.icon {
+    font-size: 1.2rem;
+}
+.cardDescription {
+    color: var(--ifm-color-secondary);
+    font-size: 0.95rem;
+}

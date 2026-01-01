@@ -14,6 +14,7 @@ import TabItem from "@theme/TabItem";
 import styles from "./index.module.css";
 
 import CodeBlock from "@theme/CodeBlock";
+import SdkPowers from "@site/src/components/SdkPowers";
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -25,11 +26,13 @@ function HomepageHeader() {
                         {siteConfig.title}
                     </Heading>
                     <p className="hero__subtitle">{siteConfig.tagline}</p>
+                    <p className="hero__subtitle">Cliente de integração (Service + SDK) para o padrão NFSe Nacional.</p>
                     <p className={styles.heroDescription}>
-                        Este pacote fornece um conjunto robusto de DTOs que
-                        simplificam a criação e validação dos XMLs, oferecendo
-                        uma interface fluida e uma documentação alinhada à
-                        realidade do desenvolvedor.
+                        Simplifique a integração com a NFS-e Nacional. Este
+                        pacote oferece um cliente completo (Service + SDK)
+                        para emissão, consulta e cancelamento de notas fiscais
+                        de serviço, com validação de DTOs e assinatura digital
+                        automática.
                     </p>
                     <div className={styles.buttons}>
                         <Link
@@ -121,6 +124,75 @@ try {
 } catch (ValidationException $e) {
     print_r($e->errors());
 }`}
+                                </CodeBlock>
+                            </TabItem>
+                            <TabItem value="emitir" label="Emitir NFS-e">
+                                <CodeBlock language="php">
+                                    {`use Nfse\Contribuinte\Service\NfseService;
+    use Nfse\Contribuinte\Configuration\NfseContext;
+    use Nfse\Dto\DpsData;
+
+    $context = new NfseContext(
+        Environment::Homologation,
+        '/path/to/certificate.pfx',
+        'password'
+    );
+    $service = new NfseService($context);
+
+    $dps = new DpsData(
+        versao: '1.00',
+        infDps: [
+            'id' => 'DPS123',
+            'tipoAmbiente' => 2,
+            'prestador' => ['cnpj' => '12345678000199'],
+            'tomador' => ['cpf' => '11122233344'],
+            'servico' => ['codigoTributacaoNacional' => '01.01'],
+            'valores' => ['valorServicoPrestado' => ['valorServico' => 100.00]]
+        ]
+    );
+
+    $nfse = $service->emitir($dps);
+    echo "Nota emitida! Número: {$nfse->infNfse->numeroNfse}";`}
+                                </CodeBlock>
+                            </TabItem>
+                            <TabItem value="consultar" label="Consultar">
+                                <CodeBlock language="php">
+                                    {`// 1. Instancie o serviço (igual ao exemplo anterior)
+    $service = new NfseService($context);
+
+    // 2. Consulte pela chave de acesso
+    $chave = '12345678901234567890123456789012345678901234567890';
+    try {
+        $nfse = $service->consultar($chave);
+        if ($nfse) {
+            echo "Nota encontrada! Emitida em: " . $nfse->infNfse->dataEmissao;
+        } else {
+            echo "Nota não encontrada.";
+        }
+    } catch (\Exception $e) {
+        echo "Erro na consulta: " . $e->getMessage();
+    }`}
+                                </CodeBlock>
+                            </TabItem>
+                            <TabItem value="eventos" label="Eventos (Cancelar)">
+                                <CodeBlock language="php">
+                                    {`use Nfse\Dto\EventoData;
+
+    $evento = new EventoData(
+        chaveAcesso: '12345678901234567890123456789012345678901234567890',
+        tipoEvento: 'CANCELAMENTO',
+        motivo: 'Erro na emissão dos valores',
+        codigoCancelamento: '1'
+    );
+
+    try {
+        $resultado = $service->registrarEvento($evento);
+        if ($resultado->sucesso) {
+            echo "Evento registrado com sucesso!";
+        }
+    } catch (\Exception $e) {
+        echo "Falha ao registrar evento: " . $e->getMessage();
+    }`}
                                 </CodeBlock>
                             </TabItem>
                             <TabItem
@@ -265,6 +337,7 @@ export default function Home(): ReactNode {
             <main>
                 <HomepageFeatures />
                 <DtoAdvantages />
+                <SdkPowers />
                 <RoadmapStepper />
                 <FAQ />
             </main>
