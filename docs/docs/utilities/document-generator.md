@@ -456,6 +456,6 @@ Para ambientes de produção, considere:
 
 ## 🔗 Veja Também
 
--   [DocumentFormatter](/utilities/document-formatter) - Formatação de documentos
--   [IdGenerator](/utilities/id-generator) - Geração de IDs únicos
+-   [CpfCnpjFormatter](./cpf-cnpj-formatter) - Formatação de documentos
+-   [IdGenerator](./id-generator) - Geração de IDs únicos
 -   [Factories do Laravel](https://laravel.com/docs/eloquent-factories) - Geração de dados de teste

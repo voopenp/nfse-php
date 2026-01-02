@@ -75,12 +75,12 @@ try {
     $xml = $builder->build($dps);
 
     // 5. Assinar o XML
-    $signer = new XmlSigner();
-    $xmlAssinado = $signer->sign(
-        $xml,
+    $certificado = new \Nfse\Signer\Certificate(
         '/caminho/para/certificado.p12',
         'sua-senha'
     );
+    $signer = new XmlSigner($certificado);
+    $xmlAssinado = $signer->sign($xml, 'infDPS');
 
     // 6. Transmitir para a SEFIN Nacional
     $context = new NfseContext(

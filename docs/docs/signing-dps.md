@@ -524,7 +524,7 @@ Log::info('Assinando DPS', [
 
 ## 🔗 Veja Também
 
--   [Certificate](/digital-signature#carregando-o-certificado) - Carregar certificado A1
--   [XmlSigner](/digital-signature#assinando-um-xml) - Assinatura digital
--   [DpsXmlBuilder](/xml-serialization) - Geração de XML
--   [IdGenerator](/utilities/id-generator) - Geração de IDs
+-   [Certificate](./digital-signature#carregando-o-certificado) - Carregar certificado A1
+-   [XmlSigner](./digital-signature#assinando-um-xml) - Assinatura digital
+-   [DpsXmlBuilder](./xml-serialization) - Geração de XML
+-   [IdGenerator](./utilities/id-generator) - Geração de IDs

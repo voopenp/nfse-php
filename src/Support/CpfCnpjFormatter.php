@@ -2,7 +2,7 @@
 
 namespace Nfse\Support;
 
-class DocumentFormatter
+class CpfCnpjFormatter
 {
     public static function formatCpf(string $cpf): string
     {

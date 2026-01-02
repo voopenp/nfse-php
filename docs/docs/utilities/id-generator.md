@@ -409,6 +409,6 @@ $id = IdGenerator::generateDpsId('12345678000199', '355', '1', '1');
 
 ## 🔗 Veja Também
 
--   [DocumentFormatter](/utilities/document-formatter) - Formatação de documentos
--   [TaxCalculator](/utilities/tax-calculator) - Cálculos tributários
--   [InfDpsData](/types/main-documents) - DTO da DPS
+-   [CpfCnpjFormatter](./cpf-cnpj-formatter) - Formatação de documentos
+-   [TaxCalculator](./tax-calculator) - Cálculos tributários
+-   [InfDpsData](../types/main-documents) - DTO da DPS

@@ -4,9 +4,9 @@ O pacote inclui um conjunto de classes utilitárias (`helpers`) no namespace `Nf
 
 ---
 
-## DocumentFormatter
+## CpfCnpjFormatter
 
-A classe `DocumentFormatter` oferece métodos estáticos para formatar e limpar documentos brasileiros (CPF, CNPJ, CEP).
+A classe `CpfCnpjFormatter` oferece métodos estáticos para formatar e limpar documentos brasileiros (CPF, CNPJ, CEP).
 
 ### Métodos Disponíveis
 
@@ -15,9 +15,9 @@ A classe `DocumentFormatter` oferece métodos estáticos para formatar e limpar 
 Formata um CPF no padrão brasileiro (XXX.XXX.XXX-XX).
 
 ```php
-use Nfse\Support\DocumentFormatter;
+use Nfse\Support\CpfCnpjFormatter;
 
-echo DocumentFormatter::formatCpf('12345678901');
+echo CpfCnpjFormatter::formatCpf('12345678901');
 // Saída: 123.456.789-01
 ```
 
@@ -34,7 +34,7 @@ echo DocumentFormatter::formatCpf('12345678901');
 Formata um CNPJ no padrão brasileiro (XX.XXX.XXX/XXXX-XX).
 
 ```php
-echo DocumentFormatter::formatCnpj('12345678000199');
+echo CpfCnpjFormatter::formatCnpj('12345678000199');
 // Saída: 12.345.678/0001-99
 ```
 
@@ -51,7 +51,7 @@ echo DocumentFormatter::formatCnpj('12345678000199');
 Formata um CEP no padrão brasileiro (XXXXX-XXX).
 
 ```php
-echo DocumentFormatter::formatCep('12345678');
+echo CpfCnpjFormatter::formatCep('12345678');
 // Saída: 12345-678
 ```
 
@@ -68,13 +68,13 @@ echo DocumentFormatter::formatCep('12345678');
 Remove toda a formatação de um documento, mantendo apenas os números.
 
 ```php
-echo DocumentFormatter::unformat('123.456.789-01');
+echo CpfCnpjFormatter::unformat('123.456.789-01');
 // Saída: 12345678901
 
-echo DocumentFormatter::unformat('12.345.678/0001-99');
+echo CpfCnpjFormatter::unformat('12.345.678/0001-99');
 // Saída: 12345678000199
 
-echo DocumentFormatter::unformat('12345-678');
+echo CpfCnpjFormatter::unformat('12345-678');
 // Saída: 12345678
 ```
 
@@ -339,7 +339,7 @@ $dpsDemo = new DpsData(
 
 | Classe              | Propósito                   | Principais Métodos                                         |
 | ------------------- | --------------------------- | ---------------------------------------------------------- |
-| `DocumentFormatter` | Formatação de documentos    | `formatCpf()`, `formatCnpj()`, `formatCep()`, `unformat()` |
+| `CpfCnpjFormatter`  | Formatação de documentos    | `formatCpf()`, `formatCnpj()`, `formatCep()`, `unformat()` |
 | `TaxCalculator`     | Cálculos tributários        | `calculate()`                                              |
 | `IdGenerator`       | Geração de IDs únicos       | `generateDpsId()`                                          |
 | `DocumentGenerator` | Geração de docs para testes | `generateCpf()`, `generateCnpj()`                          |
@@ -351,15 +351,15 @@ $dpsDemo = new DpsData(
 Veja como usar múltiplos utilitários em conjunto:
 
 ```php
-use Nfse\Support\{DocumentFormatter, TaxCalculator, IdGenerator, DocumentGenerator};
+use Nfse\Support\{CpfCnpjFormatter, TaxCalculator, IdGenerator, DocumentGenerator};
 
 // 1. Gerar documentos para teste
 $cnpjPrestador = DocumentGenerator::generateCnpj();
 $cpfTomador = DocumentGenerator::generateCpf();
 
 // 2. Formatar para exibição
-echo "Prestador: " . DocumentFormatter::formatCnpj($cnpjPrestador) . "\n";
-echo "Tomador: " . DocumentFormatter::formatCpf($cpfTomador) . "\n";
+echo "Prestador: " . CpfCnpjFormatter::formatCnpj($cnpjPrestador) . "\n";
+echo "Tomador: " . CpfCnpjFormatter::formatCpf($cpfTomador) . "\n";
 
 // 3. Calcular impostos
 $valorServico = 10000.00;
@@ -371,7 +371,7 @@ echo "ISS (5%): R$ " . number_format($valorIss, 2, ',', '.') . "\n";
 
 // 4. Gerar ID da DPS
 $idDps = IdGenerator::generateDpsId(
-    DocumentFormatter::unformat($cnpjPrestador), // Remove formatação
+    CpfCnpjFormatter::unformat($cnpjPrestador), // Remove formatação
     '3550308',
     '1',
     '1'

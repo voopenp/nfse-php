@@ -323,6 +323,6 @@ $iss = TaxCalculator::calculate($valor, 0.05); // ❌ Isso é 0,05%, não 5%
 
 ## 🔗 Veja Também
 
--   [DocumentFormatter](/utilities/document-formatter) - Formatação de documentos
--   [IdGenerator](/utilities/id-generator) - Geração de IDs únicos
--   [TributacaoData](/types/values-taxation) - DTO de tributação
+-   [CpfCnpjFormatter](./cpf-cnpj-formatter) - Formatação de documentos
+-   [IdGenerator](./id-generator) - Geração de IDs únicos
+-   [TributacaoData](../types/values-taxation) - DTO de tributação
