@@ -5,7 +5,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 const config: Config = {
     title: "NFS-e Nacional PHP",
     tagline:
-        "A maneira mais moderna e eficiente de integrar PHP com a NFS-e Nacional.",
+        "SDK completo para empresas e prefeituras integrarem com a NFS-e Nacional.",
     favicon: "img/favicon.ico",
 
     url: "https://nfse-nacional.github.io",

@@ -27,15 +27,17 @@ function HomepageHeader() {
                     </Heading>
                     <p className="hero__subtitle">{siteConfig.tagline}</p>
                     <p className="hero__subtitle">
-                        Cliente de integração (Service + SDK) para o padrão NFSe
-                        Nacional.
+                        Suporte completo às APIs de{" "}
+                        <strong>Contribuinte</strong> (empresas) e{" "}
+                        <strong>Município</strong> (prefeituras).
                     </p>
                     <p className={styles.heroDescription}>
-                        Simplifique a integração com a NFS-e Nacional. Este
-                        pacote oferece um cliente completo (Service + SDK) para
-                        emissão, consulta e cancelamento de notas fiscais de
-                        serviço, com validação de DTOs e assinatura digital
-                        automática.
+                        Um único pacote para todas as suas necessidades de
+                        integração com a NFS-e Nacional. Emita, consulte e
+                        cancele notas fiscais de serviço (API Contribuinte) ou
+                        gerencie documentos fiscais do seu município (API
+                        Município) — tudo com validação automática de DTOs,
+                        assinatura digital integrada e tipagem completa.
                     </p>
                     <div className={styles.buttons}>
                         <Link

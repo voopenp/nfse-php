@@ -58,7 +58,7 @@ const sidebars: SidebarsConfig = {
             type: "category",
             label: "Utilitários",
             items: [
-                "utilities/document-formatter",
+                "utilities/cpf-cnpj-formatter",
                 "utilities/tax-calculator",
                 "utilities/id-generator",
                 "utilities/document-generator",
