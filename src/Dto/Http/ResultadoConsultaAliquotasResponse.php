@@ -5,7 +5,7 @@ namespace Nfse\Dto\Http;
 class ResultadoConsultaAliquotasResponse
 {
     /**
-     * @param array<string, AliquotaDto[]> $aliquotas
+     * @param  array<string, AliquotaDto[]>  $aliquotas
      */
     public function __construct(
         public ?string $mensagem = null,

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 use Nfse\Http\NfseContext;
 use Nfse\Nfse;
@@ -24,11 +24,11 @@ $municipioSelecionado = 'FORTALEZA';
 $codigoMunicipio = $municipios[$municipioSelecionado];
 
 // Configurações básicas para os exemplos
-$certificatePath = __DIR__ . '/certs/contribuinte.pfx';
+$certificatePath = __DIR__.'/certs/contribuinte.pfx';
 $certificatePassword = 'Maia2040!';
 
 // Se o arquivo de certificado não existir, vamos avisar (apenas para o exemplo)
-if (!file_exists($certificatePath)) {
+if (! file_exists($certificatePath)) {
     echo "AVISO: Arquivo de certificado não encontrado em: $certificatePath\n";
     echo "Para rodar estes exemplos, coloque seu certificado .pfx na pasta examples/certs/ e ajuste a senha no arquivo bootstrap.php se necessário.\n\n";
 }

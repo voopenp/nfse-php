@@ -13,7 +13,7 @@ use Nfse\Dto\Nfse\ValorServicoPrestadoData;
 use Nfse\Support\IdGenerator;
 
 /** @var \Nfse\Nfse $nfse */
-$nfse = require_once __DIR__ . '/../bootstrap.php';
+$nfse = require_once __DIR__.'/../bootstrap.php';
 
 try {
     $cnpjPrestador = '12345678000199';
@@ -76,12 +76,12 @@ try {
     );
 
     echo "Emitindo NFS-e para a DPS: $idDps...\n";
-    
+
     $nfseData = $nfse->contribuinte()->emitir($dps);
-    
+
     echo "NFS-e emitida com sucesso!\n";
-    echo "Chave de Acesso: " . $nfseData->infNfse->id . "\n";
-    
+    echo 'Chave de Acesso: '.$nfseData->infNfse->id."\n";
+
 } catch (\Exception $e) {
-    echo "Erro: " . $e->getMessage() . "\n";
+    echo 'Erro: '.$e->getMessage()."\n";
 }

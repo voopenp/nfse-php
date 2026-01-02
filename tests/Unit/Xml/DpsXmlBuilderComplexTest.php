@@ -2,21 +2,21 @@
 
 namespace Nfse\Tests\Unit\Xml;
 
+use Nfse\Dto\Nfse\AtividadeEventoData;
+use Nfse\Dto\Nfse\ComercioExteriorData;
+use Nfse\Dto\Nfse\DeducaoReducaoData;
+use Nfse\Dto\Nfse\DescontoData;
+use Nfse\Dto\Nfse\DocumentoDeducaoData;
 use Nfse\Dto\Nfse\DpsData;
+use Nfse\Dto\Nfse\EnderecoData;
 use Nfse\Dto\Nfse\InfDpsData;
+use Nfse\Dto\Nfse\IntermediarioData;
+use Nfse\Dto\Nfse\ObraData;
 use Nfse\Dto\Nfse\PrestadorData;
 use Nfse\Dto\Nfse\RegimeTributarioData;
-use Nfse\Dto\Nfse\IntermediarioData;
 use Nfse\Dto\Nfse\SubstituicaoData;
-use Nfse\Dto\Nfse\ComercioExteriorData;
-use Nfse\Dto\Nfse\ObraData;
-use Nfse\Dto\Nfse\AtividadeEventoData;
-use Nfse\Dto\Nfse\ValoresData;
-use Nfse\Dto\Nfse\DescontoData;
-use Nfse\Dto\Nfse\DeducaoReducaoData;
-use Nfse\Dto\Nfse\DocumentoDeducaoData;
 use Nfse\Dto\Nfse\TributacaoData;
-use Nfse\Dto\Nfse\EnderecoData;
+use Nfse\Dto\Nfse\ValoresData;
 use Nfse\Xml\DpsXmlBuilder;
 
 it('can build xml with complex structures', function () {
@@ -113,7 +113,7 @@ it('can build xml with complex structures', function () {
                         dataEmissaoDocumento: null,
                         valorDedutivelRedutivel: 100.0,
                         valorDeducaoReducao: 100.0
-                    )
+                    ),
                 ]
             ),
             tributacao: new TributacaoData(
