@@ -19,6 +19,29 @@ Você pode instalar o pacote via composer:
 composer require nfse-nacional/nfse-php
 ```
 
+## Nota Fical Service `Nfse`
+
+`Nfse`  _facade_ (fachada) que centraliza e simplifica o acesso aos diferentes serviços disponíveis:
+
+-   **`ContribuinteService`**: Para empresas que emitem notas fiscais de serviço
+-   **`MunicipioService`**: Para prefeituras e órgãos municipais que gerenciam a arrecadação
+
+```php
+use Nfse\Nfse;
+use Nfse\Http\NfseContext;
+
+// Nfse centraliza o acesso aos serviços
+$nfse = new Nfse($context);
+
+// Contribuinte (empresas)
+$contribuinte = $nfse->contribuinte();
+
+// Municipio (prefeituras)
+$municipio = $nfse->municipio();
+```
+
+Esta abordagem facilita a integração tanto para **empresas prestadoras de serviço** quanto para **municípios** com uma API unificada para ambos os tipos de usuários do sistema nacional.
+
 ## Uso
 
 Exemplo básico de utilização dos DTOs:
