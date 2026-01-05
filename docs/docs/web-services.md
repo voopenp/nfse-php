@@ -73,17 +73,31 @@ $pdfContent = $adn->obterDanfse($chaveAcesso);
 file_put_contents('nota.pdf', $pdfContent);
 
 // 2. Consultar Parâmetros de Convênio do Município
-$parametros = $adn->consultarParametrosConvenio('3550308'); // São Paulo
+// 3. Baixar Documentos (Contribuinte)
+$docsContribuinte = $adn->baixarDfeContribuinte(
+    nsu: 100,
+    cnpjConsulta: '12345678000199', // Opcional
+    lote: true // Opcional (default true)
+);
+
+// 4. Baixar Documentos (Município)
+$docsMunicipio = $adn->baixarDfeMunicipio(
+    nsu: 100,
+    tipoNSU: 'GERAL', // Opcional (RECEPCAO, DISTRIBUICAO, GERAL, MEI)
+    lote: true // Opcional (default true)
+);
 ```
 
 ### Métodos Disponíveis no AdnClient
 
-| Método                                                 | Descrição                                                 |
-| :----------------------------------------------------- | :-------------------------------------------------------- |
-| `obterDanfse(string $chaveAcesso)`                     | Retorna o PDF do Documento Auxiliar da NFS-e.             |
-| `consultarParametrosConvenio(string $codigoMunicipio)` | Consulta as regras e convênios de um município.           |
-| `consultarAliquota(...)`                               | Consulta a alíquota vigente para um serviço no município. |
-| `consultarRegimesEspeciais(...)`                       | Consulta regimes especiais de tributação do município.    |
+| Método                                                               | Descrição                                                 |
+| :------------------------------------------------------------------- | :-------------------------------------------------------- |
+| `obterDanfse(string $chaveAcesso)`                                   | Retorna o PDF do Documento Auxiliar da NFS-e.             |
+| `baixarDfeContribuinte(int $nsu, ?string $cnpjConsulta, bool $lote)` | Baixa documentos fiscais para o contribuinte.             |
+| `baixarDfeMunicipio(int $nsu, ?string $tipoNSU, bool $lote)`         | Baixa documentos fiscais para o município.                |
+| `consultarParametrosConvenio(string $codigoMunicipio)`               | Consulta as regras e convênios de um município.           |
+| `consultarAliquota(...)`                                             | Consulta a alíquota vigente para um serviço no município. |
+| `consultarRegimesEspeciais(...)`                                     | Consulta regimes especiais de tributação do município.    |
 
 :::tip Formato dos Parâmetros (ADN)
 Ao utilizar métodos de parametrização municipal (como `consultarAliquota`), observe as seguintes regras:

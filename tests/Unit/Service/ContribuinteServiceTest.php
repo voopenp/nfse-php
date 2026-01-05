@@ -43,11 +43,9 @@ class ContribuinteServiceTest extends TestCase
         $reflection = new ReflectionClass($this->service);
 
         $sefinProperty = $reflection->getProperty('sefinClient');
-        $sefinProperty->setAccessible(true);
         $sefinProperty->setValue($this->service, $this->sefinClientMock);
 
         $adnProperty = $reflection->getProperty('adnClient');
-        $adnProperty->setAccessible(true);
         $adnProperty->setValue($this->service, $this->adnClientMock);
     }
 

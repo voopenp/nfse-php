@@ -22,7 +22,12 @@ Permite ao município baixar todos os documentos fiscais emitidos ou tomados em 
 
 ```php
 // Baixa documentos do município via NSU
-$dfe = $service->baixarDfe(12345);
+// Parâmetros opcionais: $tipoNSU (RECEPCAO, DISTRIBUICAO, GERAL, MEI) e $lote
+$dfe = $service->baixarDfe(
+    nsu: 12345,
+    tipoNSU: 'GERAL', // Opcional
+    lote: true // Opcional (default true)
+);
 ```
 
 ## Recepção de Documentos (ADN Recepção)

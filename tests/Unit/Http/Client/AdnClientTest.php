@@ -30,7 +30,7 @@ class AdnClientTest extends TestCase
 
         $reflection = new ReflectionClass($client);
         $property = $reflection->getProperty('httpClient');
-        $property->setAccessible(true);
+
         $property->setValue($client, $httpClient);
 
         return $client;
@@ -57,10 +57,10 @@ class AdnClientTest extends TestCase
     public function test_baixar_dfe_contribuinte()
     {
         $responseData = [
-            'tipoAmbiente' => 2,
-            'ultimoNSU' => 100,
-            'listaNSU' => [
-                ['nsu' => 100, 'xmlGZipB64' => 'base64'],
+            'TipoAmbiente' => 2,
+            'UltimoNSU' => 100,
+            'LoteDFe' => [
+                ['NSU' => 100, 'ArquivoXml' => 'base64'],
             ],
         ];
 
@@ -103,8 +103,8 @@ class AdnClientTest extends TestCase
     public function test_baixar_dfe_municipio()
     {
         $responseData = [
-            'ultimoNSU' => 100,
-            'listaNSU' => [],
+            'UltimoNSU' => 100,
+            'LoteDFe' => [],
         ];
 
         $client = $this->createClientWithMock([

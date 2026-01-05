@@ -153,9 +153,14 @@ $nfse = new Nfse($context);
 $contribuinte = $nfse->contribuinte();
 $resultado = $contribuinte->emitir($dps);
 
+// Baixar documentos (Contribuinte)
+// Parâmetros opcionais: $cnpjConsulta (para terceiros) e $lote (default true)
+$notas = $contribuinte->baixarDfe(nsu: 100, cnpjConsulta: '12345678000199');
+
 // Baixar arrecadação (Município)
 $municipio = $nfse->municipio();
-$notas = $municipio->baixarDfe(100);
+// Parâmetros opcionais: $tipoNSU (RECEPCAO, DISTRIBUICAO, GERAL, MEI) e $lote
+$notas = $municipio->baixarDfe(nsu: 100, tipoNSU: 'GERAL');
 ```
 
 ## 🗺️ Roadmap

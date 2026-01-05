@@ -115,9 +115,9 @@ class ContribuinteService
     /**
      * ADN Contribuinte - Baixa documentos via NSU
      */
-    public function baixarDfe(int $nsu): \Nfse\Dto\Http\DistribuicaoDfeResponse
+    public function baixarDfe(int $nsu, ?string $cnpjConsulta = null, bool $lote = true): \Nfse\Dto\Http\DistribuicaoDfeResponse
     {
-        return $this->adnClient->baixarDfeContribuinte($nsu);
+        return $this->adnClient->baixarDfeContribuinte($nsu, $cnpjConsulta, $lote);
     }
 
     /**

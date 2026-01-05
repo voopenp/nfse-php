@@ -12,7 +12,7 @@ class DistribuicaoDfeResponse extends Data
      * @param  DistribuicaoNsuDto[]  $listaNsu
      */
     public function __construct(
-        public ?int $tipoAmbiente = null,
+        public ?string $tipoAmbiente = null,
         public ?string $versaoAplicativo = null,
         public ?string $dataHoraProcessamento = null,
         public ?int $ultimoNsu = null,

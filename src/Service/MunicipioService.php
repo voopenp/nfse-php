@@ -21,9 +21,9 @@ class MunicipioService
     /**
      * ADN Município - Baixa arrecadação e notas do município via NSU
      */
-    public function baixarDfe(int $nsu): \Nfse\Dto\Http\DistribuicaoDfeResponse
+    public function baixarDfe(int $nsu, ?string $tipoNSU = null, bool $lote = true): \Nfse\Dto\Http\DistribuicaoDfeResponse
     {
-        return $this->adnClient->baixarDfeMunicipio($nsu);
+        return $this->adnClient->baixarDfeMunicipio($nsu, $tipoNSU, $lote);
     }
 
     /**

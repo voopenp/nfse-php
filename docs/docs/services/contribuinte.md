@@ -86,5 +86,10 @@ Baixa documentos onde o contribuinte figura como prestador ou tomador de forma i
 
 ```php
 // Baixa novos documentos a partir do NSU 100
-$documentos = $service->baixarDfe(100);
+// Parâmetros opcionais: $cnpjConsulta e $lote
+$documentos = $service->baixarDfe(
+    nsu: 100,
+    cnpjConsulta: '12345678000199', // Opcional (para terceiros)
+    lote: true // Opcional (default true)
+);
 ```

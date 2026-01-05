@@ -68,6 +68,13 @@ class AdnClient implements AdnDanfseInterface
             }
 
             return $decoded;
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $message = $e->getMessage();
+            if ($e->hasResponse()) {
+                $responseBody = $e->getResponse()->getBody()->getContents();
+                $message = "Erro na requisição: {$responseBody}";
+            }
+            throw NfseApiException::requestError($message, $e->getCode());
         } catch (GuzzleException $e) {
             throw NfseApiException::requestError($e->getMessage(), $e->getCode());
         }
@@ -76,24 +83,50 @@ class AdnClient implements AdnDanfseInterface
     /**
      * ADN Contribuinte
      */
-    public function baixarDfeContribuinte(int $nsu): DistribuicaoDfeResponse
+    public function baixarDfeContribuinte(int $nsu, ?string $cnpjConsulta = null, bool $lote = true): DistribuicaoDfeResponse
     {
-        $response = $this->get("/contribuintes/dfe/{$nsu}");
+        $queryParams = [];
+        if ($cnpjConsulta) {
+            $queryParams['cnpjConsulta'] = $cnpjConsulta;
+        }
+        if (! $lote) {
+            $queryParams['lote'] = 'false';
+        }
+
+        $url = "/contribuintes/DFe/{$nsu}";
+        if (! empty($queryParams)) {
+            $url .= '?'.http_build_query($queryParams);
+        }
+
+        $response = $this->get($url);
 
         return $this->mapDistribuicaoResponse($response);
     }
 
     public function consultarEventosContribuinte(string $chaveAcesso): array
     {
-        return $this->get("/contribuintes/nfse/{$chaveAcesso}/eventos");
+        return $this->get("/contribuintes/NFSe/{$chaveAcesso}/Eventos");
     }
 
     /**
      * ADN Município
      */
-    public function baixarDfeMunicipio(int $nsu): DistribuicaoDfeResponse
+    public function baixarDfeMunicipio(int $nsu, ?string $tipoNSU = null, bool $lote = true): DistribuicaoDfeResponse
     {
-        $response = $this->get("/municipios/dfe/{$nsu}");
+        $queryParams = [];
+        if ($tipoNSU) {
+            $queryParams['tipoNSU'] = $tipoNSU;
+        }
+        if (! $lote) {
+            $queryParams['lote'] = 'false';
+        }
+
+        $url = "/municipios/DFe/{$nsu}";
+        if (! empty($queryParams)) {
+            $url .= '?'.http_build_query($queryParams);
+        }
+
+        $response = $this->get($url);
 
         return $this->mapDistribuicaoResponse($response);
     }
@@ -104,13 +137,20 @@ class AdnClient implements AdnDanfseInterface
     public function enviarLote(string $xmlZipB64): array
     {
         try {
-            $response = $this->httpClient->post('/dfe', [
+            $response = $this->httpClient->post('/adn/DFe', [
                 RequestOptions::JSON => [
-                    'arquivo' => $xmlZipB64,
+                    'LoteXmlGZipB64' => [$xmlZipB64],
                 ],
             ]);
 
             return json_decode($response->getBody()->getContents(), true);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $message = $e->getMessage();
+            if ($e->hasResponse()) {
+                $responseBody = $e->getResponse()->getBody()->getContents();
+                $message = "Erro na requisição: {$responseBody}";
+            }
+            throw NfseApiException::requestError($message, $e->getCode());
         } catch (GuzzleException $e) {
             throw NfseApiException::requestError($e->getMessage(), $e->getCode());
         }
@@ -185,6 +225,13 @@ class AdnClient implements AdnDanfseInterface
             $response = $this->httpClient->get("/danfse/{$chaveAcesso}");
 
             return $response->getBody()->getContents();
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $message = $e->getMessage();
+            if ($e->hasResponse()) {
+                $responseBody = $e->getResponse()->getBody()->getContents();
+                $message = "Erro na requisição: {$responseBody}";
+            }
+            throw NfseApiException::requestError($message, $e->getCode());
         } catch (GuzzleException $e) {
             throw NfseApiException::requestError($e->getMessage(), $e->getCode());
         }
@@ -192,18 +239,31 @@ class AdnClient implements AdnDanfseInterface
 
     private function mapDistribuicaoResponse(array $response): DistribuicaoDfeResponse
     {
+        $listaNsu = array_map(fn ($item) => new DistribuicaoNsuDto(
+            nsu: $item['NSU'] ?? null,
+            chaveAcesso: $item['ChaveAcesso'] ?? null,
+            dfeXmlGZipB64: $item['ArquivoXml'] ?? null
+        ), $response['LoteDFe'] ?? []);
+
+        $ultimoNsu = $response['UltimoNSU'] ?? null;
+        $maiorNsu = $response['MaiorNSU'] ?? null;
+
+        if (empty($ultimoNsu) && ! empty($listaNsu)) {
+            $nsus = array_map(fn ($item) => $item->nsu, $listaNsu);
+            $maxNsu = max($nsus);
+            $ultimoNsu = $maxNsu;
+            $maiorNsu = $maxNsu;
+        }
+
         return new DistribuicaoDfeResponse(
-            tipoAmbiente: $response['tipoAmbiente'] ?? null,
-            versaoAplicativo: $response['versaoAplicativo'] ?? null,
-            dataHoraProcessamento: $response['dataHoraProcessamento'] ?? null,
-            ultimoNsu: $response['ultimoNSU'] ?? null,
-            maiorNsu: $response['maiorNSU'] ?? null,
-            alertas: $this->mapMensagens($response['alertas'] ?? []),
-            erros: $this->mapMensagens($response['erros'] ?? []),
-            listaNsu: array_map(fn ($item) => new DistribuicaoNsuDto(
-                nsu: $item['nsu'] ?? null,
-                dfeXmlGZipB64: $item['xmlGZipB64'] ?? null
-            ), $response['listaNSU'] ?? [])
+            tipoAmbiente: $response['TipoAmbiente'] ?? null,
+            versaoAplicativo: $response['VersaoAplicativo'] ?? null,
+            dataHoraProcessamento: $response['DataHoraProcessamento'] ?? null,
+            ultimoNsu: $ultimoNsu,
+            maiorNsu: $maiorNsu,
+            alertas: $this->mapMensagens($response['Alertas'] ?? []),
+            erros: $this->mapMensagens($response['Erros'] ?? []),
+            listaNsu: $listaNsu
         );
     }
 
@@ -228,11 +288,11 @@ class AdnClient implements AdnDanfseInterface
     private function mapMensagens(array $mensagens): array
     {
         return array_map(fn ($m) => new MensagemProcessamentoDto(
-            mensagem: $m['mensagem'] ?? null,
-            parametros: $m['parametros'] ?? null,
-            codigo: $m['codigo'] ?? null,
-            descricao: $m['descricao'] ?? null,
-            complemento: $m['complemento'] ?? null
+            mensagem: $m['Mensagem'] ?? null,
+            parametros: $m['Parametros'] ?? null,
+            codigo: $m['Codigo'] ?? null,
+            descricao: $m['Descricao'] ?? null,
+            complemento: $m['Complemento'] ?? null
         ), $mensagens);
     }
 }

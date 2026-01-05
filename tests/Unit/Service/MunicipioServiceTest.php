@@ -38,11 +38,9 @@ class MunicipioServiceTest extends TestCase
         $reflection = new ReflectionClass($this->service);
 
         $adnProperty = $reflection->getProperty('adnClient');
-        $adnProperty->setAccessible(true);
         $adnProperty->setValue($this->service, $this->adnClientMock);
 
         $cncProperty = $reflection->getProperty('cncClient');
-        $cncProperty->setAccessible(true);
         $cncProperty->setValue($this->service, $this->cncClientMock);
     }
 
