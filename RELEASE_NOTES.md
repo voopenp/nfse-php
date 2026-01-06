@@ -1,4 +1,332 @@
-# v1.1.0-beta
+# v1.4.0-beta
+
+📅 **Data de Lançamento**: 2026-01-06
+
+## 🎯 Destaques
+
+Esta versão representa um marco importante na evolução do SDK, trazendo **type safety completo** através de enums tipados e melhorias significativas na estrutura de dados.
+
+## 🚀 Novidades
+
+### Refatoração Completa com Enums Tipados
+
+Implementação de **22 enums** para substituir valores primitivos (strings/integers) por tipos seguros, aumentando drasticamente a confiabilidade e a manutenibilidade do código.
+
+#### ✨ Novos Enums Adicionados
+
+**Tributação e Regime Fiscal:**
+
+-   `RegimeApuracaoSN` - Regime de apuração dos tributos (Simples Nacional)
+-   `OpcaoSimplesNacional` - Opção pelo Simples Nacional
+-   `RegimeEspecialTributacao` - Regime especial de tributação
+-   `TributacaoIssqn` - Tributação do ISSQN
+-   `TipoImunidade` - Tipos de imunidade fiscal
+-   `TipoSuspensao` - Tipos de suspensão de exigibilidade
+-   `CstPisCofins` - Código de Situação Tributária (PIS/COFINS)
+
+**Retenções:**
+
+-   `TipoRetencaoIssqn` - Tipo de retenção do ISSQN
+-   `TipoRetencaoPisCofins` - Tipo de retenção de PIS/COFINS
+
+**Documentos e Processos:**
+
+-   `MotivoSubstituicao` - Motivo de substituição de NFS-e
+-   `MotivoEmissaoTomadorIntermediario` - Motivo de emissão por tomador/intermediário
+-   `MotivoNaoNif` - Motivo de não informar NIF
+-   `TipoDeducaoReducao` - Tipo de dedução/redução
+
+**Comércio Exterior:**
+
+-   `ModoPrestacao` - Modo de prestação de serviço
+-   `MovimentacaoTemporariaBens` - Movimentação temporária de bens
+
+**Controles e Indicadores:**
+
+-   `IndicadorTotalTributos` - Indicador de informação de tributos na nota
+
+**Cadastro:**
+
+-   `TipoPessoa` - Tipo de pessoa (Física/Jurídica/Estrangeiro)
+
+**Ambiente e Sistema:**
+
+-   `AmbienteGerador` - Ambiente gerador da NFS-e
+-   `TipoNsu` - Tipo de NSU para distribuição
+-   `EmitenteDPS` - Emitente do DPS
+-   `ProcessoEmissao` - Processo de emissão
+-   `TipoAmbiente` - Tipo de ambiente (Produção/Homologação)
+
+### 🔧 Melhorias no EnumCaster
+
+Aprimoramento do `EnumCaster` para suportar:
+
+-   Conversão automática de strings numéricas para int-backed enums
+-   Validação rigorosa de valores
+-   Melhor tratamento de erros com mensagens descritivas
+
+### 🏗️ Integração com DTOs
+
+Todos os DTOs foram atualizados para utilizar os novos enums através do atributo `#[CastWith(EnumCaster::class)]`, garantindo:
+
+-   Type hints adequados em todas as propriedades
+-   Autocomplete no IDE
+-   Validação em tempo de execução
+-   Documentação inline dos valores válidos
+
+### 📦 Builders XML Atualizados
+
+Os builders XML (`DpsXmlBuilder`, `NfseXmlBuilder`, `EventosXmlBuilder`) foram ajustados para:
+
+-   Extrair automaticamente o valor de enums backed (`$enum->value`)
+-   Manter compatibilidade com valores null
+-   Preservar a formatação correta do XML
+
+## 🛠️ Correções
+
+### Testes Corrigidos
+
+-   **Fix**: Corrigido valor inválido para `regApTribSN` nos testes (era `0` ou `3`, agora usa `null` ou `2`)
+-   **Fix**: Corrigido valor inválido para `cMotivo` no teste (era `'1'`, agora usa `'01'`)
+-   **Fix**: Removido cast manual de enum para string em `DpsXmlBuilder::appendElement()` que causava erro de conversão
+
+### Validação de Enums
+
+-   **Fix**: Implementada validação rigorosa de valores de enum, prevenindo uso de valores inválidos
+-   **Fix**: Mensagens de erro mais claras quando valores inválidos são fornecidos
+
+## 📊 Impacto nos Testes
+
+-   ✅ **150 testes passando** (521 assertions)
+-   ⚠️ **1 teste skipped** (certificado expirado - requer arquivo pré-gerado)
+-   ❌ **0 testes falhando**
+
+## 🔄 Breaking Changes
+
+⚠️ **Atenção**: Esta versão introduz mudanças significativas na API.
+
+### Migração de Valores Primitivos para Enums
+
+**Antes:**
+
+```php
+$dps = new DpsData([
+    'infDPS' => [
+        'tpAmb' => 2,
+        'tpEmit' => 1,
+        // ...
+    ]
+]);
+```
+
+**Depois:**
+
+```php
+use Nfse\Enums\TipoAmbiente;
+use Nfse\Enums\EmitenteDPS;
+
+$dps = new DpsData([
+    'infDPS' => [
+        'tpAmb' => TipoAmbiente::Homologacao,
+        // ou simplesmente: 'tpAmb' => 2,
+        'tpEmit' => EmitenteDPS::Prestador,
+        // ou simplesmente: 'tpEmit' => 1,
+        // ...
+    ]
+]);
+```
+
+**Nota**: O `EnumCaster` mantém retrocompatibilidade, aceitando tanto valores primitivos quanto instâncias de enum.
+
+### Valores que Mudaram
+
+-   `regApTribSN`: Agora aceita apenas `'1'` ou `'2'` (valores `0` ou `3` não são mais válidos)
+-   `cMotivo`: Deve usar formato com zero à esquerda (ex: `'01'` ao invés de `'1'`)
+
+## 📚 Documentação
+
+Para mais detalhes sobre os enums e seus valores válidos, consulte:
+
+-   A documentação inline de cada enum em `src/Enums/`
+-   Os métodos `getDescription()` disponíveis em cada enum
+-   Os testes de exemplo em `tests/Unit/Enums/EnumsTest.php`
+
+## 🎓 Guia de Migração
+
+Consulte o arquivo `DTO_MIGRATION_GUIDE.md` para instruções detalhadas sobre como migrar seu código para utilizar os novos enums.
+
+## 📋 Requisitos
+
+-   PHP 8.4+
+-   Extensão OpenSSL
+-   Certificado digital A1 (PFX/P12)
+
+## 🔗 Links
+
+-   📚 [Documentação](https://nfse-php.netlify.app)
+-   💬 [Discussões](https://github.com/nfse-nacional/nfse-php/discussions)
+-   🐛 [Issues](https://github.com/nfse-nacional/nfse-php/issues)
+
+---
+
+⚠️ **Nota**: Esta é uma versão beta. Reporte problemas no [Issues](https://github.com/nfse-nacional/nfse-php/issues).
+
+💖 **Apoie o projeto**: [GitHub Sponsors](https://github.com/sponsors/a21ns1g4ts)
+
+---
+
+# v1.4.0-beta
+
+📅 **Data de Lançamento**: 2026-01-06
+
+## 🎯 Destaques
+
+Esta versão representa um marco importante na evolução do SDK, trazendo **type safety completo** através de enums tipados e melhorias significativas na estrutura de dados.
+
+## 🚀 Novidades
+
+### Refatoração Completa com Enums Tipados
+
+Implementação de **22 enums** para substituir valores primitivos (strings/integers) por tipos seguros, aumentando drasticamente a confiabilidade e a manutenibilidade do código.
+
+#### ✨ Novos Enums Adicionados
+
+**Tributação e Regime Fiscal:**
+
+-   `RegimeApuracaoSN` - Regime de apuração dos tributos (Simples Nacional)
+-   `OpcaoSimplesNacional` - Opção pelo Simples Nacional
+-   `RegimeEspecialTributacao` - Regime especial de tributação
+-   `TributacaoIssqn` - Tributação do ISSQN
+-   `TipoImunidade` - Tipos de imunidade fiscal
+-   `TipoSuspensao` - Tipos de suspensão de exigibilidade
+-   `CstPisCofins` - Código de Situação Tributária (PIS/COFINS)
+
+**Retenções:**
+
+-   `TipoRetencaoIssqn` - Tipo de retenção do ISSQN
+-   `TipoRetencaoPisCofins` - Tipo de retenção de PIS/COFINS
+
+**Documentos e Processos:**
+
+-   `MotivoSubstituicao` - Motivo de substituição de NFS-e
+-   `MotivoEmissaoTomadorIntermediario` - Motivo de emissão por tomador/intermediário
+-   `MotivoNaoNif` - Motivo de não informar NIF
+-   `TipoDeducaoReducao` - Tipo de dedução/redução
+
+**Comércio Exterior:**
+
+-   `ModoPrestacao` - Modo de prestação de serviço
+-   `MovimentacaoTemporariaBens` - Movimentação temporária de bens
+
+**Outros:**
+
+-   `IndicadorTotalTributos` - Indicador de informação de tributos
+-   `TipoPessoa` - Tipo de pessoa (Física/Jurídica/Estrangeiro)
+-   `AmbienteGerador` - Ambiente gerador da NFS-e
+-   `TipoNsu` - Tipo de NSU para distribuição
+-   `EmitenteDPS` - Emitente do DPS
+-   `ProcessoEmissao` - Processo de emissão
+-   `TipoAmbiente` - Tipo de ambiente (Produção/Homologação)
+
+### 🔧 Melhorias no EnumCaster
+
+Aprimoramento do `EnumCaster` para suportar:
+
+-   Conversão automática de strings numéricas para int-backed enums
+-   Validação rigorosa de valores
+-   Melhor tratamento de erros com mensagens descritivas
+
+### 🏗️ Integração com DTOs
+
+Todos os DTOs foram atualizados para utilizar os novos enums através do atributo `#[CastWith(EnumCaster::class)]`, garantindo:
+
+-   Type hints adequados em todas as propriedades
+-   Autocomplete no IDE
+-   Validação em tempo de execução
+-   Documentação inline dos valores válidos
+
+### 📦 Builders XML Atualizados
+
+Os builders XML (`DpsXmlBuilder`, `NfseXmlBuilder`, `EventosXmlBuilder`) foram ajustados para:
+
+-   Extrair automaticamente o valor de enums backed (`$enum->value`)
+-   Manter compatibilidade com valores null
+-   Preservar a formatação correta do XML
+
+## 🛠️ Correções
+
+### Testes Corrigidos
+
+-   **Fix**: Corrigido valor inválido para `regApTribSN` nos testes (era `0` ou `3`, agora usa `null` ou `2`)
+-   **Fix**: Corrigido valor inválido para `cMotivo` no teste (era `'1'`, agora usa `'01'`)
+-   **Fix**: Removido cast manual de enum para string em `DpsXmlBuilder::appendElement()` que causava erro de conversão
+
+### Validação de Enums
+
+-   **Fix**: Implementada validação rigorosa de valores de enum, prevenindo uso de valores inválidos
+-   **Fix**: Mensagens de erro mais claras quando valores inválidos são fornecidos
+
+## 📊 Impacto nos Testes
+
+-   ✅ **150 testes passando** (521 assertions)
+-   ⚠️ **1 teste skipped** (certificado expirado - requer arquivo pré-gerado)
+-   ❌ **0 testes falhando**
+
+## 🔄 Breaking Changes
+
+⚠️ **Atenção**: Esta versão introduz mudanças significativas na API.
+
+### Migração de Valores Primitivos para Enums
+
+**Antes:**
+
+```php
+$dps = new DpsData([
+    'infDPS' => [
+        'tpAmb' => 2,
+        'tpEmit' => 1,
+        // ...
+    ]
+]);
+```
+
+**Depois:**
+
+```php
+use Nfse\Enums\TipoAmbiente;
+use Nfse\Enums\EmitenteDPS;
+
+$dps = new DpsData([
+    'infDPS' => [
+        'tpAmb' => TipoAmbiente::Homologacao,
+        // ou simplesmente: 'tpAmb' => 2,
+        'tpEmit' => EmitenteDPS::Prestador,
+        // ou simplesmente: 'tpEmit' => 1,
+        // ...
+    ]
+]);
+```
+
+**Nota**: O `EnumCaster` mantém retrocompatibilidade, aceitando tanto valores primitivos quanto instâncias de enum.
+
+### Valores que Mudaram
+
+-   `regApTribSN`: Agora aceita apenas `'1'` ou `'2'` (valores `0` ou `3` não são mais válidos)
+-   `cMotivo`: Deve usar formato com zero à esquerda (ex: `'01'` ao invés de `'1'`)
+
+## 📚 Documentação
+
+Para mais detalhes sobre os enums e seus valores válidos, consulte:
+
+-   A documentação inline de cada enum em `src/Enums/`
+-   Os métodos `getDescription()` disponíveis em cada enum
+-   Os testes de exemplo em `tests/Unit/Enums/EnumsTest.php`
+
+## 🎓 Guia de Migração
+
+Consulte o arquivo `DTO_MIGRATION_GUIDE.md` para instruções detalhadas sobre como migrar seu código para utilizar os novos enums.
+
+---
 
 ## 🚀 Novidades
 
@@ -26,7 +354,7 @@ Agora é possível baixar documentos fiscais tanto para Contribuintes quanto par
 -   Atualização da documentação (`README.md` e `docs/`) com novos exemplos de uso.
 -   Refatoração dos testes para garantir compatibilidade com as novas assinaturas de métodos.
 
------------------------------------------------------------------------
+---
 
 # 🚀 NFS-e Nacional PHP SDK v1.0.0-beta
 

@@ -2,6 +2,80 @@
 
 All notable changes to `nfse-php` will be documented in this file.
 
+## [1.4.0-beta] - 2026-01-06
+
+### 🎯 Type Safety com Enums
+
+Esta versão traz uma refatoração completa focada em type safety através de enums tipados.
+
+### ✨ Funcionalidades
+
+#### 📦 Novos Enums (22 no total)
+
+**Tributação e Regime Fiscal:**
+
+-   `RegimeApuracaoSN` - Regime de apuração dos tributos (Simples Nacional)
+-   `OpcaoSimplesNacional` - Opção pelo Simples Nacional
+-   `RegimeEspecialTributacao` - Regime especial de tributação
+-   `TributacaoIssqn` - Tributação do ISSQN
+-   `TipoImunidade` - Tipos de imunidade fiscal
+-   `TipoSuspensao` - Tipos de suspensão de exigibilidade
+-   `CstPisCofins` - Código de Situação Tributária (PIS/COFINS)
+-   `TipoRetencaoIssqn` - Tipo de retenção do ISSQN
+-   `TipoRetencaoPisCofins` - Tipo de retenção de PIS/COFINS
+
+**Documentos e Processos:**
+
+-   `MotivoSubstituicao` - Motivo de substituição de NFS-e
+-   `MotivoEmissaoTomadorIntermediario` - Motivo de emissão por tomador/intermediário
+-   `MotivoNaoNif` - Motivo de não informar NIF
+-   `TipoDeducaoReducao` - Tipo de dedução/redução
+
+**Comércio Exterior:**
+
+-   `ModoPrestacao` - Modo de prestação de serviço
+-   `MovimentacaoTemporariaBens` - Movimentação temporária de bens
+
+**Outros:**
+
+-   `IndicadorTotalTributos` - Indicador de informação de tributos
+-   `TipoPessoa` - Tipo de pessoa (Física/Jurídica/Estrangeiro)
+-   `AmbienteGerador` - Ambiente gerador da NFS-e
+-   `TipoNsu` - Tipo de NSU para distribuição
+-   `EmitenteDPS` - Emitente do DPS
+-   `ProcessoEmissao` - Processo de emissão
+-   `TipoAmbiente` - Tipo de ambiente (Produção/Homologação)
+
+#### 🔧 EnumCaster Aprimorado
+
+-   Conversão automática de strings numéricas para int-backed enums
+-   Validação rigorosa de valores
+-   Mensagens de erro descritivas
+
+#### 🏗️ DTOs Atualizados
+
+-   Todos os DTOs integrados com os novos enums via `#[CastWith(EnumCaster::class)]`
+-   Type hints adequados em todas as propriedades
+-   Autocomplete melhorado no IDE
+-   Validação em tempo de execução
+
+### 🛠️ Correções
+
+-   **Fix**: Corrigido valores inválidos de `regApTribSN` nos testes (era `0` ou `3`, agora usa `null` ou `2`)
+-   **Fix**: Corrigido valor inválido de `cMotivo` (era `'1'`, agora usa `'01'`)
+-   **Fix**: Removido cast manual de enum em `DpsXmlBuilder` que causava erro de conversão
+-   **Fix**: Implementada validação rigorosa de valores de enum
+
+### ⚠️ Breaking Changes
+
+-   `regApTribSN` agora aceita apenas `'1'` ou `'2'` (valores `0` ou `3` não são mais válidos)
+-   `cMotivo` deve usar formato com zero à esquerda (ex: `'01'` ao invés de `'1'`)
+
+### 📊 Testes
+
+-   ✅ 150 testes passando (521 assertions)
+-   ❌ 0 testes falhando
+
 ## [1.0.0-beta] - 2026-01-01
 
 ### 🎉 Lançamento Inicial (Beta)
