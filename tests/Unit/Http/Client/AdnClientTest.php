@@ -40,7 +40,7 @@ class AdnClientTest extends TestCase
     {
         $responseData = [
             'mensagem' => 'Sucesso',
-            'parametrosConvenio' => ['tipoConvenio' => 1],
+            'parametrosConvenio' => ['aderenteAmbienteNacional' => 1],
         ];
 
         $client = $this->createClientWithMock([
@@ -51,7 +51,7 @@ class AdnClientTest extends TestCase
 
         $this->assertInstanceOf(\Nfse\Dto\Http\ResultadoConsultaConfiguracoesConvenioResponse::class, $response);
         $this->assertEquals('Sucesso', $response->mensagem);
-        $this->assertEquals(1, $response->parametrosConvenio->tipoConvenio);
+        $this->assertEquals(1, $response->parametrosConvenio->aderenteAmbienteNacional);
     }
 
     public function test_baixar_dfe_contribuinte()
