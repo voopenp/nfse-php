@@ -84,7 +84,7 @@ it('can instantiate dps data with full structure', function () {
                 'comExt' => null,
                 'obra' => null,
                 'atvEvento' => null,
-                'infoComplem' => 'Serviço prestado com excelência',
+                'infocompl' => 'Serviço prestado com excelência',
                 'idDocTec' => null,
                 'docRef' => null,
                 'xInfComp' => null,

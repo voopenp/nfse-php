@@ -67,7 +67,7 @@ try {
                 'email' => 'teste@empresa.com.br',
                 'regTrib' => [
                     'opSimpNac' => 1, // Não Optante 2 optante (MEI) 3-Optante (ME/EPP)
-                    'regApTribSN' => null,  
+                    'regApTribSN' => null,
                     'regEspTrib' => 0, // Nenhum
                 ],
             ],

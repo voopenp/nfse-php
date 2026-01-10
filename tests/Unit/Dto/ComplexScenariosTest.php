@@ -32,7 +32,7 @@ it('can instantiate DPS with Civil Construction (Obra)', function () {
             ],
         ],
         'atvEvento' => null,
-        'infoComplem' => null,
+        'infocompl' => null,
         'idDocTec' => null,
         'docRef' => null,
         'xInfComp' => null,

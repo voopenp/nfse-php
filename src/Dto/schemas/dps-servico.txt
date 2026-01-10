@@ -62,7 +62,7 @@
 291	NFSe/infNFSe/DPS/infDPS/serv/atvEvento/end/	nro	-		-	-	-	-	-	-	-	-	-	-
 292	NFSe/infNFSe/DPS/infDPS/serv/atvEvento/end/	xCpl	-		-	-	-	-	-	-	-	-	-	-
 293	NFSe/infNFSe/DPS/infDPS/serv/atvEvento/end/	xBairro	-		-	-	-	-	-	-	-	-	-	-
-294	NFSe/infNFSe/DPS/infDPS/serv	infoComplem	-		-	-	-	-	-	-	-	-	-	-
-295	NFSe/infNFSe/DPS/infDPS/serv/	idDocTec	-		-	-	-	-	-	-	-	-	-	-
-296	NFSe/infNFSe/DPS/infDPS/serv/	docRef	Quando o emitente da DPS for o tomador ou o intermediário do serviço (tpEmit = 2  ou 3, respectivamente) este campo deve ser obrigatoriamente informado.		Obrig.	Rej.	E0420	O documento de referência deve ser obrigatoriamente informado quando o emitente da DPS for o tomador ou intermediário do serviço.	1	V	X	V	X	-
-297	NFSe/infNFSe/DPS/infDPS/serv/	xInfComp	-		-	-		-	-	-	-	-	-	-
+NFSe/infNFSe/DPS/infDPS/serv	infoCompl	G	-	0-1	-	Grupo de informações complementares disponível para todos os serviços prestados
+NFSe/infNFSe/DPS/infDPS/serv/infoCompl/	idDocTec	E	C	0-1	1-40	Identificador de Documento de Responsabilidade Técnica: ART, RRT, DRT, Outros.
+NFSe/infNFSe/DPS/infDPS/serv/infoCompl/	docRef	E	C	0-1	255	Chave da nota, número identificador da nota, número do contrato ou outro identificador de documento emitido pelo prestador de serviços, que subsidia a emissão dessa nota pelo tomador do serviço ou intermediário (preenchimento obrigatório caso a nota esteja sendo emitida pelo Tomador ou intermediário do serviço).
+NFSe/infNFSe/DPS/infDPS/serv/infoCompl/	xInfComp	E	C	0-1	2000	Campo livre para preenchimento pelo contribuinte.

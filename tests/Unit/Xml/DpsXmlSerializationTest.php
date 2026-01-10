@@ -82,10 +82,6 @@ it('serializes dps data to xml correctly', function () {
                 'comExt' => null,
                 'obra' => null,
                 'atvEvento' => null,
-                'infoComplem' => 'Serviço prestado with excellence',
-                'idDocTec' => null,
-                'docRef' => null,
-                'xInfComp' => null,
             ],
             'valores' => [
                 'vServPrest' => [

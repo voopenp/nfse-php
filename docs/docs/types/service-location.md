@@ -8,17 +8,17 @@ Agrupa todas as informações relativas ao serviço prestado.
 
 ### Propriedades
 
-| Propriedade                          | Tipo                   | Mapeamento XML | Descrição                                  |
-| :----------------------------------- | :--------------------- | :------------- | :----------------------------------------- |
-| `localPrestacao`                     | `LocalPrestacaoData`   | `locPrest`     | Onde o serviço foi prestado.               |
-| `codigoServico`                      | `CodigoServicoData`    | `cServ`        | Classificação e descrição do serviço.      |
-| `comercioExterior`                   | `ComercioExteriorData` | `comExt`       | Dados de comércio exterior (se aplicável). |
-| `obra`                               | `ObraData`             | `obra`         | Dados da obra (se aplicável).              |
-| `atividadeEvento`                    | `AtividadeEventoData`  | `atvEvento`    | Dados do evento (se aplicável).            |
-| `informacoesComplementares`          | `string`               | `infoComplem`  | Observações gerais sobre o serviço.        |
-| `idDocumentoTecnico`                 | `string`               | `idDocTec`     | Identificador do documento técnico.        |
-| `documentoReferencia`                | `string`               | `docRef`       | Documento de referência.                   |
-| `descricaoInformacoesComplementares` | `string`               | `xInfComp`     | Outras informações complementares.         |
+| Propriedade                 | Tipo                   | Mapeamento XML | Descrição                                     |
+| :-------------------------- | :--------------------- | :------------- | :-------------------------------------------- |
+| `localPrestacao`            | `LocalPrestacaoData`   | `locPrest`     | Onde o serviço foi prestado.                  |
+| `codigoServico`             | `CodigoServicoData`    | `cServ`        | Classificação e descrição do serviço.         |
+| `comercioExterior`          | `ComercioExteriorData` | `comExt`       | Dados de comércio exterior (se aplicável).    |
+| `obra`                      | `ObraData`             | `obra`         | Dados da obra (se aplicável).                 |
+| `atividadeEvento`           | `AtividadeEventoData`  | `atvEvento`    | Dados do evento (se aplicável).               |
+| `informacaoComplemento`     | `InfoComplData`        | `infoCompl`    | Informações complementares do serviço (grupo) |
+| `idDocumentoTecnico`        | `string`               | `idDocTec`     | Identificador do documento técnico.           |
+| `documentoReferencia`       | `string`               | `docRef`       | Documento de referência.                      |
+| `informacoesComplementares` | `string`               | `xInfComp`     | Observações gerais sobre o serviço.           |
 
 ---
 

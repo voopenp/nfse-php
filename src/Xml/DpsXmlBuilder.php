@@ -222,10 +222,22 @@ class DpsXmlBuilder
             $serv->appendChild($atvEvento);
         }
 
-        $this->appendElement($serv, 'infoComplem', $data->informacoesComplementares);
-        $this->appendElement($serv, 'idDocTec', $data->idDocumentoTecnico);
-        $this->appendElement($serv, 'docRef', $data->documentoReferencia);
-        $this->appendElement($serv, 'xInfComp', $data->descricaoInformacoesComplementares);
+        if ($data->informacaoComplemento && ($data->informacaoComplemento->idDocumentoTecnico || $data->informacaoComplemento->documentoReferencia || $data->informacaoComplemento->informacoesComplementares)) {
+            $infoCompl = $this->dom->createElement('infoCompl');
+            if ($data->informacaoComplemento->idDocumentoTecnico) {
+                $this->appendElement($infoCompl, 'idDocTec', $data->informacaoComplemento->idDocumentoTecnico);
+            }
+
+            if ($data->informacaoComplemento->documentoReferencia) {
+                $this->appendElement($infoCompl, 'docRef', $data->informacaoComplemento->documentoReferencia);
+            }
+
+            if ($data->informacaoComplemento->informacoesComplementares) {
+                $this->appendElement($infoCompl, 'xInfComp', $data->informacaoComplemento->informacoesComplementares);
+            }
+
+            $serv->appendChild($infoCompl);
+        }
 
         $parent->appendChild($serv);
     }

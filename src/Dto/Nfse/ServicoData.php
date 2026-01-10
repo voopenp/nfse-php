@@ -40,25 +40,6 @@ class ServicoData extends Dto
     /**
      * Informações complementares do serviço.
      */
-    #[MapFrom('infoComplem')]
-    public ?string $informacoesComplementares = null;
-
-    /**
-     * Identificador do documento técnico.
-     */
-    #[MapFrom('idDocTec')]
-    public ?string $idDocumentoTecnico = null;
-
-    /**
-     * Documento de referência.
-     * Obrigatório se tpEmit = 2 ou 3.
-     */
-    #[MapFrom('docRef')]
-    public ?string $documentoReferencia = null;
-
-    /**
-     * Outras informações complementares.
-     */
-    #[MapFrom('xInfComp')]
-    public ?string $descricaoInformacoesComplementares = null;
+    #[MapFrom('infoCompl')]
+    public ?InfoComplData $informacaoComplemento = null;
 }
