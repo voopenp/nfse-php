@@ -7,6 +7,9 @@ use Spatie\DataTransferObject\Attributes\MapFrom;
 
 class InfEventoData extends Dto
 {
+    #[MapFrom('@attributes.Id')]
+    public ?string $id = null;
+
     #[MapFrom('verAplic')]
     public ?string $versaoAplicativo = null;
 
