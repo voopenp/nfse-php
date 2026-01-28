@@ -7,6 +7,9 @@ use Spatie\DataTransferObject\Attributes\MapFrom;
 
 class InfPedRegData extends Dto
 {
+    #[MapFrom('@attributes.Id')]
+    public ?string $id = null;
+
     #[MapFrom('tpAmb')]
     public ?int $tipoAmbiente = null;
 
