@@ -32,40 +32,60 @@ class ContribuinteService
         $this->adnClient = new AdnClient($context);
     }
 
-    public function cancelarNfse(string $chaveAcesso, string $justificativa, int $numSeqEvento = 1): \Nfse\Dto\Http\RegistroEventoResponse
-    {
-        // 1) Monta o DTO do pedido de registro de evento (pedRegEvento)
-        $evt = new InfEventoData;
-        $evt->pedRegEvento = new PedRegEventoData;
-        $evt->pedRegEvento->infPedReg = new InfPedRegData;
-    
-        // chave + sequência
-        $evt->pedRegEvento->infPedReg->chaveAcesso = $chaveAcesso;
-        $evt->pedRegEvento->infPedReg->numSeqEvento = $numSeqEvento;
-    
-        // tipo do evento (cancelamento)
-        $evt->pedRegEvento->infPedReg->tipoEvento = '101101';
-    
-        // dados específicos do cancelamento (e101101)
-        $cancel = new CancelamentoData;
-        $cancel->xJust = $justificativa; // (nome do campo pode ser xJust mesmo; confirme no CancelamentoData)
-        $evt->pedRegEvento->infPedReg->e101101 = $cancel;
-    
-        // 2) Build do XML
-        $builder = new EventosXmlBuilder;
-        $xml = $builder->build($evt);
-    
-        // 3) Assina a tag correta: "infPedReg" (está no schema e nos DTOs que você achou)
-        $cert = new Certificate($this->context->certificatePath, $this->context->certificatePassword);
-        $signer = $this->createSigner($cert);
-        $signedXml = $signer->sign($xml, 'infPedReg');
-    
-        // 4) Envelope (GZIP + Base64)
-        $eventoXmlGZipB64 = base64_encode(gzencode($signedXml));
-    
-        // 5) Envia o evento
-        return $this->sefinClient->registrarEvento($chaveAcesso, $eventoXmlGZipB64);
-    }
+public function cancelarNfse(
+    string $chaveAcesso,
+    string $descricao,
+    string $codigoMotivo,
+    string $motivo,
+    int $nPedRegEvento = 1,
+    ?string $cnpjAutor = null,
+    ?string $cpfAutor = null
+): \Nfse\Dto\Http\RegistroEventoResponse {
+    // 1) DTO raiz
+    $ped = new PedRegEventoData;
+    // garante versão 1.01 (se existir essa prop no DTO; quase sempre existe)
+    $ped->versao = '1.01';
+
+    // 2) infPedReg
+    $inf = new InfPedRegData;
+    $inf->tipoEvento = '101101';              // cancelamento
+    $inf->chaveNfse = $chaveAcesso;           // no XML é chNFSe
+    $inf->nPedRegEvento = $nPedRegEvento;
+
+    // ambiente: use do context (se teu DTO tiver tpAmb como int 1/2)
+    // Se no teu projeto TipoAmbiente::Producao = 1 e Homologacao = 2, perfeito:
+    $inf->tipoAmbiente = (int) $this->context->ambiente->value; // ajuste se seu enum for diferente
+    $inf->versaoAplicativo = 'voope'; // ou uma versão real tipo 'voope-1.0.0'
+    $inf->dataHoraEvento = date('Y-m-d\TH:i:sP');
+
+    if ($cnpjAutor) $inf->cnpjAutor = $cnpjAutor;
+    if ($cpfAutor)  $inf->cpfAutor  = $cpfAutor;
+
+    // 3) bloco e101101
+    $can = new CancelamentoData;
+    $can->descricao = $descricao;
+    $can->codigoMotivo = $codigoMotivo;
+    $can->motivo = $motivo;
+
+    $inf->e101101 = $can;
+
+    $ped->infPedReg = $inf;
+
+    // 4) monta XML
+    $builder = new EventosXmlBuilder;
+    $xml = $builder->buildPedRegEvento($ped);
+
+    // 5) assina infPedReg (Id = PRE...)
+    $cert = new Certificate($this->context->certificatePath, $this->context->certificatePassword);
+    $signer = $this->createSigner($cert);
+    $signedXml = $signer->sign($xml, 'infPedReg');
+
+    // 6) gzip + base64 e envia
+    $eventoXmlGZipB64 = base64_encode(gzencode($signedXml));
+
+    return $this->sefinClient->registrarEvento($chaveAcesso, $eventoXmlGZipB64);
+}
+
     
     public function downloadXmlNfse(string $chave): ?string
     {
