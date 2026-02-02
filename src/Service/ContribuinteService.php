@@ -27,6 +27,28 @@ class ContribuinteService
         $this->adnClient = new AdnClient($context);
     }
 
+    public function downloadXmlNfse(string $chave): ?string
+    {
+        try {
+            $response = $this->sefinClient->consultarNfse($chave);
+        } catch (NfseApiException $e) {
+            return null;
+        }
+    
+        if (empty($response->nfseXmlGZipB64)) {
+            return null;
+        }
+    
+        $xml = gzdecode(base64_decode($response->nfseXmlGZipB64));
+    
+        if ($xml === false || trim($xml) === '') {
+            return null;
+        }
+    
+        return $xml;
+    }
+
+
     /**
      * Emite uma NFS-e a partir de um DPS.
      */
