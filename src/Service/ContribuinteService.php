@@ -14,11 +14,6 @@ use Nfse\Signer\SignerInterface;
 use Nfse\Signer\XmlSigner;
 use Nfse\Xml\DpsXmlBuilder;
 use Nfse\Xml\NfseXmlParser;
-use Nfse\Dto\Nfse\InfEventoData;
-use Nfse\Dto\Nfse\PedRegEventoData;
-use Nfse\Dto\Nfse\InfPedRegData;
-use Nfse\Dto\Nfse\CancelamentoData;
-use Nfse\Xml\EventosXmlBuilder;
 
 class ContribuinteService
 {
@@ -31,7 +26,7 @@ class ContribuinteService
         $this->sefinClient = new SefinClient($context);
         $this->adnClient = new AdnClient($context);
     }
-    
+
     /**
      * Emite uma NFS-e a partir de um DPS.
      */
