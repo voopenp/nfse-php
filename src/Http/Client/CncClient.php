@@ -5,9 +5,11 @@ namespace Nfse\Http\Client;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use Nfse\Dto\Http\MensagemProcessamentoDto;
 use Nfse\Enums\TipoAmbiente;
 use Nfse\Http\Exceptions\NfseApiException;
 use Nfse\Http\NfseContext;
+use Nfse\Http\Retry;
 
 class CncClient
 {
@@ -17,9 +19,30 @@ class CncClient
 
     private Client $httpClient;
 
+    private ?string $tempCertFile = null;
+
     public function __construct(private NfseContext $context)
     {
         $this->httpClient = $this->createHttpClient();
+    }
+
+    public function __destruct()
+    {
+        if ($this->tempCertFile !== null && file_exists($this->tempCertFile)) {
+            unlink($this->tempCertFile);
+        }
+    }
+
+    private function resolveCertificatePath(): string
+    {
+        if ($this->context->certificatePath !== null) {
+            return $this->context->certificatePath;
+        }
+
+        $this->tempCertFile = tempnam(sys_get_temp_dir(), 'nfse_cert_');
+        file_put_contents($this->tempCertFile, $this->context->certificateContent);
+
+        return $this->tempCertFile;
     }
 
     private function createHttpClient(): Client
@@ -30,9 +53,10 @@ class CncClient
 
         return new Client([
             'base_uri' => $baseUrl,
+            'handler' => Retry::stack(),
             'curl' => [
                 CURLOPT_SSLCERTTYPE => 'P12',
-                CURLOPT_SSLCERT => $this->context->certificatePath,
+                CURLOPT_SSLCERT => $this->resolveCertificatePath(),
                 CURLOPT_SSLCERTPASSWD => $this->context->certificatePassword,
                 CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
                 CURLOPT_CONNECTTIMEOUT => 30,
@@ -61,7 +85,7 @@ class CncClient
 
             return $decoded;
         } catch (GuzzleException $e) {
-            throw NfseApiException::requestError($e->getMessage(), $e->getCode());
+            $this->handleException($e);
         }
     }
 
@@ -80,7 +104,7 @@ class CncClient
 
             return $decoded;
         } catch (GuzzleException $e) {
-            throw NfseApiException::requestError($e->getMessage(), $e->getCode());
+            $this->handleException($e);
         }
     }
 
@@ -106,5 +130,45 @@ class CncClient
     public function atualizarContribuinte(array $dados): array
     {
         return $this->post('', $dados);
+    }
+
+    private function mapMensagens(array $mensagens): array
+    {
+        return array_map(fn ($m) => new MensagemProcessamentoDto([
+            'mensagem' => $m['Mensagem'] ?? $m['mensagem'] ?? null,
+            'parametros' => $m['Parametros'] ?? $m['parametros'] ?? null,
+            'codigo' => $m['Codigo'] ?? $m['codigo'] ?? null,
+            'descricao' => $m['Descricao'] ?? $m['descricao'] ?? null,
+            'complemento' => $m['Complemento'] ?? $m['complemento'] ?? null,
+        ]), $mensagens);
+    }
+
+    /**
+     * @param  \Exception|GuzzleException  $e
+     * @param  array  $decoded
+     * @return mixed
+     * @throws NfseApiException
+     */
+    private function handleException(\Exception|GuzzleException $e)
+    {
+        $errorBody = '';
+        if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->hasResponse()) {
+            $errorBody = $e->getResponse()->getBody()->getContents();
+        }
+
+        $parsedErrors = [];
+        if ($errorBody) {
+            $decoded = json_decode($errorBody, true);
+            if (is_array($decoded) && isset($decoded['erros']) && is_array($decoded['erros'])) {
+                $parsedErrors = $this->mapMensagens($decoded['erros']);
+            }
+        }
+
+        throw NfseApiException::requestError(
+            $e->getMessage().($errorBody ? "\nResposta: ".$errorBody : ''),
+            $e->getCode(),
+            $errorBody ?: null,
+            $parsedErrors
+        );
     }
 }

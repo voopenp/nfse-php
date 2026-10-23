@@ -24,4 +24,9 @@ class NfseData extends Dto
      */
     #[MapFrom('infEvento')]
     public ?InfEventoData $infEvento = null;
+
+    /**
+     * XML original retornado pela API da SEFIN Nacional.
+     */
+    public ?string $nfseXml = null;
 }

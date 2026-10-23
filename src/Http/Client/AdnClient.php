@@ -17,6 +17,8 @@ use Nfse\Enums\TipoNsu;
 use Nfse\Http\Contracts\AdnDanfseInterface;
 use Nfse\Http\Exceptions\NfseApiException;
 use Nfse\Http\NfseContext;
+use Nfse\Http\Retry;
+use Nfse\Support\SefinEndpointResolver;
 
 class AdnClient implements AdnDanfseInterface
 {
@@ -26,9 +28,30 @@ class AdnClient implements AdnDanfseInterface
 
     private Client $httpClient;
 
+    private ?string $tempCertFile = null;
+
     public function __construct(private NfseContext $context)
     {
         $this->httpClient = $this->createHttpClient();
+    }
+
+    public function __destruct()
+    {
+        if ($this->tempCertFile !== null && file_exists($this->tempCertFile)) {
+            unlink($this->tempCertFile);
+        }
+    }
+
+    private function resolveCertificatePath(): string
+    {
+        if ($this->context->certificatePath !== null) {
+            return $this->context->certificatePath;
+        }
+
+        $this->tempCertFile = tempnam(sys_get_temp_dir(), 'nfse_cert_');
+        file_put_contents($this->tempCertFile, $this->context->certificateContent);
+
+        return $this->tempCertFile;
     }
 
     private function createHttpClient(): Client
@@ -39,9 +62,10 @@ class AdnClient implements AdnDanfseInterface
 
         return new Client([
             'base_uri' => $baseUrl,
+            'handler' => Retry::stack(),
             'curl' => [
                 CURLOPT_SSLCERTTYPE => 'P12',
-                CURLOPT_SSLCERT => $this->context->certificatePath,
+                CURLOPT_SSLCERT => $this->resolveCertificatePath(),
                 CURLOPT_SSLCERTPASSWD => $this->context->certificatePassword,
                 CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
                 CURLOPT_CONNECTTIMEOUT => 30,
@@ -70,12 +94,7 @@ class AdnClient implements AdnDanfseInterface
 
             return $decoded;
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $message = $e->getMessage();
-            if ($e->hasResponse()) {
-                $responseBody = $e->getResponse()->getBody()->getContents();
-                $message = "Erro na requisição: {$responseBody}";
-            }
-            throw NfseApiException::requestError($message, $e->getCode());
+            $this->handleException($e);
         } catch (GuzzleException $e) {
             throw NfseApiException::requestError($e->getMessage(), $e->getCode());
         }
@@ -146,12 +165,7 @@ class AdnClient implements AdnDanfseInterface
 
             return json_decode($response->getBody()->getContents(), true);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $message = $e->getMessage();
-            if ($e->hasResponse()) {
-                $responseBody = $e->getResponse()->getBody()->getContents();
-                $message = "Erro na requisição: {$responseBody}";
-            }
-            throw NfseApiException::requestError($message, $e->getCode());
+            $this->handleException($e);
         } catch (GuzzleException $e) {
             throw NfseApiException::requestError($e->getMessage(), $e->getCode());
         }
@@ -215,17 +229,17 @@ class AdnClient implements AdnDanfseInterface
      */
     public function obterDanfse(string $chaveAcesso): string
     {
+        // Municípios com endpoint próprio servem o PDF na mesma base do envio.
+        // URI absoluta faz o Guzzle ignorar o base_uri nacional.
+        $url = (new SefinEndpointResolver)->resolveDanfse($this->context, $chaveAcesso)
+            ?? "/danfse/{$chaveAcesso}";
+
         try {
-            $response = $this->httpClient->get("/danfse/{$chaveAcesso}");
+            $response = $this->httpClient->get($url);
 
             return $response->getBody()->getContents();
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $message = $e->getMessage();
-            if ($e->hasResponse()) {
-                $responseBody = $e->getResponse()->getBody()->getContents();
-                $message = "Erro na requisição: {$responseBody}";
-            }
-            throw NfseApiException::requestError($message, $e->getCode());
+            $this->handleException($e);
         } catch (GuzzleException $e) {
             throw NfseApiException::requestError($e->getMessage(), $e->getCode());
         }
@@ -277,11 +291,35 @@ class AdnClient implements AdnDanfseInterface
     private function mapMensagens(array $mensagens): array
     {
         return array_map(fn ($m) => new MensagemProcessamentoDto([
-            'mensagem' => $m['Mensagem'] ?? null,
-            'parametros' => $m['Parametros'] ?? null,
-            'codigo' => $m['Codigo'] ?? null,
-            'descricao' => $m['Descricao'] ?? null,
-            'complemento' => $m['Complemento'] ?? null,
+            'mensagem' => $m['Mensagem'] ?? $m['mensagem'] ?? null,
+            'parametros' => $m['Parametros'] ?? $m['parametros'] ?? null,
+            'codigo' => $m['Codigo'] ?? $m['codigo'] ?? null,
+            'descricao' => $m['Descricao'] ?? $m['descricao'] ?? null,
+            'complemento' => $m['Complemento'] ?? $m['complemento'] ?? null,
         ]), $mensagens);
+    }
+
+    /**
+     * @param  \GuzzleHttp\Exception\RequestException|\Exception  $e
+     * @return mixed
+     * @throws NfseApiException
+     */
+    private function handleException(\GuzzleHttp\Exception\RequestException|\Exception $e)
+    {
+        $responseBody = '';
+        if ($e->hasResponse()) {
+            $responseBody = $e->getResponse()->getBody()->getContents();
+        }
+
+        $parsedErrors = [];
+        if ($responseBody) {
+            $decoded = json_decode($responseBody, true);
+            if (is_array($decoded) && isset($decoded['erros']) && is_array($decoded['erros'])) {
+                $parsedErrors = $this->mapMensagens($decoded['erros']);
+            }
+        }
+
+        $message = $responseBody ? "Erro na requisição: {$responseBody}" : $e->getMessage();
+        throw NfseApiException::requestError($message, $e->getCode(), $responseBody ?: null, $parsedErrors);
     }
 }

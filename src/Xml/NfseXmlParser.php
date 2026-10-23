@@ -9,6 +9,8 @@ class NfseXmlParser
 {
     public function parse(string $xml): NfseData
     {
+        $rawXml = $xml;
+
         // 1. Fix Encoding
         if (! mb_check_encoding($xml, 'UTF-8')) {
             $xml = mb_convert_encoding($xml, 'UTF-8', 'ISO-8859-1');
@@ -19,6 +21,9 @@ class NfseXmlParser
 
         // Remove escaped quotes if present (e.g. from JSON dumps)
         $xml = str_replace('\"', '"', $xml);
+
+        // Eventos no layout antigo usam nDFe; o layout 1.01 renomeou para nDFSe
+        $xml = str_replace(['<nDFe>', '</nDFe>'], ['<nDFSe>', '</nDFSe>'], $xml);
 
         // 2. Parse XML
         $useInternal = libxml_use_internal_errors(true);
@@ -51,7 +56,10 @@ class NfseXmlParser
         // 4. Sanitize Array (Fix [] -> null)
         $parsedDoc = $this->sanitizeArray($parsedDoc);
 
-        return new NfseData($parsedDoc);
+        $nfseData = new NfseData($parsedDoc);
+        $nfseData->nfseXml = $rawXml;
+
+        return $nfseData;
     }
 
     private function sanitizeArray($data)

@@ -4,6 +4,7 @@ namespace Nfse\Service;
 
 use Nfse\Dto\Nfse\DpsData;
 use Nfse\Dto\Nfse\NfseData;
+use Nfse\Dto\Nfse\PedRegEventoData;
 use Nfse\Http\Client\AdnClient;
 use Nfse\Http\Client\SefinClient;
 use Nfse\Http\Contracts\SefinNacionalInterface;
@@ -13,6 +14,7 @@ use Nfse\Signer\Certificate;
 use Nfse\Signer\SignerInterface;
 use Nfse\Signer\XmlSigner;
 use Nfse\Xml\DpsXmlBuilder;
+use Nfse\Xml\EventosXmlBuilder;
 use Nfse\Xml\NfseXmlParser;
 
 class ContribuinteService
@@ -35,7 +37,7 @@ class ContribuinteService
         $builder = new DpsXmlBuilder;
         $xml = $builder->build($dps);
 
-        $cert = new Certificate($this->context->certificatePath, $this->context->certificatePassword);
+        $cert = $this->makeCertificate();
         $signer = $this->createSigner($cert);
 
         // Assina a tag 'infDPS'
@@ -48,8 +50,8 @@ class ContribuinteService
         $response = $this->sefinClient->emitirNfse($payload);
 
         if (! empty($response->erros)) {
-            $msg = 'Erro na emissão: '.json_encode($response->erros);
-            throw NfseApiException::responseError($msg);
+            $msg = 'Erro na emissão: ' . json_encode($response->erros);
+            throw NfseApiException::responseError($msg, 0, null, $response->erros);
         }
 
         if (! $response->nfseXmlGZipB64) {
@@ -87,6 +89,18 @@ class ContribuinteService
         return $this->sefinClient->consultarDps($idDps);
     }
 
+    /**
+     * Baixa o DANFSe gerado pela API oficial do ambiente nacional.
+     *
+     * @deprecated A API oficial do ambiente nacional para geração do Documento Auxiliar
+     * da Nota Fiscal de Serviços Eletrônica (DANFSe) será descontinuada em 1º de julho de 2026. A emissão
+     * passará a ser responsabilidade dos sistemas emissores, ERPs e softwares das próprias empresas.
+     * Fim da API de Geração: a interface oficial do governo que gerava o DANFSe será desligada.
+     * Responsabilidade do Emissor: ERPs, softwares de gestão e plataformas de contabilidade precisarão
+     * gerar o DANFSe internamente e adequar seus layouts. Novo Layout: o documento agora possui um formato
+     * padrão obrigatório em folha A4, exigência de QR Code e inclusão de campos para IBS e CBS.
+     * Nota técnica: https://www.gov.br/nfse/pt-br/biblioteca/documentacao-tecnica/rtc/nt-008-se-cgnfse-danfse-20260505.pdf
+     */
     public function downloadDanfse(string $chaveAcesso): string
     {
         return $this->adnClient->obterDanfse($chaveAcesso);
@@ -100,6 +114,37 @@ class ContribuinteService
     public function registrarEvento(string $chaveAcesso, string $eventoXmlGZipB64): \Nfse\Dto\Http\RegistroEventoResponse
     {
         return $this->sefinClient->registrarEvento($chaveAcesso, $eventoXmlGZipB64);
+    }
+
+    /**
+     * Registra um evento a partir de um DTO.
+     */
+    public function registrarEventoData(PedRegEventoData $evento): \Nfse\Dto\Http\RegistroEventoResponse
+    {
+        $builder = new EventosXmlBuilder;
+        $xml = $builder->buildPedRegEvento($evento);
+
+        $cert = $this->makeCertificate();
+        $signer = $this->createSigner($cert);
+
+        // Assina a tag 'infPedReg'
+        $signedXml = $signer->sign($xml, 'infPedReg');
+
+        // Envelope (GZIP + Base64)
+        $payload = base64_encode(gzencode($signedXml));
+
+        return $this->registrarEvento($evento->infPedReg->chaveNfse, $payload);
+    }
+
+    /**
+     * Atalho para cancelamento de NFS-e (Evento 101101).
+     */
+    public function cancelar(PedRegEventoData $evento): \Nfse\Dto\Http\RegistroEventoResponse
+    {
+        // Garante o código do evento de cancelamento
+        $evento->infPedReg->tipoEvento = '101101';
+
+        return $this->registrarEventoData($evento);
     }
 
     public function consultarEvento(string $chaveAcesso, int $tipoEvento, int $numSeqEvento): \Nfse\Dto\Http\RegistroEventoResponse
@@ -165,5 +210,14 @@ class ContribuinteService
     protected function createSigner(Certificate $certificate): SignerInterface
     {
         return new XmlSigner($certificate);
+    }
+
+    private function makeCertificate(): Certificate
+    {
+        if ($this->context->certificateContent !== null) {
+            return Certificate::fromContent($this->context->certificateContent, $this->context->certificatePassword);
+        }
+
+        return new Certificate($this->context->certificatePath, $this->context->certificatePassword);
     }
 }

@@ -24,10 +24,17 @@ class EnumCaster implements Caster
 
         // Handle string to int conversion for int-backed enums
         $reflection = new \ReflectionEnum($this->enumType);
-        if ($reflection->isBacked() && $reflection->getBackingType()->getName() === 'int' && is_string($value) && is_numeric($value)) {
+        $backingType = $reflection->getBackingType();
+        if (
+            $reflection->isBacked()
+            && $backingType instanceof \ReflectionNamedType
+            && $backingType->getName() === 'int'
+            && is_string($value)
+            && is_numeric($value)
+        ) {
             $value = (int) $value;
         }
 
-        return $this->enumType::from($value);
+        return $this->enumType::tryFrom($value);
     }
 }

@@ -10,35 +10,54 @@ use Nfse\Dto\Http\ConsultaNfseResponse;
 use Nfse\Dto\Http\EmissaoNfseResponse;
 use Nfse\Dto\Http\MensagemProcessamentoDto;
 use Nfse\Dto\Http\RegistroEventoResponse;
-use Nfse\Enums\TipoAmbiente;
 use Nfse\Http\Contracts\SefinNacionalInterface;
 use Nfse\Http\Exceptions\NfseApiException;
 use Nfse\Http\NfseContext;
+use Nfse\Http\Retry;
+use Nfse\Support\SefinEndpointResolver;
 
 class SefinClient implements SefinNacionalInterface
 {
-    private const URL_PRODUCTION = 'https://sefin.nfse.gov.br/SefinNacional';
-
-    private const URL_HOMOLOGATION = 'https://sefin.producaorestrita.nfse.gov.br/SefinNacional';
-
     private Client $httpClient;
+
+    private string $baseUrl;
+
+    private ?string $tempCertFile = null;
 
     public function __construct(private NfseContext $context)
     {
+        $resolver = new SefinEndpointResolver();
+        $this->baseUrl = $resolver->resolve($this->context);
         $this->httpClient = $this->createHttpClient();
+    }
+
+    public function __destruct()
+    {
+        if ($this->tempCertFile !== null && file_exists($this->tempCertFile)) {
+            unlink($this->tempCertFile);
+        }
+    }
+
+    private function resolveCertificatePath(): string
+    {
+        if ($this->context->certificatePath !== null) {
+            return $this->context->certificatePath;
+        }
+
+        $this->tempCertFile = tempnam(sys_get_temp_dir(), 'nfse_cert_');
+        file_put_contents($this->tempCertFile, $this->context->certificateContent);
+
+        return $this->tempCertFile;
     }
 
     private function createHttpClient(): Client
     {
-        $baseUrl = $this->context->ambiente === TipoAmbiente::Producao
-            ? self::URL_PRODUCTION
-            : self::URL_HOMOLOGATION;
-
         return new Client([
-            'base_uri' => rtrim($baseUrl, '/').'/',
+            'base_uri' => rtrim($this->baseUrl, '/') . '/',
+            'handler' => Retry::stack(),
             'curl' => [
                 CURLOPT_SSLCERTTYPE => 'P12',
-                CURLOPT_SSLCERT => $this->context->certificatePath,
+                CURLOPT_SSLCERT => $this->resolveCertificatePath(),
                 CURLOPT_SSLCERTPASSWD => $this->context->certificatePassword,
                 CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
                 CURLOPT_CONNECTTIMEOUT => 30,
@@ -52,6 +71,7 @@ class SefinClient implements SefinNacionalInterface
                 'Accept' => 'application/json',
             ],
         ]);
+
     }
 
     private function post(string $endpoint, array $data): array
@@ -70,13 +90,7 @@ class SefinClient implements SefinNacionalInterface
 
             return $decoded;
         } catch (GuzzleException $e) {
-            // Try to extract error response body
-            $errorBody = '';
-            if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->getResponse()) {
-                $errorBody = $e->getResponse()->getBody()->getContents();
-            }
-
-            throw NfseApiException::requestError($e->getMessage().($errorBody ? "\nResposta: ".$errorBody : ''), $e->getCode());
+            $this->handleException($e);
         }
     }
 
@@ -87,7 +101,7 @@ class SefinClient implements SefinNacionalInterface
 
             return json_decode($response->getBody()->getContents(), true);
         } catch (GuzzleException $e) {
-            throw NfseApiException::requestError($e->getMessage(), $e->getCode());
+            $this->handleException($e);
         }
     }
 
@@ -186,11 +200,39 @@ class SefinClient implements SefinNacionalInterface
     private function mapMensagens(array $mensagens): array
     {
         return array_map(fn ($m) => new MensagemProcessamentoDto(
-            mensagem: $m['mensagem'] ?? null,
-            parametros: $m['parametros'] ?? null,
-            codigo: $m['codigo'] ?? null,
-            descricao: $m['descricao'] ?? null,
-            complemento: $m['complemento'] ?? null
+            mensagem: $m['mensagem'] ?? $m['Mensagem'] ?? null,
+            parametros: $m['parametros'] ?? $m['Parametros'] ?? null,
+            codigo: $m['codigo'] ?? $m['Codigo'] ?? null,
+            descricao: $m['descricao'] ?? $m['Descricao'] ?? null,
+            complemento: $m['complemento'] ?? $m['Complemento'] ?? null
         ), $mensagens);
+    }
+
+    /**
+     * @param  \Exception|GuzzleException  $e
+     * @return mixed
+     * @throws NfseApiException
+     */
+    private function handleException(\Exception|GuzzleException $e)
+    {
+        $errorBody = '';
+        if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->getResponse()) {
+            $errorBody = $e->getResponse()->getBody()->getContents();
+        }
+
+        $parsedErrors = [];
+        if ($errorBody) {
+            $decoded = json_decode($errorBody, true);
+            if (is_array($decoded) && isset($decoded['erros']) && is_array($decoded['erros'])) {
+                $parsedErrors = $this->mapMensagens($decoded['erros']);
+            }
+        }
+
+        throw NfseApiException::requestError(
+            $e->getMessage().($errorBody ? "\nResposta: ".$errorBody : ''),
+            $e->getCode(),
+            $errorBody ?: null,
+            $parsedErrors
+        );
     }
 }

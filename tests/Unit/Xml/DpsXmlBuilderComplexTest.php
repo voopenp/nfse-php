@@ -129,6 +129,57 @@ it('can build xml with complex structures', function () {
         ->and($xml)->toContain('<vTotTribFed>50.00</vTotTribFed>');
 });
 
+it('can build xml with endExt (foreign address)', function () {
+    $dpsData = new DpsData([
+        '@versao' => '1.0',
+        'infDPS' => [
+            '@Id' => 'DPS123',
+            'tpAmb' => 2,
+            'dhEmi' => '2023-10-27T10:00:00',
+            'verAplic' => '1.0',
+            'serie' => '1',
+            'nDPS' => '1',
+            'dCompet' => '2023-10-27',
+            'tpEmit' => 1,
+            'cLocEmi' => '3550308',
+            'toma' => [
+                'CNPJ' => '12345678000199',
+                'xNome' => 'Tomador Exterior',
+                'end' => [
+                    'endExt' => [
+                        'cPais' => 'US',
+                        'cEndPost' => '10001',
+                        'xCidade' => 'New York',
+                        'xEstProvReg' => 'NY',
+                    ],
+                    'xLgr' => 'Broadway',
+                    'nro' => '1000',
+                    'xBairro' => 'Manhattan',
+                ],
+            ],
+            'valores' => [
+                'vServPrest' => [
+                    'vServ' => 100.0,
+                    'vReceb' => 100.0,
+                ],
+                'trib' => [
+                    'tribMun.tribISSQN' => 1,
+                ],
+            ],
+        ],
+    ]);
+
+    $builder = new DpsXmlBuilder;
+    $xml = $builder->build($dpsData);
+
+    expect($xml)->toContain('<endExt>')
+        ->and($xml)->toContain('<cPais>US</cPais>')
+        ->and($xml)->toContain('<cEndPost>10001</cEndPost>')
+        ->and($xml)->toContain('<xCidade>New York</xCidade>')
+        ->and($xml)->toContain('<xEstProvReg>NY</xEstProvReg>')
+        ->and($xml)->not->toContain('<endNac>');
+});
+
 it('can build xml with indicadorTotalTributos', function () {
     $dpsData = new DpsData([
         '@versao' => '1.0',
@@ -191,4 +242,72 @@ it('can build xml with percentualTotalTributosSN', function () {
     $xml = $builder->build($dpsData);
 
     expect($xml)->toContain('<pTotTribSN>5.00</pTotTribSN>');
+});
+
+it('can build xml with percentualTotalTributosSN equal to zero', function () {
+    $dpsData = new DpsData([
+        '@versao' => '1.0',
+        'infDPS' => [
+            '@Id' => 'DPS123',
+            'tpAmb' => 2,
+            'dhEmi' => '2023-10-27T10:00:00',
+            'verAplic' => '1.0',
+            'serie' => '1',
+            'nDPS' => '1',
+            'dCompet' => '2023-10-27',
+            'tpEmit' => 1,
+            'cLocEmi' => '3550308',
+            'valores' => [
+                'vServPrest' => [
+                    'vServ' => 100.0,
+                    'vReceb' => 100.0,
+                ],
+                'trib' => [
+                    'tribMun.tribISSQN' => 1,
+                    'totTrib.pTotTribSN' => 0.0,
+                ],
+            ],
+        ],
+    ]);
+
+    $builder = new DpsXmlBuilder;
+    $xml = $builder->build($dpsData);
+
+    expect($xml)->toContain('<totTrib><pTotTribSN>0.00</pTotTribSN></totTrib>');
+});
+
+it('can build xml with percentualTotalTributos Fed Est Mun', function () {
+    $dpsData = new DpsData([
+        '@versao' => '1.0',
+        'infDPS' => [
+            '@Id' => 'DPS123',
+            'tpAmb' => 2,
+            'dhEmi' => '2023-10-27T10:00:00',
+            'verAplic' => '1.0',
+            'serie' => '1',
+            'nDPS' => '1',
+            'dCompet' => '2023-10-27',
+            'tpEmit' => 1,
+            'cLocEmi' => '3550308',
+            'valores' => [
+                'vServPrest' => [
+                    'vServ' => 100.0,
+                    'vReceb' => 100.0,
+                ],
+                'trib' => [
+                    'tribMun.tribISSQN' => 1,
+                    'totTrib.pTotTrib.pTotTribFed' => 10.50,
+                    'totTrib.pTotTrib.pTotTribEst' => 5.00,
+                    'totTrib.pTotTrib.pTotTribMun' => 2.00,
+                ],
+            ],
+        ],
+    ]);
+
+    $builder = new DpsXmlBuilder;
+    $xml = $builder->build($dpsData);
+
+    expect($xml)->toContain('<pTotTribFed>10.50</pTotTribFed>')
+        ->and($xml)->toContain('<pTotTribEst>5.00</pTotTribEst>')
+        ->and($xml)->toContain('<pTotTribMun>2.00</pTotTribMun>');
 });

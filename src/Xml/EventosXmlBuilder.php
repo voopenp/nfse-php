@@ -5,6 +5,7 @@ namespace Nfse\Xml;
 use DOMDocument;
 use DOMElement;
 use Nfse\Dto\Nfse\PedRegEventoData;
+use Nfse\Support\SchemaText;
 
 class EventosXmlBuilder
 {
@@ -21,11 +22,11 @@ class EventosXmlBuilder
 
         $inf = $this->dom->createElement('infPedReg');
 
-        // Build Id for infPedReg: PRE + chNFSe + tipoEvento + nPedRegEvento(3 digits)
+        // Build Id for infPedReg: PRE + chNFSe + tipoEvento
+        // nPedRegEvento foi removido do Id a partir de jan/2026 (TSIdPedRegEvt: PRE[0-9]{56})
         $ch = $data->infPedReg->chaveNfse;
         $tipo = $data->infPedReg->tipoEvento;
-        $nPed = str_pad((string) $data->infPedReg->nPedRegEvento, 3, '0', STR_PAD_LEFT);
-        $id = "PRE{$ch}{$tipo}{$nPed}";
+        $id = "PRE{$ch}{$tipo}";
         $inf->setAttribute('Id', $id);
 
         $this->appendElement($inf, 'tpAmb', (string) $data->infPedReg->tipoAmbiente);
@@ -40,9 +41,9 @@ class EventosXmlBuilder
         }
 
         $this->appendElement($inf, 'chNFSe', $data->infPedReg->chaveNfse);
-        $this->appendElement($inf, 'nPedRegEvento', (string) $data->infPedReg->nPedRegEvento);
 
-        // Only implement cancellation (e101101) for now
+        // nPedRegEvento não existe no schema XSD (nem v1.00 nem v1.01)
+        // Após chNFSe vem direto o elemento do tipo de evento (e101101, etc.)
         if ($data->infPedReg->e101101) {
             $e = $this->dom->createElement('e101101');
             $this->appendElement($e, 'xDesc', $data->infPedReg->e101101->descricao);
@@ -63,8 +64,12 @@ class EventosXmlBuilder
         if ($value === null) {
             return;
         }
+        $text = SchemaText::forSchema($value);
+        if ($text === null || $text === '') {
+            return;
+        }
         $el = $this->dom->createElement($name);
-        $el->appendChild($this->dom->createTextNode($value));
+        $el->appendChild($this->dom->createTextNode($text));
         $parent->appendChild($el);
     }
 }

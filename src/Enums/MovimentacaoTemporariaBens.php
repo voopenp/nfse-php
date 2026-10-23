@@ -35,6 +35,7 @@ enum MovimentacaoTemporariaBens: string
     public function getDescription(): string
     {
         return match ($this) {
+            self::Nenhum => 'Nenhum',
             self::Nao => 'Não',
             self::SimImportacao => 'Sim (Importação)',
             self::SimExportacao => 'Sim (Exportação)',
